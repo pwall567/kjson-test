@@ -78,7 +78,7 @@ do not take advantage of the capabilities of Kotlin.
 
 ### The Solution
 
-The `json-kotlin-test` library allows the expected content of a JSON object to be described in a simple, intuitive form,
+The `kjson-test` library allows the expected content of a JSON object to be described in a simple, intuitive form,
 allowing functions returning JSON to be tested easily.
 
 In many cases, the expected values will be known precisely, and the basic forms of comparison make a good starting
@@ -99,7 +99,7 @@ Nested objects may be checked by:
 
 And array items can similarly be checked, either as primitive values or as nested objects or arrays.
 
-The `json-kotlin-test` library makes testing simple cases easy and clear, and at the same time provides functionality to
+The `kjson-test` library makes testing simple cases easy and clear, and at the same time provides functionality to
 meet very broad and complex testing requirements.
 
 
@@ -122,7 +122,7 @@ First, some terminology:
 
 A function or service returning a JSON result will usually return an object or an array of objects, but according to the
 JSON specification the string representation of any JSON value is a valid JSON string.
-The `json-kotlin-test` library provides facilities for testing all forms of JSON results.
+The `kjson-test` library provides facilities for testing all forms of JSON results.
 
 ### Invoking the Tests
 
@@ -205,7 +205,7 @@ See the [Reference](#reference) section for a full list of these [General Test L
 
 Floating point numbers are those with a decimal point, or using the scientific notation (e.g. 1.5e20).
 Many decimal floating point numbers can not be represented with complete accuracy in a binary floating point system, so
-the `json-kotlin-test` library converts all such numbers to `BigDecimal`.
+the `kjson-test` library converts all such numbers to `BigDecimal`.
 This means that tests on floating point numbers must use `BigDecimal`, or `ClosedRange<BigDecimal>`, or
 `Collection<BigDecimal>`.
 
@@ -370,12 +370,12 @@ Example:
 
 ### The `import` Statement
 
-Perhaps the most complex part of `json-kotlin-test` is the import statement:
+Perhaps the most complex part of `kjson-test` is the import statement:
 ```kotlin
-import net.pwall.json.test.JSONExpect.Companion.expectJSON
+import io.kjson.test.JSONExpect.Companion.expectJSON
 ```
-If the IDE is configured to include the `json-kotlin-test` library, it will often include the `import` automatically
-when you enter the name of the test function.
+If the IDE is configured to include the `kjson-test` library, it will often include the `import` automatically when you
+enter the name of the test function.
 
 ### `expectJSON`
 
