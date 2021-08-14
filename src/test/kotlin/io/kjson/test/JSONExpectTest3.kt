@@ -1,8 +1,8 @@
 /*
  * @(#) JSONExpectTest3.kt
  *
- * json-kotlin-test Library for testing Kotlin JSON applications
- * Copyright (c) 2020 Peter Wall
+ * kjson-test Library for testing Kotlin JSON applications
+ * Copyright (c) 2020, 2021 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ package io.kjson.test
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.expect
+
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
 class JSONExpectTest3 {
