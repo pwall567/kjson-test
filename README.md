@@ -1,6 +1,6 @@
 # kjson-test
 
-[![Build Status](https://travis-ci.com/pwall567/kjson-test.svg?branch=main)](https://travis-ci.com/pwall567/kjson-test)
+[![Build Status](https://travis-ci.com/pwall567/kjson-test.svg?branch=main)](https://app.travis-ci.com/github/pwall567/kjson-test)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.5.20&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.5.20)
 [![Maven Central](https://img.shields.io/maven-central/v/io.kjson/kjson-test?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.kjson%22%20AND%20a:%22kjson-test%22)
@@ -679,7 +679,7 @@ passes if the value is `Int` or `Long`, and the `decimal` test passes if the val
 
 ## Dependency Specification
 
-The latest version of the library is 1.1, and it may be obtained from the Maven Central repository.
+The latest version of the library is 1.2, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -688,19 +688,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:1.1'
+    testImplementation 'io.kjson:kjson-test:1.2'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:1.1")
+    testImplementation("io.kjson:kjson-test:1.2")
 ```
 
 Peter Wall
 
-2021-08-24
+2021-08-29
