@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [Unreleased]
+### Changed
+- `README.md`, `SPRING.md`: added documentation (use of this library with Spring)
+- `pom.xml`: bumped dependency version
+
 ## [1.2] - 2021-08-29
 ### Changed
 - `pom.xml`: bumped dependency version

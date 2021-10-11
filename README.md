@@ -365,6 +365,12 @@ Example:
     }
 ```
 
+### Spring Framework
+
+Many users will wish to use `kjson-test` in conjunction with the
+[Spring Framework](https://spring.io/projects/spring-framework).
+A suggestion for simplifying some forms of Spring testing is included in the [Spring and `kjson-test`](SPRING.md) guide.
+
 
 ## Reference
 
