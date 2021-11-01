@@ -15,7 +15,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <kotlin.version>1.5.20</kotlin.version>
-    <dokka.version>1.4.0</dokka.version>
+    <dokka.version>1.5.0</dokka.version>
   </properties>
 
   <licenses>
