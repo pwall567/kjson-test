@@ -161,10 +161,10 @@ and an expected value or a lambda as the second.
 
 Some examples:
 ```kotlin
-        index(0, "bear")
-        index(27, -1)
-        index(1, true)
-        index(4) {
+        item(0, "bear")
+        item(27, -1)
+        item(1, true)
+        item(4) {
             // tests on nested object or array
         }
 ```
@@ -709,4 +709,4 @@ expected to be its principal use.)
 
 Peter Wall
 
-2021-10-11
+2021-11-01
