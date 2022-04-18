@@ -676,8 +676,9 @@ Name             | Tests that the value is...
 `year`           | ...a `String` containing a valid `Year`
 `yearMonth`      | ...a `String` containing a valid `YearMonth`
 `monthDay`       | ...a `String` containing a valid `MonthDay`
-`duration`       | ...a `String` containing a valid `Duration`
+`javaDuration`   | ...a `String` containing a valid `java.time.Duration`
 `period`         | ...a `String` containing a valid `Period`
+`duration`       | ...a `String` containing a valid `kotlin.time.Duration`
 
 Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the `longInteger` test
 passes if the value is `Int` or `Long`, and the `decimal` test passes if the value is `Int` or `Long` or `BigDecimal`.
@@ -685,7 +686,7 @@ passes if the value is `Int` or `Long`, and the `decimal` test passes if the val
 
 ## Dependency Specification
 
-The latest version of the library is 1.4, and it may be obtained from the Maven Central repository.
+The latest version of the library is 2.0, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -694,19 +695,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>1.4</version>
+      <version>2.0</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:1.4'
+    testImplementation 'io.kjson:kjson-test:2.0'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:1.4")
+    testImplementation("io.kjson:kjson-test:2.0")
 ```
 
 Peter Wall
 
-2022-01-31
+2022-04-18

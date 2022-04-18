@@ -2,7 +2,7 @@
  * @(#) JSONExpect.kt
  *
  * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021 Peter Wall
+ * Copyright (c) 2020, 2021, 2022 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,10 @@ package io.kjson.test
 
 import kotlin.reflect.KClass
 import kotlin.test.fail
+import kotlin.time.Duration
 
 import java.math.BigDecimal
-import java.time.Duration
+import java.time.Duration as JavaDuration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -51,10 +52,11 @@ import net.pwall.json.validation.JSONValidation
  * @author  Peter Wall
  */
 class JSONExpect private constructor(
-        /** The context node. */
-        val node: Any?,
-        /** The context node pointer. */
-        val pointer: String? = null) {
+    /** The context node. */
+    val node: Any?,
+    /** The context node pointer. */
+    val pointer: String? = null,
+) {
 
     /** The context node as [Int]. */
     val nodeAsInt: Int
@@ -853,7 +855,7 @@ class JSONExpect private constructor(
         try {
             LocalDate.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a LocalDate - ${showNode()}")
         }
     }
@@ -863,7 +865,7 @@ class JSONExpect private constructor(
         try {
             LocalDateTime.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a LocalDateTime - ${showNode()}")
         }
     }
@@ -873,7 +875,7 @@ class JSONExpect private constructor(
         try {
             LocalTime.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a LocalTime - ${showNode()}")
         }
     }
@@ -883,7 +885,7 @@ class JSONExpect private constructor(
         try {
             OffsetDateTime.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a OffsetDateTime - ${showNode()}")
         }
     }
@@ -893,7 +895,7 @@ class JSONExpect private constructor(
         try {
             OffsetTime.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a OffsetTime - ${showNode()}")
         }
     }
@@ -903,7 +905,7 @@ class JSONExpect private constructor(
         try {
             ZonedDateTime.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a ZonedDateTime - ${showNode()}")
         }
     }
@@ -913,7 +915,7 @@ class JSONExpect private constructor(
         try {
             YearMonth.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a YearMonth - ${showNode()}")
         }
     }
@@ -923,7 +925,7 @@ class JSONExpect private constructor(
         try {
             MonthDay.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a MonthDay - ${showNode()}")
         }
     }
@@ -933,18 +935,18 @@ class JSONExpect private constructor(
         try {
             Year.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a Year - ${showNode()}")
         }
     }
 
-    /** Check that a string value is a valid [Duration]. */
-    val duration: JSONExpect.() -> Unit = {
+    /** Check that a string value is a valid [JavaDuration]. */
+    val javaDuration: JSONExpect.() -> Unit = {
         try {
-            Duration.parse(nodeAsString)
+            JavaDuration.parse(nodeAsString)
         }
-        catch (e: Exception) {
-            error("JSON string is not a Duration - ${showNode()}")
+        catch (_: Exception) {
+            error("JSON string is not a Java Duration - ${showNode()}")
         }
     }
 
@@ -953,8 +955,18 @@ class JSONExpect private constructor(
         try {
             Period.parse(nodeAsString)
         }
-        catch (e: Exception) {
+        catch (_: Exception) {
             error("JSON string is not a Period - ${showNode()}")
+        }
+    }
+
+    /** Check that a string value is a valid [Duration]. */
+    val duration: JSONExpect.() -> Unit = {
+        try {
+            Duration.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a Duration - ${showNode()}")
         }
     }
 
@@ -965,9 +977,9 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if the length is incorrect
      */
     fun length(expected: Int): JSONExpect.() -> Unit = {
-        nodeAsString.let {
-            if (it.length != expected)
-                error("JSON string length doesn't match - Expected $expected, was ${it.length}")
+        nodeAsString.length.let {
+            if (it != expected)
+                error("JSON string length doesn't match - Expected $expected, was $it")
         }
     }
 
@@ -978,9 +990,9 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if the length is incorrect
      */
     fun length(expected: IntRange): JSONExpect.() -> Unit = {
-        nodeAsString.let {
-            if (it.length !in expected)
-                error("JSON string length doesn't match - Expected $expected, was ${it.length}")
+        nodeAsString.length.let {
+            if (it !in expected)
+                error("JSON string length doesn't match - Expected $expected, was $it")
         }
     }
 
@@ -991,9 +1003,9 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if the scale is incorrect
      */
     fun scale(expected: Int): JSONExpect.() -> Unit = {
-        nodeAsDecimal.let {
-            if (it.scale() != expected)
-                error("JSON decimal scale doesn't match - Expected $expected, was ${it.scale()}")
+        nodeAsDecimal.scale().let {
+            if (it != expected)
+                error("JSON decimal scale doesn't match - Expected $expected, was $it")
         }
     }
 
@@ -1004,9 +1016,9 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if the scale is incorrect
      */
     fun scale(expected: IntRange): JSONExpect.() -> Unit = {
-        nodeAsDecimal.let {
-            if (it.scale() !in expected)
-                error("JSON decimal scale doesn't match - Expected $expected, was ${it.scale()}")
+        nodeAsDecimal.scale().let {
+            if (it !in expected)
+                error("JSON decimal scale doesn't match - Expected $expected, was $it")
         }
     }
 
@@ -1016,8 +1028,7 @@ class JSONExpect private constructor(
      * @param   message     the error message
      */
     fun error(message: String): Nothing {
-        val context = if (pointer != null) "$pointer: " else ""
-        fail("$context$message")
+        fail(pointer?.let { "$it: $message" } ?: message)
     }
 
     /**

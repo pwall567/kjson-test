@@ -2,6 +2,13 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.0] - 2022-04-18
+### Changed
+- `JSONExpect`: minor optimisations
+- `JSONExpect`: added test for `kotlin.time.Duration`, renamed test for `java.time.Duration` to `javaDuration`
+  (breaking change)
+- `pom.xml`: bumped dependency version
+
 ## [1.4] - 2022-01-31
 ### Changed
 - `pom.xml`: bumped dependency version

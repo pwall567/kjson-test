@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest3.kt
  *
  * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021 Peter Wall
+ * Copyright (c) 2020, 2021, 2022 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -912,65 +912,65 @@ class JSONExpectTest3 {
         expect("/0: JSON string is not a Year - \"not a Year\"") { exception.message }
     }
 
-    @Test fun `should test string value as Duration`() {
+    @Test fun `should test string value as Java Duration`() {
         val json = "\"PT2H\""
         expectJSON(json) {
-            value(duration)
+            value(javaDuration)
         }
     }
 
-    @Test fun `should fail on incorrect test of string value as Duration`() {
+    @Test fun `should fail on incorrect test of string value as Java Duration`() {
         val json = "\"not a Duration\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(duration)
+                value(javaDuration)
             }
         }
-        expect("JSON string is not a Duration - \"not a Duration\"") { exception.message }
+        expect("JSON string is not a Java Duration - \"not a Duration\"") { exception.message }
     }
 
-    @Test fun `should fail on test of non-string value as Duration`() {
+    @Test fun `should fail on test of non-string value as Java Duration`() {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(duration)
+                value(javaDuration)
             }
         }
         expect("JSON type doesn't match - Expected string, was integer") { exception.message }
     }
 
-    @Test fun `should test string property as Duration`() {
+    @Test fun `should test string property as Java Duration`() {
         val json = """{"abc":"PT2H"}"""
         expectJSON(json) {
-            property("abc", duration)
+            property("abc", javaDuration)
         }
     }
 
-    @Test fun `should fail on incorrect test of string property as Duration`() {
+    @Test fun `should fail on incorrect test of string property as Java Duration`() {
         val json = """{"abc":"not a Duration"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", duration)
+                property("abc", javaDuration)
             }
         }
-        expect("/abc: JSON string is not a Duration - \"not a Duration\"") { exception.message }
+        expect("/abc: JSON string is not a Java Duration - \"not a Duration\"") { exception.message }
     }
 
-    @Test fun `should test string array item as Duration`() {
+    @Test fun `should test string array item as Java Duration`() {
         val json = """["PT2H"]"""
         expectJSON(json) {
-            item(0, duration)
+            item(0, javaDuration)
         }
     }
 
-    @Test fun `should fail on incorrect test of string array item as Duration`() {
+    @Test fun `should fail on incorrect test of string array item as Java Duration`() {
         val json = """["not a Duration"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, duration)
+                item(0, javaDuration)
             }
         }
-        expect("/0: JSON string is not a Duration - \"not a Duration\"") { exception.message }
+        expect("/0: JSON string is not a Java Duration - \"not a Duration\"") { exception.message }
     }
 
     @Test fun `should test string value as Period`() {
@@ -1032,6 +1032,67 @@ class JSONExpectTest3 {
             }
         }
         expect("/0: JSON string is not a Period - \"not a Period\"") { exception.message }
+    }
+
+    @Test fun `should test string value as Duration`() {
+        val json = "\"2m 5s\""
+        expectJSON(json) {
+            value(duration)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of string value as Duration`() {
+        val json = "\"not a Duration\""
+        val exception = assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                value(duration)
+            }
+        }
+        expect("JSON string is not a Duration - \"not a Duration\"") { exception.message }
+    }
+
+    @Test fun `should fail on test of non-string value as Duration`() {
+        val json = "12345"
+        val exception = assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                value(duration)
+            }
+        }
+        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+    }
+
+    @Test fun `should test string property as Duration`() {
+        val json = """{"abc":"2m 5s"}"""
+        expectJSON(json) {
+            property("abc", duration)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of string property as Duration`() {
+        val json = """{"abc":"not a Duration"}"""
+        val exception = assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("abc", duration)
+            }
+        }
+        expect("/abc: JSON string is not a Duration - \"not a Duration\"") { exception.message }
+    }
+
+    @Test fun `should test string array item as Duration`() {
+        val json = """["2m 5s"]"""
+        expectJSON(json) {
+            item(0, duration)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of string array item as Duration`() {
+        val json = """["not a Duration"]"""
+        val exception = assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                item(0, duration)
+            }
+        }
+        expect("/0: JSON string is not a Duration - \"not a Duration\"") { exception.message }
     }
 
 }
