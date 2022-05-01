@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.0.1] - 2022-05-01
+### Changed
+- `pom.xml`: bumped dependency version
+
 ## [2.0] - 2022-04-18
 ### Changed
 - `JSONExpect`: minor optimisations
