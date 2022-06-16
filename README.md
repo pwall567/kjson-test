@@ -19,6 +19,13 @@ are now output in [JSON Pointer](https://tools.ietf.org/html/rfc6901) form inste
 This is to bring the internal references within a JSON array or object into line with the approach taken by
 [JSON Schema](https://json-schema.org/).
 
+**New in version 2.1:** the `property`, `item` and `value` tests may now take any of the `java.time` classes or
+`kotlin.time.Duration` or `UUID` as a parameter.
+There are often multiple ways of representing these classes in string form (for example, a time may include or omit
+trailing zeros on fractional seconds, or a UUID may use upper or lower case alphabetic characters), so using string
+comparisons in tests could cause those tests to fail incorrectly.
+The new tests should be used in preference to string tests in future.
+
 ## Contents
 
 - [Quick Start](#quick-start)
@@ -413,6 +420,19 @@ Signature                                 | Check that the property...
 `property(String, BigDecimal)`            | ...is equal to a `BigDecimal`
 `property(String, Boolean)`               | ...is equal to a `Boolean`
 `property(String, Regex)`                 | ...is a `String` matching the given `Regex`
+`property(String, LocalDate)`             | ...is a `String` matching the given `LocalDate`
+`property(String, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`
+`property(String, LocalTime)`             | ...is a `String` matching the given `LocalTime`
+`property(String, OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`
+`property(String, OffsetTime)`            | ...is a `String` matching the given `OffsetTime`
+`property(String, ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`
+`property(String, YearMonth)`             | ...is a `String` matching the given `YearMonth`
+`property(String, MonthDay)`              | ...is a `String` matching the given `MonthDay`
+`property(String, Year)`                  | ...is a `String` matching the given `Year`
+`property(String, java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`
+`property(String, Period)`                | ...is a `String` matching the given `Period`
+`property(String, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
+`property(String, UUID)`                  | ...is a `String` matching the given `UUID`
 `property(String, IntRange)`              | ...is in a given range
 `property(String, LongRange)`             | ...is in a given range
 `property(String, ClosedRange<*>)`        | ...is in a given range
@@ -437,6 +457,7 @@ Examples:
 ```kotlin
         property("id", 12345)
         property("name", "William")
+        property("dob", LocalDate.of(1996, 7, 4))
         property("count", 0..9999)
         property("amount", decimal)
         property("reference", uuid)
@@ -462,6 +483,19 @@ Signature                          | Check that the array item...
 `item(Int, BigDecimal)`            | ...is equal to a `BigDecimal`
 `item(Int, Boolean)`               | ...is equal to a `Boolean`
 `item(Int, Regex)`                 | ...is a `String` matching the given `Regex`
+`item(Int, LocalDate)`             | ...is a `String` matching the given `LocalDate`
+`item(Int, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`
+`item(Int, LocalTime)`             | ...is a `String` matching the given `LocalTime`
+`item(Int, OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`
+`item(Int, OffsetTime)`            | ...is a `String` matching the given `OffsetTime`
+`item(Int, ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`
+`item(Int, YearMonth)`             | ...is a `String` matching the given `YearMonth`
+`item(Int, MonthDay)`              | ...is a `String` matching the given `MonthDay`
+`item(Int, Year)`                  | ...is a `String` matching the given `Year`
+`item(Int, java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`
+`item(Int, Period)`                | ...is a `String` matching the given `Period`
+`item(Int, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
+`item(Int, UUID)`                  | ...is a `String` matching the given `UUID`
 `item(Int, IntRange)`              | ...is in a given range
 `item(Int, LongRange)`             | ...is in a given range
 `item(Int, ClosedRange<*>)`        | ...is in a given range
@@ -474,6 +508,7 @@ Examples:
 ```kotlin
         item(0, 22)
         item(5, "William")
+        item(4, 2.hours)
         item(7, decimal)
         item(7, scale(0..2))
         item(1, uuid)
@@ -494,6 +529,19 @@ Signature                      | Check that the value...
 `value(BigDecimal)`            | ...is equal to a `BigDecimal`
 `value(Boolean)`               | ...is equal to a `Boolean`
 `value(Regex)`                 | ...is a `String` matching the given `Regex`
+`value(LocalDate)`             | ...is a `String` matching the given `LocalDate`
+`value(LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`
+`value(LocalTime)`             | ...is a `String` matching the given `LocalTime`
+`value(OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`
+`value(OffsetTime)`            | ...is a `String` matching the given `OffsetTime`
+`value(ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`
+`value(YearMonth)`             | ...is a `String` matching the given `YearMonth`
+`value(MonthDay)`              | ...is a `String` matching the given `MonthDay`
+`value(Year)`                  | ...is a `String` matching the given `Year`
+`value(java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`
+`value(Period)`                | ...is a `String` matching the given `Period`
+`value(kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
+`value(UUID)`                  | ...is a `String` matching the given `UUID`
 `value(IntRange)`              | ...is in a given range
 `value(LongRange)`             | ...is in a given range
 `value(ClosedRange<*>)`        | ...is in a given range
@@ -577,6 +625,19 @@ Signature                     | Create a test for...
 `test(BigDecimal)`            | ...value equal to a `BigDecimal`
 `test(Boolean)`               | ...value equal to a `Boolean`
 `test(Regex)`                 | ...value a `String` matching the given `Regex`
+`test(LocalDate)`             | ...value a `String` matching the given `LocalDate`
+`test(LocalDateTime)`         | ...value a `String` matching the given `LocalDateTime`
+`test(LocalTime)`             | ...value a `String` matching the given `LocalTime`
+`test(OffsetDateTime)`        | ...value a `String` matching the given `OffsetDateTime`
+`test(OffsetTime)`            | ...value a `String` matching the given `OffsetTime`
+`test(ZonedDateTime)`         | ...value a `String` matching the given `ZonedDateTime`
+`test(YearMonth)`             | ...value a `String` matching the given `YearMonth`
+`test(MonthDay)`              | ...value a `String` matching the given `MonthDay`
+`test(Year)`                  | ...value a `String` matching the given `Year`
+`test(java.time.Duration)`    | ...value a `String` matching the given `java.time.Duration`
+`test(Period)`                | ...value a `String` matching the given `Period`
+`test(kotlin.time.Duration)`  | ...value a `String` matching the given `kotlin.time.Duration`
+`test(UUID)`                  | ...value a `String` matching the given `UUID`
 `test(IntRange)`              | ...value in a given range
 `test(LongRange)`             | ...value in a given range
 `test(ClosedRange<*>)`        | ...value in a given range
@@ -686,7 +747,7 @@ passes if the value is `Int` or `Long`, and the `decimal` test passes if the val
 
 ## Dependency Specification
 
-The latest version of the library is 2.0.3, and it may be obtained from the Maven Central repository.
+The latest version of the library is 2.1 and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -695,19 +756,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>2.0.3</version>
+      <version>2.1</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:2.0.3'
+    testImplementation 'io.kjson:kjson-test:2.1'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:2.0.3")
+    testImplementation("io.kjson:kjson-test:2.1")
 ```
 
 Peter Wall
 
-2022-06-07
+2022-06-16

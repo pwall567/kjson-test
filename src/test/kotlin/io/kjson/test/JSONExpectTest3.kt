@@ -554,13 +554,13 @@ class JSONExpectTest3 {
     }
 
     @Test fun `should fail on incorrect test of string value as OffsetDateTime`() {
-        val json = "\"not a OffsetDateTime\""
+        val json = "\"not an OffsetDateTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 value(offsetDateTime)
             }
         }
-        expect("JSON string is not a OffsetDateTime - \"not a OffsetDateTime\"") { exception.message }
+        expect("JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { exception.message }
     }
 
     @Test fun `should fail on test of non-string value as OffsetDateTime`() {
@@ -581,13 +581,13 @@ class JSONExpectTest3 {
     }
 
     @Test fun `should fail on incorrect test of string property as OffsetDateTime`() {
-        val json = """{"abc":"not a OffsetDateTime"}"""
+        val json = """{"abc":"not an OffsetDateTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 property("abc", offsetDateTime)
             }
         }
-        expect("/abc: JSON string is not a OffsetDateTime - \"not a OffsetDateTime\"") { exception.message }
+        expect("/abc: JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { exception.message }
     }
 
     @Test fun `should test string array item as OffsetDateTime`() {
@@ -598,13 +598,13 @@ class JSONExpectTest3 {
     }
 
     @Test fun `should fail on incorrect test of string array item as OffsetDateTime`() {
-        val json = """["not a OffsetDateTime"]"""
+        val json = """["not an OffsetDateTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 item(0, offsetDateTime)
             }
         }
-        expect("/0: JSON string is not a OffsetDateTime - \"not a OffsetDateTime\"") { exception.message }
+        expect("/0: JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { exception.message }
     }
 
     @Test fun `should test string value as OffsetTime`() {
@@ -615,13 +615,13 @@ class JSONExpectTest3 {
     }
 
     @Test fun `should fail on incorrect test of string value as OffsetTime`() {
-        val json = "\"not a OffsetTime\""
+        val json = "\"not an OffsetTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 value(offsetTime)
             }
         }
-        expect("JSON string is not a OffsetTime - \"not a OffsetTime\"") { exception.message }
+        expect("JSON string is not an OffsetTime - \"not an OffsetTime\"") { exception.message }
     }
 
     @Test fun `should fail on test of non-string value as OffsetTime`() {
@@ -642,13 +642,13 @@ class JSONExpectTest3 {
     }
 
     @Test fun `should fail on incorrect test of string property as OffsetTime`() {
-        val json = """{"abc":"not a OffsetTime"}"""
+        val json = """{"abc":"not an OffsetTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 property("abc", offsetTime)
             }
         }
-        expect("/abc: JSON string is not a OffsetTime - \"not a OffsetTime\"") { exception.message }
+        expect("/abc: JSON string is not an OffsetTime - \"not an OffsetTime\"") { exception.message }
     }
 
     @Test fun `should test string array item as OffsetTime`() {
@@ -659,13 +659,13 @@ class JSONExpectTest3 {
     }
 
     @Test fun `should fail on incorrect test of string array item as OffsetTime`() {
-        val json = """["not a OffsetTime"]"""
+        val json = """["not an OffsetTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 item(0, offsetTime)
             }
         }
-        expect("/0: JSON string is not a OffsetTime - \"not a OffsetTime\"") { exception.message }
+        expect("/0: JSON string is not an OffsetTime - \"not an OffsetTime\"") { exception.message }
     }
 
     @Test fun `should test string value as ZonedDateTime`() {

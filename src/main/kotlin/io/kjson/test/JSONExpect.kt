@@ -43,6 +43,7 @@ import java.time.YearMonth
 import java.time.ZonedDateTime
 import java.util.UUID
 
+import net.pwall.json.JSONFunctions
 import net.pwall.json.JSONSimple
 import net.pwall.json.validation.JSONValidation
 
@@ -94,6 +95,123 @@ class JSONExpect private constructor(
     /** The context node as [List]. */
     val nodeAsArray: List<*>
         get() = if (node is List<*>) node else errorOnType("array")
+
+    /** The context node as [LocalDate]. */
+    val nodeAsLocalDate: LocalDate
+        get() = try {
+            LocalDate.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a LocalDate - ${showNode()}")
+        }
+
+    /** The context node as [LocalDateTime]. */
+    val nodeAsLocalDateTime: LocalDateTime
+        get() = try {
+            LocalDateTime.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a LocalDateTime - ${showNode()}")
+        }
+
+    /** The context node as [LocalTime]. */
+    val nodeAsLocalTime: LocalTime
+        get() = try {
+            LocalTime.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a LocalTime - ${showNode()}")
+        }
+
+    /** The context node as [OffsetDateTime]. */
+    val nodeAsOffsetDateTime: OffsetDateTime
+        get() = try {
+            OffsetDateTime.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not an OffsetDateTime - ${showNode()}")
+        }
+
+    /** The context node as [OffsetTime]. */
+    val nodeAsOffsetTime: OffsetTime
+        get() = try {
+            OffsetTime.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not an OffsetTime - ${showNode()}")
+        }
+
+    /** The context node as [ZonedDateTime]. */
+    val nodeAsZonedDateTime: ZonedDateTime
+        get() = try {
+            ZonedDateTime.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a ZonedDateTime - ${showNode()}")
+        }
+
+    /** The context node as [YearMonth]. */
+    val nodeAsYearMonth: YearMonth
+        get() = try {
+            YearMonth.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a YearMonth - ${showNode()}")
+        }
+
+    /** The context node as [MonthDay]. */
+    val nodeAsMonthDay: MonthDay
+        get() = try {
+            MonthDay.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a MonthDay - ${showNode()}")
+        }
+
+    /** The context node as [Year]. */
+    val nodeAsYear: Year
+        get() = try {
+            Year.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a Year - ${showNode()}")
+        }
+
+    /** The context node as [JavaDuration]. */
+    val nodeAsJavaDuration: JavaDuration
+        get() = try {
+            JavaDuration.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a Java Duration - ${showNode()}")
+        }
+
+    /** The context node as [Period]. */
+    val nodeAsPeriod: Period
+        get() = try {
+            Period.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a Period - ${showNode()}")
+        }
+
+    /** The context node as [Duration]. */
+    val nodeAsDuration: Duration
+        get() = try {
+            Duration.parse(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a Duration - ${showNode()}")
+        }
+
+    /** The context node as [UUID]. */
+    val nodeAsUUID: UUID
+        get() = try {
+            UUID.fromString(nodeAsString)
+        }
+        catch (_: Exception) {
+            error("JSON string is not a UUID - ${showNode()}")
+        }
 
     /**
      * Check the value as an [Int].
@@ -153,9 +271,152 @@ class JSONExpect private constructor(
             }
             else -> {
                 if (nodeAsString != expected)
-                    errorOnValue("\"$expected\"")
+                    errorOnValue(JSONFunctions.displayString(expected, 45))
             }
         }
+    }
+
+    /**
+     * Check the value as a [LocalDate].
+     *
+     * @param   expected        the expected [LocalDate] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: LocalDate) {
+        if (nodeAsLocalDate != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [LocalDateTime].
+     *
+     * @param   expected        the expected [LocalDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: LocalDateTime) {
+        if (nodeAsLocalDateTime != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [LocalTime].
+     *
+     * @param   expected        the expected [LocalTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: LocalTime) {
+        if (nodeAsLocalTime != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as an [OffsetDateTime].
+     *
+     * @param   expected        the expected [OffsetDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: OffsetDateTime) {
+        if (nodeAsOffsetDateTime != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as an [OffsetTime].
+     *
+     * @param   expected        the expected [OffsetTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: OffsetTime) {
+        if (nodeAsOffsetTime != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [ZonedDateTime].
+     *
+     * @param   expected        the expected [ZonedDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: ZonedDateTime) {
+        if (nodeAsZonedDateTime != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [YearMonth].
+     *
+     * @param   expected        the expected [YearMonth] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: YearMonth) {
+        if (nodeAsYearMonth != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [Year].
+     *
+     * @param   expected        the expected [Year] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: Year) {
+        if (nodeAsYear != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [MonthDay].
+     *
+     * @param   expected        the expected [MonthDay] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: MonthDay) {
+        if (nodeAsMonthDay != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [JavaDuration].
+     *
+     * @param   expected        the expected [JavaDuration] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: JavaDuration) {
+        if (nodeAsJavaDuration != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [Period].
+     *
+     * @param   expected        the expected [Period] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: Period) {
+        if (nodeAsPeriod != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [Duration].
+     *
+     * @param   expected        the expected [Duration] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: Duration) {
+        if (nodeAsDuration != expected)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
+     * Check the value as a [UUID].
+     *
+     * @param   expected        the expected [UUID] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: UUID) {
+        if (nodeAsUUID != expected)
+            errorOnValue("\"$expected\"")
     }
 
     /**
@@ -353,6 +614,175 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check a property as a [LocalDate].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [LocalDate] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: LocalDate) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [LocalDateTime].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [LocalDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: LocalDateTime) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [LocalTime].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [LocalTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: LocalTime) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as an [OffsetDateTime].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [OffsetDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: OffsetDateTime) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as an [OffsetTime].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [OffsetTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: OffsetTime) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [ZonedDateTime].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [ZonedDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: ZonedDateTime) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [YearMonth].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [YearMonth] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: YearMonth) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [MonthDay].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [MonthDay] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: MonthDay) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [Year].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [Year] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: Year) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [JavaDuration].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [JavaDuration] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: JavaDuration) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [Period].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [Period] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: Period) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [Duration].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [Duration] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: Duration) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check a property as a [UUID].
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [UUID] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: UUID) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
      * Check a property as a [String] against a [Regex].
      *
      * @param   name            the property name
@@ -514,6 +944,175 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: String?) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [LocalDate].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [LocalDate] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: LocalDate) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [LocalDateTime].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [LocalDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: LocalDateTime) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [LocalTime].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [LocalTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: LocalTime) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as an [OffsetDateTime].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [OffsetDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: OffsetDateTime) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as an [OffsetTime].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [OffsetTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: OffsetTime) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [ZonedDateTime].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [ZonedDateTime] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: ZonedDateTime) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [YearMonth].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [YearMonth] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: YearMonth) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [MonthDay].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [MonthDay] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: MonthDay) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [Year].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [Year] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: Year) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [JavaDuration].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [JavaDuration] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: JavaDuration) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [Period].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [Period] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: Period) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [Duration].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [Duration] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: Duration) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as a [UUID].
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [UUID] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: UUID) {
         checkIndex(index).let {
             JSONExpect(getItem(it), itemPointer(it)).value(expected)
         }
@@ -714,9 +1313,7 @@ class JSONExpect private constructor(
      * @param   expected    the expected [Int] value
      * @return              the lambda
      */
-    fun test(expected: Int): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: Int): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Long] equality check to a lambda for use in a multiple test check.
@@ -724,9 +1321,7 @@ class JSONExpect private constructor(
      * @param   expected    the expected [Long] value
      * @return              the lambda
      */
-    fun test(expected: Long): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: Long): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [BigDecimal] equality check to a lambda for use in a multiple test check.
@@ -734,9 +1329,7 @@ class JSONExpect private constructor(
      * @param   expected    the expected [BigDecimal] value
      * @return              the lambda
      */
-    fun test(expected: BigDecimal): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: BigDecimal): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Boolean] equality check to a lambda for use in a multiple test check.
@@ -744,9 +1337,7 @@ class JSONExpect private constructor(
      * @param   expected    the expected [Boolean] value
      * @return              the lambda
      */
-    fun test(expected: Boolean): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: Boolean): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [String] or `null` equality check to a lambda for use in a multiple test check.
@@ -754,9 +1345,111 @@ class JSONExpect private constructor(
      * @param   expected    the expected [String] value (or `null`)
      * @return              the lambda
      */
-    fun test(expected: String?): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: String?): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [LocalDate] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [LocalDate] value
+     * @return              the lambda
+     */
+    fun test(expected: LocalDate): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [LocalDateTime] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [LocalDateTime] value
+     * @return              the lambda
+     */
+    fun test(expected: LocalDateTime): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [LocalTime] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [LocalTime] value
+     * @return              the lambda
+     */
+    fun test(expected: LocalTime): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert an [OffsetDateTime] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [OffsetDateTime] value
+     * @return              the lambda
+     */
+    fun test(expected: OffsetDateTime): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert an [OffsetTime] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [OffsetTime] value
+     * @return              the lambda
+     */
+    fun test(expected: OffsetTime): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [ZonedDateTime] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [ZonedDateTime] value
+     * @return              the lambda
+     */
+    fun test(expected: ZonedDateTime): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [YearMonth] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [YearMonth] value
+     * @return              the lambda
+     */
+    fun test(expected: YearMonth): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [MonthDay] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [MonthDay] value
+     * @return              the lambda
+     */
+    fun test(expected: MonthDay): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [Year] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [Year] value
+     * @return              the lambda
+     */
+    fun test(expected: Year): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [JavaDuration] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [JavaDuration] value
+     * @return              the lambda
+     */
+    fun test(expected: JavaDuration): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [Period] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [Period] value
+     * @return              the lambda
+     */
+    fun test(expected: Period): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [Duration] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [Duration] value
+     * @return              the lambda
+     */
+    fun test(expected: Duration): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
+     * Convert a [UUID] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [UUID] value
+     * @return              the lambda
+     */
+    fun test(expected: UUID): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [String] [Regex] check to a lambda for use in a multiple test check.
@@ -764,9 +1457,7 @@ class JSONExpect private constructor(
      * @param   expected    the [Regex]
      * @return              the lambda
      */
-    fun test(expected: Regex): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: Regex): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert an [Int] range check to a lambda for use in a multiple test check.
@@ -774,9 +1465,7 @@ class JSONExpect private constructor(
      * @param   expected    the [IntRange]
      * @return              the lambda
      */
-    fun test(expected: IntRange): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: IntRange): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Long] range check to a lambda for use in a multiple test check.
@@ -784,9 +1473,7 @@ class JSONExpect private constructor(
      * @param   expected    the [LongRange]
      * @return              the lambda
      */
-    fun test(expected: LongRange): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    fun test(expected: LongRange): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [ClosedRange] check to a lambda for use in a multiple test check.
@@ -794,9 +1481,7 @@ class JSONExpect private constructor(
      * @param   expected    the [ClosedRange]
      * @return              the lambda
      */
-    inline fun <reified T: Comparable<T>> test(expected: ClosedRange<T>): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    inline fun <reified T: Comparable<T>> test(expected: ClosedRange<T>): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Collection] check to a lambda for use in a multiple test check.
@@ -804,9 +1489,7 @@ class JSONExpect private constructor(
      * @param   expected    the [Collection]
      * @return              the lambda
      */
-    inline fun <reified T: Any> test(expected: Collection<T>): JSONExpect.() -> Unit {
-        return { value(expected) }
-    }
+    inline fun <reified T: Any> test(expected: Collection<T>): JSONExpect.() -> Unit = { value(expected) }
 
     /** Check that a value is non-null. */
     val nonNull: JSONExpect.() -> Unit = {
@@ -851,124 +1534,40 @@ class JSONExpect private constructor(
     }
 
     /** Check that a string value is a valid [LocalDate]. */
-    val localDate: JSONExpect.() -> Unit = {
-        try {
-            LocalDate.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a LocalDate - ${showNode()}")
-        }
-    }
+    val localDate: JSONExpect.() -> Unit = { nodeAsLocalDate }
 
     /** Check that a string value is a valid [LocalDateTime]. */
-    val localDateTime: JSONExpect.() -> Unit = {
-        try {
-            LocalDateTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a LocalDateTime - ${showNode()}")
-        }
-    }
+    val localDateTime: JSONExpect.() -> Unit = { nodeAsLocalDateTime }
 
     /** Check that a string value is a valid [LocalTime]. */
-    val localTime: JSONExpect.() -> Unit = {
-        try {
-            LocalTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a LocalTime - ${showNode()}")
-        }
-    }
+    val localTime: JSONExpect.() -> Unit = { nodeAsLocalTime }
 
     /** Check that a string value is a valid [OffsetDateTime]. */
-    val offsetDateTime: JSONExpect.() -> Unit = {
-        try {
-            OffsetDateTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a OffsetDateTime - ${showNode()}")
-        }
-    }
+    val offsetDateTime: JSONExpect.() -> Unit = { nodeAsOffsetDateTime }
 
     /** Check that a string value is a valid [OffsetTime]. */
-    val offsetTime: JSONExpect.() -> Unit = {
-        try {
-            OffsetTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a OffsetTime - ${showNode()}")
-        }
-    }
+    val offsetTime: JSONExpect.() -> Unit = { nodeAsOffsetTime }
 
     /** Check that a string value is a valid [ZonedDateTime]. */
-    val zonedDateTime: JSONExpect.() -> Unit = {
-        try {
-            ZonedDateTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a ZonedDateTime - ${showNode()}")
-        }
-    }
+    val zonedDateTime: JSONExpect.() -> Unit = { nodeAsZonedDateTime }
 
     /** Check that a string value is a valid [YearMonth]. */
-    val yearMonth: JSONExpect.() -> Unit = {
-        try {
-            YearMonth.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a YearMonth - ${showNode()}")
-        }
-    }
+    val yearMonth: JSONExpect.() -> Unit = { nodeAsYearMonth }
 
     /** Check that a string value is a valid [MonthDay]. */
-    val monthDay: JSONExpect.() -> Unit = {
-        try {
-            MonthDay.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a MonthDay - ${showNode()}")
-        }
-    }
+    val monthDay: JSONExpect.() -> Unit = { nodeAsMonthDay }
 
     /** Check that a string value is a valid [Year]. */
-    val year: JSONExpect.() -> Unit = {
-        try {
-            Year.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Year - ${showNode()}")
-        }
-    }
+    val year: JSONExpect.() -> Unit = { nodeAsYear }
 
     /** Check that a string value is a valid [JavaDuration]. */
-    val javaDuration: JSONExpect.() -> Unit = {
-        try {
-            JavaDuration.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Java Duration - ${showNode()}")
-        }
-    }
+    val javaDuration: JSONExpect.() -> Unit = { nodeAsJavaDuration }
 
     /** Check that a string value is a valid [Period]. */
-    val period: JSONExpect.() -> Unit = {
-        try {
-            Period.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Period - ${showNode()}")
-        }
-    }
+    val period: JSONExpect.() -> Unit = { nodeAsPeriod }
 
     /** Check that a string value is a valid [Duration]. */
-    val duration: JSONExpect.() -> Unit = {
-        try {
-            Duration.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Duration - ${showNode()}")
-        }
-    }
+    val duration: JSONExpect.() -> Unit = { nodeAsDuration }
 
     /**
      * Check the length of a string value.
