@@ -26,6 +26,10 @@ trailing zeros on fractional seconds, or a UUID may use upper or lower case alph
 comparisons in tests could cause those tests to fail incorrectly.
 The new tests should be used in preference to string tests in future.
 
+**New in version 2.2:** the `property`, `item` and `value` tests may now take an `enum` value as a parameter, and the
+effect of the test is to do a string comparison on the `enum` name.
+This is just a matter of convenience &ndash; the tests are simpler if they don't require a `.name` or `.toString()`.
+
 ## Contents
 
 - [Quick Start](#quick-start)
@@ -433,6 +437,7 @@ Signature                                 | Check that the property...
 `property(String, Period)`                | ...is a `String` matching the given `Period`
 `property(String, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
 `property(String, UUID)`                  | ...is a `String` matching the given `UUID`
+`property(String, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`
 `property(String, IntRange)`              | ...is in a given range
 `property(String, LongRange)`             | ...is in a given range
 `property(String, ClosedRange<*>)`        | ...is in a given range
@@ -496,6 +501,7 @@ Signature                          | Check that the array item...
 `item(Int, Period)`                | ...is a `String` matching the given `Period`
 `item(Int, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
 `item(Int, UUID)`                  | ...is a `String` matching the given `UUID`
+`item(Int, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`
 `item(Int, IntRange)`              | ...is in a given range
 `item(Int, LongRange)`             | ...is in a given range
 `item(Int, ClosedRange<*>)`        | ...is in a given range
@@ -542,6 +548,7 @@ Signature                      | Check that the value...
 `value(Period)`                | ...is a `String` matching the given `Period`
 `value(kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
 `value(UUID)`                  | ...is a `String` matching the given `UUID`
+`value(Enum<*>)`               | ...is a `String` matching a member of the given `Enum`
 `value(IntRange)`              | ...is in a given range
 `value(LongRange)`             | ...is in a given range
 `value(ClosedRange<*>)`        | ...is in a given range
@@ -747,7 +754,7 @@ passes if the value is `Int` or `Long`, and the `decimal` test passes if the val
 
 ## Dependency Specification
 
-The latest version of the library is 2.1 and it may be obtained from the Maven Central repository.
+The latest version of the library is 2.2 and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -756,19 +763,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>2.1</version>
+      <version>2.2</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:2.1'
+    testImplementation 'io.kjson:kjson-test:2.2'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:2.1")
+    testImplementation("io.kjson:kjson-test:2.2")
 ```
 
 Peter Wall
 
-2022-06-16
+2022-06-17

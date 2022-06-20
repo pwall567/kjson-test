@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [2.2] - 2022-06-17
+### Changed
+- `JSONExpect`: added `value`, `property` and `item` tests for `Enum` values
+
 ## [2.1] - 2022-06-13
 ### Changed
 - `JSONExpect`: added `value`, `property` and `item` tests for `java.time` classes, `Duration` and `UUID`

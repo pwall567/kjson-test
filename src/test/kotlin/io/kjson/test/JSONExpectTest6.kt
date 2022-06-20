@@ -994,4 +994,60 @@ class JSONExpectTest6 {
         }
     }
 
+    @Test fun `should test Enum value`() {
+        val json = "\"OPEN\""
+        expectJSON(json) {
+            value(Status.OPEN)
+        }
+    }
+
+    @Test fun `should fail on incorrect Enum value`() {
+        val json = "\"WRONG\""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                value(Status.OPEN)
+            }
+        }.let {
+            expect("JSON value doesn't match - Expected \"OPEN\", was \"WRONG\"") { it.message }
+        }
+    }
+
+    @Test fun `should test Enum property`() {
+        val json = """{"abc":"CLOSED"}"""
+        expectJSON(json) {
+            property("abc", Status.CLOSED)
+        }
+    }
+
+    @Test fun `should fail on incorrect Enum property`() {
+        val json = """{"abc":"WRONG"}"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("abc", Status.CLOSED)
+            }
+        }.let {
+            expect("/abc: JSON value doesn't match - Expected \"CLOSED\", was \"WRONG\"") { it.message }
+        }
+    }
+
+    @Test fun `should test Enum array item`() {
+        val json = """["OPEN"]"""
+        expectJSON(json) {
+            item(0, Status.OPEN)
+        }
+    }
+
+    @Test fun `should fail on incorrect Enum array item`() {
+        val json = """["BAD"]"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                item(0, Status.OPEN)
+            }
+        }.let {
+            expect("/0: JSON value doesn't match - Expected \"OPEN\", was \"BAD\"") { it.message }
+        }
+    }
+
+    enum class Status { OPEN, CLOSED }
+
 }

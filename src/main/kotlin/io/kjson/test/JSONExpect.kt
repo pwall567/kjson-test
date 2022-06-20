@@ -420,6 +420,17 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check the value as an [Enum] member.
+     *
+     * @param   expected        the expected [Enum] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun value(expected: Enum<*>) {
+        if (nodeAsString != expected.name)
+            errorOnValue("\"$expected\"")
+    }
+
+    /**
      * Check the value as a [String] against a [Regex].
      *
      * @param   expected        the [Regex]
@@ -783,6 +794,19 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check a property as an [Enum] member.
+     *
+     * @param   name            the property name
+     * @param   expected        the expected [Enum] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun property(name: String, expected: Enum<*>) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
      * Check a property as a [String] against a [Regex].
      *
      * @param   name            the property name
@@ -1113,6 +1137,19 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: UUID) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
+     * Check an array item as an [Enum] member.
+     *
+     * @param   index           the array index
+     * @param   expected        the expected [Enum] value
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun item(index: Int, expected: Enum<*>) {
         checkIndex(index).let {
             JSONExpect(getItem(it), itemPointer(it)).value(expected)
         }
@@ -1452,6 +1489,14 @@ class JSONExpect private constructor(
     fun test(expected: UUID): JSONExpect.() -> Unit = { value(expected) }
 
     /**
+     * Convert an [Enum] equality check to a lambda for use in a multiple test check.
+     *
+     * @param   expected    the expected [Enum] value
+     * @return              the lambda
+     */
+    fun test(expected: Enum<*>): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
      * Convert a [String] [Regex] check to a lambda for use in a multiple test check.
      *
      * @param   expected    the [Regex]
@@ -1670,8 +1715,7 @@ class JSONExpect private constructor(
         error("JSON value not in range - ${showNode()}")
     }
 
-    private fun checkName(name: String): String =
-            name.ifEmpty { error("JSON property name must not be empty") }
+    private fun checkName(name: String): String = name.ifEmpty { error("JSON property name must not be empty") }
 
     private fun checkIndex(index: Int): Int =
             if (index >= 0) index else error("JSON array index must not be negative - $index")
