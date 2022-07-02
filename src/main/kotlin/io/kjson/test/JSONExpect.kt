@@ -1,7 +1,7 @@
 /*
  * @(#) JSONExpect.kt
  *
- * kjson-test Library for testing Kotlin JSON applications
+ * kjson-test  Library for testing Kotlin JSON applications
  * Copyright (c) 2020, 2021, 2022 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,6 +26,7 @@
 package io.kjson.test
 
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 import kotlin.test.fail
 import kotlin.time.Duration
 
@@ -45,7 +46,7 @@ import java.util.UUID
 
 import net.pwall.json.JSONFunctions
 import net.pwall.json.JSONSimple
-import net.pwall.json.validation.JSONValidation
+import net.pwall.util.DateOutput
 
 /**
  * Implementation class for `expectJSON()` function.
@@ -271,7 +272,7 @@ class JSONExpect private constructor(
             }
             else -> {
                 if (nodeAsString != expected)
-                    errorOnValue(JSONFunctions.displayString(expected, 45))
+                    errorOnValue(expected)
             }
         }
     }
@@ -284,7 +285,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: LocalDate) {
         if (nodeAsLocalDate != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -295,7 +296,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: LocalDateTime) {
         if (nodeAsLocalDateTime != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -306,7 +307,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: LocalTime) {
         if (nodeAsLocalTime != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -317,7 +318,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: OffsetDateTime) {
         if (nodeAsOffsetDateTime != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -328,7 +329,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: OffsetTime) {
         if (nodeAsOffsetTime != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -339,7 +340,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: ZonedDateTime) {
         if (nodeAsZonedDateTime != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -350,7 +351,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: YearMonth) {
         if (nodeAsYearMonth != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -361,7 +362,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: Year) {
         if (nodeAsYear != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -372,7 +373,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: MonthDay) {
         if (nodeAsMonthDay != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -383,7 +384,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: JavaDuration) {
         if (nodeAsJavaDuration != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -394,7 +395,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: Period) {
         if (nodeAsPeriod != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -405,7 +406,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: Duration) {
         if (nodeAsDuration != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -416,7 +417,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: UUID) {
         if (nodeAsUUID != expected)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -427,7 +428,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: Enum<*>) {
         if (nodeAsString != expected.name)
-            errorOnValue("\"$expected\"")
+            errorOnValue(expected)
     }
 
     /**
@@ -449,7 +450,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: IntRange) {
         if (nodeAsInt !in expected)
-            errorOnValue(expected)
+            errorInRange(expected.first, expected.last)
     }
 
     /**
@@ -460,7 +461,7 @@ class JSONExpect private constructor(
      */
     fun value(expected: LongRange) {
         if (nodeAsLong !in expected)
-            errorOnValue(expected)
+            errorInRange(expected.first, expected.last)
     }
 
     /**
@@ -468,26 +469,75 @@ class JSONExpect private constructor(
      *
      * @param   expected        the [ClosedRange]
      * @param   itemClass       the class of the elements of the [ClosedRange]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T: Comparable<T>> valueInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
+    fun <T : Comparable<T>> valueInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
         when (itemClass) {
             Int::class -> {
                 if (nodeAsInt as T !in expected)
-                    errorInRange()
+                    errorInRange(expected.start, expected.endInclusive)
             }
             Long::class -> {
                 if (nodeAsLong as T !in expected)
-                    errorInRange()
+                    errorInRange(expected.start, expected.endInclusive)
             }
             BigDecimal::class -> {
                 if (nodeAsDecimal as T !in expected)
-                    errorInRange()
+                    errorInRange(expected.start, expected.endInclusive)
             }
             String::class -> {
                 if (nodeAsString as T !in expected)
-                    errorInRange()
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            LocalDate::class -> {
+                if (nodeAsLocalDate as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            LocalDateTime::class -> {
+                if (nodeAsLocalDateTime as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            LocalTime::class -> {
+                if (nodeAsLocalTime as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            OffsetDateTime::class -> {
+                if (nodeAsOffsetDateTime as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            OffsetTime::class -> {
+                if (nodeAsOffsetTime as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            ZonedDateTime::class -> {
+                if (nodeAsZonedDateTime as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            YearMonth::class -> {
+                if (nodeAsYearMonth as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            MonthDay::class -> {
+                if (nodeAsMonthDay as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            Year::class -> {
+                if (nodeAsYear as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            JavaDuration::class -> {
+                if (nodeAsJavaDuration as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            Duration::class -> {
+                if (nodeAsDuration as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
+            }
+            UUID::class -> {
+                if (nodeAsUUID as T !in expected)
+                    errorInRange(expected.start, expected.endInclusive)
             }
             else -> error("Can't perform test using range of $itemClass")
         }
@@ -497,9 +547,10 @@ class JSONExpect private constructor(
      * Check the value as a member of a [ClosedRange].
      *
      * @param   expected        the [ClosedRange]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
-    inline fun <reified T: Comparable<T>> value(expected: ClosedRange<T>) {
+    inline fun <reified T : Comparable<T>> value(expected: ClosedRange<T>) {
         valueInRange(expected, T::class)
     }
 
@@ -508,10 +559,11 @@ class JSONExpect private constructor(
      *
      * @param   expected        the [Collection]
      * @param   itemClass       the class of the elements of the [Collection]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T: Any> valueInCollection(expected: Collection<T?>, itemClass: KClass<*>) {
+    fun <T : Any> valueInCollection(expected: Collection<T?>, itemClass: KClass<*>) {
         if (node == null) {
             if (!expected.contains(null))
                 errorInCollection()
@@ -534,7 +586,67 @@ class JSONExpect private constructor(
                     if (!expected.contains(nodeAsString as T))
                         errorInCollection()
                 }
-                else -> error("Can't perform test using collection of $itemClass")
+                LocalDate::class -> {
+                    if (!expected.contains(nodeAsLocalDate as T))
+                        errorInCollection()
+                }
+                LocalDateTime::class -> {
+                    if (!expected.contains(nodeAsLocalDateTime as T))
+                        errorInCollection()
+                }
+                LocalTime::class -> {
+                    if (!expected.contains(nodeAsLocalTime as T))
+                        errorInCollection()
+                }
+                OffsetDateTime::class -> {
+                    if (!expected.contains(nodeAsOffsetDateTime as T))
+                        errorInCollection()
+                }
+                OffsetTime::class -> {
+                    if (!expected.contains(nodeAsOffsetTime as T))
+                        errorInCollection()
+                }
+                ZonedDateTime::class -> {
+                    if (!expected.contains(nodeAsZonedDateTime as T))
+                        errorInCollection()
+                }
+                YearMonth::class -> {
+                    if (!expected.contains(nodeAsYearMonth as T))
+                        errorInCollection()
+                }
+                MonthDay::class -> {
+                    if (!expected.contains(nodeAsMonthDay as T))
+                        errorInCollection()
+                }
+                Year::class -> {
+                    if (!expected.contains(nodeAsYear as T))
+                        errorInCollection()
+                }
+                JavaDuration::class -> {
+                    if (!expected.contains(nodeAsJavaDuration as T))
+                        errorInCollection()
+                }
+                Period::class -> {
+                    if (!expected.contains(nodeAsPeriod as T))
+                        errorInCollection()
+                }
+                Duration::class -> {
+                    if (!expected.contains(nodeAsDuration as T))
+                        errorInCollection()
+                }
+                UUID::class -> {
+                    if (!expected.contains(nodeAsUUID as T))
+                        errorInCollection()
+                }
+                else -> {
+                    if (itemClass.isSubclassOf(Enum::class)) {
+                        val stringValue = nodeAsString
+                        if (!expected.any { (it as Enum<*>).name == stringValue })
+                            errorInCollection()
+                    }
+                    else
+                        error("Can't perform test using collection of $itemClass")
+                }
             }
         }
     }
@@ -543,9 +655,10 @@ class JSONExpect private constructor(
      * Check the value as a member of a [Collection].
      *
      * @param   expected        the [Collection]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
-    inline fun <reified T: Any> value(expected: Collection<T?>) {
+    inline fun <reified T : Any> value(expected: Collection<T?>) {
         valueInCollection(expected, T::class)
     }
 
@@ -851,9 +964,10 @@ class JSONExpect private constructor(
      * @param   name            the property name
      * @param   expected        the [ClosedRange]
      * @param   itemClass       the class of the elements of the [ClosedRange]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
-    fun <T: Comparable<T>> propertyInRange(name: String, expected: ClosedRange<T>, itemClass: KClass<*>) {
+    fun <T : Comparable<T>> propertyInRange(name: String, expected: ClosedRange<T>, itemClass: KClass<*>) {
         checkName(name).let {
             JSONExpect(getProperty(it), propertyPointer(it)).valueInRange(expected, itemClass)
         }
@@ -864,9 +978,10 @@ class JSONExpect private constructor(
      *
      * @param   name            the property name
      * @param   expected        the [ClosedRange]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
-    inline fun <reified T: Comparable<T>> property(name: String, expected: ClosedRange<T>) {
+    inline fun <reified T : Comparable<T>> property(name: String, expected: ClosedRange<T>) {
         propertyInRange(name, expected, T::class)
     }
 
@@ -876,9 +991,10 @@ class JSONExpect private constructor(
      * @param   name            the property name
      * @param   expected        the [Collection]
      * @param   itemClass       the class of the elements of the [Collection]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
-    fun <T: Any> propertyInCollection(name: String, expected: Collection<T?>, itemClass: KClass<*>) {
+    fun <T : Any> propertyInCollection(name: String, expected: Collection<T?>, itemClass: KClass<*>) {
         checkName(name).let {
             JSONExpect(getProperty(it), propertyPointer(it)).valueInCollection(expected, itemClass)
         }
@@ -889,9 +1005,10 @@ class JSONExpect private constructor(
      *
      * @param   name            the property name
      * @param   expected        the [Collection]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
-    inline fun <reified T: Any> property(name: String, expected: Collection<T?>) {
+    inline fun <reified T : Any> property(name: String, expected: Collection<T?>) {
         propertyInCollection(name, expected, T::class)
     }
 
@@ -1200,9 +1317,10 @@ class JSONExpect private constructor(
      * @param   index           the array index
      * @param   expected        the [ClosedRange]
      * @param   itemClass       the class of the elements of the [ClosedRange]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
-    fun <T: Comparable<T>> itemInRange(index: Int, expected: ClosedRange<T>, itemClass: KClass<*>) {
+    fun <T : Comparable<T>> itemInRange(index: Int, expected: ClosedRange<T>, itemClass: KClass<*>) {
         checkIndex(index).let {
             JSONExpect(getItem(it), itemPointer(it)).valueInRange(expected, itemClass)
         }
@@ -1213,9 +1331,10 @@ class JSONExpect private constructor(
      *
      * @param   index           the array index
      * @param   expected        the [ClosedRange]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
-    inline fun <reified T: Comparable<T>> item(index: Int, expected: ClosedRange<T>) {
+    inline fun <reified T : Comparable<T>> item(index: Int, expected: ClosedRange<T>) {
         itemInRange(index, expected, T::class)
     }
 
@@ -1225,9 +1344,10 @@ class JSONExpect private constructor(
      * @param   index           the array index
      * @param   expected        the [Collection]
      * @param   itemClass       the class of the elements of the [Collection]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
-    fun <T: Any> itemInCollection(index: Int, expected: Collection<T?>, itemClass: KClass<*>) {
+    fun <T : Any> itemInCollection(index: Int, expected: Collection<T?>, itemClass: KClass<*>) {
         checkIndex(index).let {
             JSONExpect(getItem(it), itemPointer(it)).valueInCollection(expected, itemClass)
         }
@@ -1238,9 +1358,10 @@ class JSONExpect private constructor(
      *
      * @param   index           the array index
      * @param   expected        the [Collection]
+     * @param   T               the type of the value
      * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
-    inline fun <reified T: Any> item(index: Int, expected: Collection<T?>) {
+    inline fun <reified T : Any> item(index: Int, expected: Collection<T?>) {
         itemInCollection(index, expected, T::class)
     }
 
@@ -1524,95 +1645,19 @@ class JSONExpect private constructor(
      * Convert a [ClosedRange] check to a lambda for use in a multiple test check.
      *
      * @param   expected    the [ClosedRange]
+     * @param   T           the type of the value
      * @return              the lambda
      */
-    inline fun <reified T: Comparable<T>> test(expected: ClosedRange<T>): JSONExpect.() -> Unit = { value(expected) }
+    inline fun <reified T : Comparable<T>> test(expected: ClosedRange<T>): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Collection] check to a lambda for use in a multiple test check.
      *
      * @param   expected    the [Collection]
+     * @param   T           the type of the value
      * @return              the lambda
      */
-    inline fun <reified T: Any> test(expected: Collection<T>): JSONExpect.() -> Unit = { value(expected) }
-
-    /** Check that a value is non-null. */
-    val nonNull: JSONExpect.() -> Unit = {
-        if (node == null)
-            error("JSON item is null")
-    }
-
-    /** Check that a value is a string. */
-    val string: JSONExpect.() -> Unit = {
-        if (node !is String)
-            errorOnType("string")
-    }
-
-    /** Check that a value is an integer. */
-    val integer: JSONExpect.() -> Unit = {
-        if (node !is Int)
-            errorOnType("integer")
-    }
-
-    /** Check that a value is a long integer. */
-    val longInteger: JSONExpect.() -> Unit = {
-        if (!(node is Long || node is Int))
-            errorOnType("long integer")
-    }
-
-    /** Check that a value is a decimal. */
-    val decimal: JSONExpect.() -> Unit = {
-        if (!(node is BigDecimal || node is Long || node is Int))
-            errorOnType("decimal")
-    }
-
-    /** Check that a value is a boolean. */
-    val boolean: JSONExpect.() -> Unit = {
-        if (node !is Boolean)
-            errorOnType("boolean")
-    }
-
-    /** Check that a string value is a valid [UUID]. */
-    val uuid: JSONExpect.() -> Unit = {
-        if (!JSONValidation.isUUID(nodeAsString))
-            error("JSON string is not a UUID - ${showNode()}")
-    }
-
-    /** Check that a string value is a valid [LocalDate]. */
-    val localDate: JSONExpect.() -> Unit = { nodeAsLocalDate }
-
-    /** Check that a string value is a valid [LocalDateTime]. */
-    val localDateTime: JSONExpect.() -> Unit = { nodeAsLocalDateTime }
-
-    /** Check that a string value is a valid [LocalTime]. */
-    val localTime: JSONExpect.() -> Unit = { nodeAsLocalTime }
-
-    /** Check that a string value is a valid [OffsetDateTime]. */
-    val offsetDateTime: JSONExpect.() -> Unit = { nodeAsOffsetDateTime }
-
-    /** Check that a string value is a valid [OffsetTime]. */
-    val offsetTime: JSONExpect.() -> Unit = { nodeAsOffsetTime }
-
-    /** Check that a string value is a valid [ZonedDateTime]. */
-    val zonedDateTime: JSONExpect.() -> Unit = { nodeAsZonedDateTime }
-
-    /** Check that a string value is a valid [YearMonth]. */
-    val yearMonth: JSONExpect.() -> Unit = { nodeAsYearMonth }
-
-    /** Check that a string value is a valid [MonthDay]. */
-    val monthDay: JSONExpect.() -> Unit = { nodeAsMonthDay }
-
-    /** Check that a string value is a valid [Year]. */
-    val year: JSONExpect.() -> Unit = { nodeAsYear }
-
-    /** Check that a string value is a valid [JavaDuration]. */
-    val javaDuration: JSONExpect.() -> Unit = { nodeAsJavaDuration }
-
-    /** Check that a string value is a valid [Period]. */
-    val period: JSONExpect.() -> Unit = { nodeAsPeriod }
-
-    /** Check that a string value is a valid [Duration]. */
-    val duration: JSONExpect.() -> Unit = { nodeAsDuration }
+    inline fun <reified T : Any> test(expected: Collection<T>): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Check the length of a string value.
@@ -1680,19 +1725,42 @@ class JSONExpect private constructor(
      *
      * @return      a text string describing the node
      */
-    fun showNode() = when (node) {
+    fun showNode() = showValue(node)
+
+    /**
+     * Create a display form of a value, for use in error messages.
+     *
+     * @return      a text string describing the value
+     */
+    fun showValue(value: Any?): String = when (value) {
         null -> "null"
-        is String -> "\"$node\""
+        is Number,
+        is Boolean -> value.toString()
+        is LocalDate -> showFormatted(value, DateOutput::appendLocalDate)
+        is LocalDateTime -> showFormatted(value, DateOutput::appendLocalDateTime)
+        is LocalTime -> showFormatted(value, DateOutput::appendLocalTime)
+        is OffsetDateTime -> showFormatted(value, DateOutput::appendOffsetDateTime)
+        is OffsetTime-> showFormatted(value, DateOutput::appendOffsetTime)
+        is YearMonth -> showFormatted(value, DateOutput::appendYearMonth)
+        is MonthDay -> showFormatted(value, DateOutput::appendMonthDay)
+        is Year -> showFormatted(value, DateOutput::appendYear)
         is List<*> -> "[...]"
         is Map<*, *> -> "{...}"
-        else -> node.toString()
+        else -> JSONFunctions.displayString(value.toString(), maxStringDisplayLength)
     }
+
+    private fun <T : Any> showFormatted(value: T, outputFunction: (Appendable, T) -> Unit): String =
+        StringBuilder().apply {
+            append('"')
+            outputFunction(this, value)
+            append('"')
+        }.toString()
 
     private fun errorOnValue(expected: Any?): Nothing {
-        error("JSON value doesn't match - Expected $expected, was ${showNode()}")
+        error("JSON value doesn't match - expected ${showValue(expected)}, was ${showNode()}")
     }
 
-    private fun errorOnType(expected: String): Nothing {
+    internal fun errorOnType(expected: String): Nothing {
         val type = when (node) {
             null -> "null"
             is Int -> "integer"
@@ -1704,15 +1772,15 @@ class JSONExpect private constructor(
             is Map<*, *> -> "object"
             else -> "unknown"
         }
-        error("JSON type doesn't match - Expected $expected, was $type")
+        error("JSON type doesn't match - expected $expected, was $type")
     }
 
     private fun errorInCollection() {
         error("JSON value not in collection - ${showNode()}")
     }
 
-    private fun errorInRange() {
-        error("JSON value not in range - ${showNode()}")
+    private fun errorInRange(lo: Any, hi: Any) {
+        error("JSON value not in range ${showValue(lo)}..${showValue(hi)} - ${showNode()}")
     }
 
     private fun checkName(name: String): String = name.ifEmpty { error("JSON property name must not be empty") }
@@ -1737,6 +1805,8 @@ class JSONExpect private constructor(
     private fun itemPointer(index: Int) = if (pointer != null) "$pointer/$index" else "/$index"
 
     companion object {
+
+        const val maxStringDisplayLength = 49
 
         /**
          * Check that a JSON string matches the defined expectations.

@@ -1,8 +1,8 @@
 /*
  * @(#) JSONExpectTest1.kt
  *
- * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021 Peter Wall
+ * kjson-test  Library for testing Kotlin JSON applications
+ * Copyright (c) 2020, 2021, 2022 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ package io.kjson.test
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.expect
+import kotlin.test.fail
 
 import java.math.BigDecimal
 
@@ -39,7 +40,7 @@ class JSONExpectTest1 {
         val json = "["
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", 1)
+                fail("Tests should not be executed")
             }
         }
         expect("Unable to parse JSON") { exception.message?.substringBefore(" - ") }
@@ -59,7 +60,7 @@ class JSONExpectTest1 {
                 value(568)
             }
         }
-        expect("JSON value doesn't match - Expected 568, was 567") { exception.message }
+        expect("JSON value doesn't match - expected 568, was 567") { exception.message }
     }
 
     @Test fun `should test long value`() {
@@ -111,7 +112,7 @@ class JSONExpectTest1 {
                 property("abc", 2)
             }
         }
-        expect("/abc: JSON value doesn't match - Expected 2, was 1") { exception.message }
+        expect("/abc: JSON value doesn't match - expected 2, was 1") { exception.message }
     }
 
     @Test fun `should test simple long property`() {
@@ -153,7 +154,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/abc: JSON value doesn't match - Expected 2, was 1") { exception.message }
+        expect("/abc: JSON value doesn't match - expected 2, was 1") { exception.message }
     }
 
     @Test fun `should test multiple properties`() {
@@ -216,7 +217,7 @@ class JSONExpectTest1 {
                 item(0, 12346)
             }
         }
-        expect("/0: JSON value doesn't match - Expected 12346, was 12345") { exception.message }
+        expect("/0: JSON value doesn't match - expected 12346, was 12345") { exception.message }
     }
 
     @Test fun `should test long array item`() {
@@ -270,7 +271,7 @@ class JSONExpectTest1 {
                 item(1, -28)
             }
         }
-        expect("/1: JSON value doesn't match - Expected -28, was -27") { exception.message }
+        expect("/1: JSON value doesn't match - expected -28, was -27") { exception.message }
     }
 
     @Test fun `should test nested int array items`() {
@@ -301,7 +302,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/1/0: JSON value doesn't match - Expected 45, was 44") { exception.message }
+        expect("/1/0: JSON value doesn't match - expected 45, was 44") { exception.message }
     }
 
     @Test fun `should test doubly nested int array items`() {
@@ -336,7 +337,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/0/1/0: JSON value doesn't match - Expected 45, was 44") { exception.message }
+        expect("/0/1/0: JSON value doesn't match - expected 45, was 44") { exception.message }
     }
 
     @Test fun `should test nested property`() {
@@ -357,7 +358,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/outer/field: JSON value doesn't match - Expected 98, was 99") { exception.message }
+        expect("/outer/field: JSON value doesn't match - expected 98, was 99") { exception.message }
     }
 
     @Test fun `should test doubly nested property`() {
@@ -382,7 +383,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/outer/middle/field: JSON value doesn't match - Expected 98, was 99") { exception.message }
+        expect("/outer/middle/field: JSON value doesn't match - expected 98, was 99") { exception.message }
     }
 
     @Test fun `should test property nested in array`() {
@@ -403,7 +404,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/0/field: JSON value doesn't match - Expected 98, was 99") { exception.message }
+        expect("/0/field: JSON value doesn't match - expected 98, was 99") { exception.message }
     }
 
     @Test fun `should test array item nested in property`() {
@@ -433,7 +434,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/primes/9: JSON value doesn't match - Expected 27, was 23") { exception.message }
+        expect("/primes/9: JSON value doesn't match - expected 27, was 23") { exception.message }
     }
 
     @Test fun `should fail on array index out of bounds`() {

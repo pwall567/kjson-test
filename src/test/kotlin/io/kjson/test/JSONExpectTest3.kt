@@ -1,7 +1,7 @@
 /*
  * @(#) JSONExpectTest3.kt
  *
- * kjson-test Library for testing Kotlin JSON applications
+ * kjson-test  Library for testing Kotlin JSON applications
  * Copyright (c) 2020, 2021, 2022 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -47,7 +47,7 @@ class JSONExpectTest3 {
                 value(string)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test that property is a string`() {
@@ -64,7 +64,7 @@ class JSONExpectTest3 {
                 property("abc", string)
             }
         }
-        expect("/abc: JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("/abc: JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test that array item is a string`() {
@@ -81,7 +81,7 @@ class JSONExpectTest3 {
                 item(0, string)
             }
         }
-        expect("/0: JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("/0: JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test that value is an integer`() {
@@ -98,7 +98,7 @@ class JSONExpectTest3 {
                 value(integer)
             }
         }
-        expect("JSON type doesn't match - Expected integer, was string") { exception.message }
+        expect("JSON type doesn't match - expected integer, was string") { exception.message }
     }
 
     @Test fun `should test that property is an integer`() {
@@ -115,7 +115,7 @@ class JSONExpectTest3 {
                 property("abc", integer)
             }
         }
-        expect("/abc: JSON type doesn't match - Expected integer, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected integer, was string") { exception.message }
     }
 
     @Test fun `should test that array item is an integer`() {
@@ -132,7 +132,7 @@ class JSONExpectTest3 {
                 item(0, integer)
             }
         }
-        expect("/0: JSON type doesn't match - Expected integer, was string") { exception.message }
+        expect("/0: JSON type doesn't match - expected integer, was string") { exception.message }
     }
 
     @Test fun `should test that value is a long integer`() {
@@ -149,7 +149,7 @@ class JSONExpectTest3 {
                 value(longInteger)
             }
         }
-        expect("JSON type doesn't match - Expected long integer, was string") { exception.message }
+        expect("JSON type doesn't match - expected long integer, was string") { exception.message }
     }
 
     @Test fun `should test that property is a long integer`() {
@@ -166,7 +166,7 @@ class JSONExpectTest3 {
                 property("abc", longInteger)
             }
         }
-        expect("/abc: JSON type doesn't match - Expected long integer, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected long integer, was string") { exception.message }
     }
 
     @Test fun `should test that array item is a long integer`() {
@@ -183,7 +183,7 @@ class JSONExpectTest3 {
                 item(0, longInteger)
             }
         }
-        expect("/0: JSON type doesn't match - Expected long integer, was string") { exception.message }
+        expect("/0: JSON type doesn't match - expected long integer, was string") { exception.message }
     }
 
     @Test fun `should test that value is a decimal`() {
@@ -200,7 +200,7 @@ class JSONExpectTest3 {
                 value(decimal)
             }
         }
-        expect("JSON type doesn't match - Expected decimal, was string") { exception.message }
+        expect("JSON type doesn't match - expected decimal, was string") { exception.message }
     }
 
     @Test fun `should test that property is a decimal`() {
@@ -217,7 +217,7 @@ class JSONExpectTest3 {
                 property("abc", decimal)
             }
         }
-        expect("/abc: JSON type doesn't match - Expected decimal, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected decimal, was string") { exception.message }
     }
 
     @Test fun `should test that array item is a decimal`() {
@@ -234,7 +234,7 @@ class JSONExpectTest3 {
                 item(0, decimal)
             }
         }
-        expect("/0: JSON type doesn't match - Expected decimal, was string") { exception.message }
+        expect("/0: JSON type doesn't match - expected decimal, was string") { exception.message }
     }
 
     @Test fun `should test that value is a boolean`() {
@@ -251,7 +251,7 @@ class JSONExpectTest3 {
                 value(boolean)
             }
         }
-        expect("JSON type doesn't match - Expected boolean, was string") { exception.message }
+        expect("JSON type doesn't match - expected boolean, was string") { exception.message }
     }
 
     @Test fun `should test that property is a boolean`() {
@@ -268,7 +268,7 @@ class JSONExpectTest3 {
                 property("abc", boolean)
             }
         }
-        expect("/abc: JSON type doesn't match - Expected boolean, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected boolean, was string") { exception.message }
     }
 
     @Test fun `should test that array item is a boolean`() {
@@ -285,7 +285,7 @@ class JSONExpectTest3 {
                 item(0, boolean)
             }
         }
-        expect("/0: JSON type doesn't match - Expected boolean, was string") { exception.message }
+        expect("/0: JSON type doesn't match - expected boolean, was string") { exception.message }
     }
 
     @Test fun `should test string value as UUID`() {
@@ -326,7 +326,7 @@ class JSONExpectTest3 {
                 value(uuid)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as UUID`() {
@@ -387,7 +387,7 @@ class JSONExpectTest3 {
                 value(localDate)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as LocalDate`() {
@@ -448,7 +448,7 @@ class JSONExpectTest3 {
                 value(localDateTime)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as LocalDateTime`() {
@@ -509,7 +509,7 @@ class JSONExpectTest3 {
                 value(localTime)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as LocalTime`() {
@@ -570,7 +570,7 @@ class JSONExpectTest3 {
                 value(offsetDateTime)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as OffsetDateTime`() {
@@ -631,7 +631,7 @@ class JSONExpectTest3 {
                 value(offsetTime)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as OffsetTime`() {
@@ -692,7 +692,7 @@ class JSONExpectTest3 {
                 value(zonedDateTime)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as ZonedDateTime`() {
@@ -753,7 +753,7 @@ class JSONExpectTest3 {
                 value(yearMonth)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as YearMonth`() {
@@ -814,7 +814,7 @@ class JSONExpectTest3 {
                 value(monthDay)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as MonthDay`() {
@@ -875,7 +875,7 @@ class JSONExpectTest3 {
                 value(year)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as Year`() {
@@ -936,7 +936,7 @@ class JSONExpectTest3 {
                 value(javaDuration)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as Java Duration`() {
@@ -997,7 +997,7 @@ class JSONExpectTest3 {
                 value(period)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as Period`() {
@@ -1058,7 +1058,7 @@ class JSONExpectTest3 {
                 value(duration)
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property as Duration`() {
@@ -1093,6 +1093,114 @@ class JSONExpectTest3 {
             }
         }
         expect("/0: JSON string is not a Duration - \"not a Duration\"") { exception.message }
+    }
+
+    @Test fun `should test that value is array`() {
+        val json = "[]"
+        expectJSON(json) {
+            value(isArray)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of value as array`() {
+        val json = "\"not an array\""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                value(isArray)
+            }
+        }.let {
+            expect("JSON type doesn't match - expected array, was string") { it.message }
+        }
+    }
+
+    @Test fun `should test that property is array`() {
+        val json = """{"abc":[]}"""
+        expectJSON(json) {
+            property("abc", isArray)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of property as array`() {
+        val json = """{"abc":"not an array"}"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("abc", isArray)
+            }
+        }.let {
+            expect("/abc: JSON type doesn't match - expected array, was string") { it.message }
+        }
+    }
+
+    @Test fun `should test that array item is array`() {
+        val json = "[[]]"
+        expectJSON(json) {
+            item(0, isArray)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of array item as array`() {
+        val json = "[\"not an array\"]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                item(0, isArray)
+            }
+        }.let {
+            expect("/0: JSON type doesn't match - expected array, was string") { it.message }
+        }
+    }
+
+    @Test fun `should test that value is object`() {
+        val json = "{}"
+        expectJSON(json) {
+            value(isObject)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of value as object`() {
+        val json = "\"not an object\""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                value(isObject)
+            }
+        }.let {
+            expect("JSON type doesn't match - expected object, was string") { it.message }
+        }
+    }
+
+    @Test fun `should test that property is object`() {
+        val json = """{"abc":{}}"""
+        expectJSON(json) {
+            property("abc", isObject)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of property as object`() {
+        val json = """{"abc":"not an object"}"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("abc", isObject)
+            }
+        }.let {
+            expect("/abc: JSON type doesn't match - expected object, was string") { it.message }
+        }
+    }
+
+    @Test fun `should test that array item is object`() {
+        val json = "[{}]"
+        expectJSON(json) {
+            item(0, isObject)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of array item as object`() {
+        val json = "[\"not an object\"]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                item(0, isObject)
+            }
+        }.let {
+            expect("/0: JSON type doesn't match - expected object, was string") { it.message }
+        }
     }
 
 }

@@ -1,8 +1,8 @@
 /*
  * @(#) JSONExpectTest4.kt
  *
- * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021 Peter Wall
+ * kjson-test  Library for testing Kotlin JSON applications
+ * Copyright (c) 2020, 2021, 2022 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@ class JSONExpectTest4 {
                 value(Regex("^[a-z]+$"))
             }
         }
-        expect("JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should test string property against regex`() {
@@ -306,11 +306,11 @@ class JSONExpectTest4 {
             expectJSON(json) {
                 property("abc") {
                     if (node !is String)
-                        error("Custom error message $pointer = ${showNode()}")
+                        error("Custom error message ${showValue(node)} $pointer = ${showNode()}")
                 }
             }
         }
-        expect("/abc: Custom error message /abc = 123") { exception.message }
+        expect("/abc: Custom error message 123 /abc = 123") { exception.message }
     }
 
     @Test fun `should correctly access integer node`() {
@@ -333,7 +333,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected integer, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected integer, was string") { exception.message }
     }
 
     @Test fun `should correctly access long integer node`() {
@@ -356,7 +356,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected long integer, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected long integer, was string") { exception.message }
     }
 
     @Test fun `should correctly access decimal node`() {
@@ -379,7 +379,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected decimal, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected decimal, was string") { exception.message }
     }
 
     @Test fun `should correctly access boolean node`() {
@@ -402,7 +402,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected boolean, was string") { exception.message }
+        expect("/abc: JSON type doesn't match - expected boolean, was string") { exception.message }
     }
 
     @Test fun `should correctly access string node`() {
@@ -425,7 +425,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected string, was integer") { exception.message }
+        expect("/abc: JSON type doesn't match - expected string, was integer") { exception.message }
     }
 
     @Test fun `should correctly access nested object node`() {
@@ -448,7 +448,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected object, was integer") { exception.message }
+        expect("/abc: JSON type doesn't match - expected object, was integer") { exception.message }
     }
 
     @Test fun `should correctly access nested array node`() {
@@ -471,7 +471,7 @@ class JSONExpectTest4 {
                 }
             }
         }
-        expect("/abc: JSON type doesn't match - Expected array, was integer") { exception.message }
+        expect("/abc: JSON type doesn't match - expected array, was integer") { exception.message }
     }
 
     @Test fun `should test integer value as long`() {
@@ -488,7 +488,7 @@ class JSONExpectTest4 {
                 value(0L)
             }
         }
-        expect("JSON value doesn't match - Expected 0, was 1") { exception.message }
+        expect("JSON value doesn't match - expected 0, was 1") { exception.message }
     }
 
     @Test fun `should test integer property as long`() {
@@ -505,7 +505,7 @@ class JSONExpectTest4 {
                 property("a", 0L)
             }
         }
-        expect("/a: JSON value doesn't match - Expected 0, was 1") { exception.message }
+        expect("/a: JSON value doesn't match - expected 0, was 1") { exception.message }
     }
 
     @Test fun `should test integer array item as long`() {
@@ -522,7 +522,7 @@ class JSONExpectTest4 {
                 item(0, 0L)
             }
         }
-        expect("/0: JSON value doesn't match - Expected 0, was 1") { exception.message }
+        expect("/0: JSON value doesn't match - expected 0, was 1") { exception.message }
     }
 
     @Test fun `should test integer value in long range`() {
@@ -539,7 +539,7 @@ class JSONExpectTest4 {
                 value(1L..123456789999)
             }
         }
-        expect("JSON value doesn't match - Expected 1..123456789999, was 0") { exception.message }
+        expect("JSON value not in range 1..123456789999 - 0") { exception.message }
     }
 
     @Test fun `should test integer property in long range`() {
@@ -556,7 +556,7 @@ class JSONExpectTest4 {
                 property("abc", 0L..123456789999)
             }
         }
-        expect("/abc: JSON value doesn't match - Expected 0..123456789999, was -1") { exception.message }
+        expect("/abc: JSON value not in range 0..123456789999 - -1") { exception.message }
     }
 
     @Test fun `should test integer array item in long range`() {
@@ -573,7 +573,7 @@ class JSONExpectTest4 {
                 item(0, 0L..123456789999)
             }
         }
-        expect("/0: JSON value doesn't match - Expected 0..123456789999, was -1") { exception.message }
+        expect("/0: JSON value not in range 0..123456789999 - -1") { exception.message }
     }
 
     @Test fun `should test integer value as decimal`() {
@@ -590,7 +590,7 @@ class JSONExpectTest4 {
                 value(BigDecimal.ZERO)
             }
         }
-        expect("JSON value doesn't match - Expected 0, was 1") { exception.message }
+        expect("JSON value doesn't match - expected 0, was 1") { exception.message }
     }
 
     @Test fun `should test integer property as decimal`() {
@@ -607,7 +607,7 @@ class JSONExpectTest4 {
                 property("aaa", BigDecimal.ZERO)
             }
         }
-        expect("/aaa: JSON value doesn't match - Expected 0, was 1") { exception.message }
+        expect("/aaa: JSON value doesn't match - expected 0, was 1") { exception.message }
     }
 
     @Test fun `should test integer array item as decimal`() {
@@ -624,7 +624,7 @@ class JSONExpectTest4 {
                 item(0, BigDecimal.ZERO)
             }
         }
-        expect("/0: JSON value doesn't match - Expected 0, was 1") { exception.message }
+        expect("/0: JSON value doesn't match - expected 0, was 1") { exception.message }
     }
 
     @Test fun `should test integer value in decimal range`() {
@@ -641,7 +641,7 @@ class JSONExpectTest4 {
                 value(BigDecimal.ZERO..BigDecimal(999))
             }
         }
-        expect("JSON value not in range - -1") { exception.message }
+        expect("JSON value not in range 0..999 - -1") { exception.message }
     }
 
     @Test fun `should test integer property in decimal range`() {
@@ -658,7 +658,7 @@ class JSONExpectTest4 {
                 property("abcde", BigDecimal.ZERO..BigDecimal(999))
             }
         }
-        expect("/abcde: JSON value not in range - -2") { exception.message }
+        expect("/abcde: JSON value not in range 0..999 - -2") { exception.message }
     }
 
     @Test fun `should test integer array item in decimal range`() {
@@ -675,7 +675,7 @@ class JSONExpectTest4 {
                 item(0, BigDecimal.ZERO..BigDecimal(999))
             }
         }
-        expect("/0: JSON value not in range - -3") { exception.message }
+        expect("/0: JSON value not in range 0..999 - -3") { exception.message }
     }
 
     @Test fun `should test long integer value as decimal`() {
@@ -692,7 +692,7 @@ class JSONExpectTest4 {
                 value(BigDecimal.ZERO)
             }
         }
-        expect("JSON value doesn't match - Expected 0, was 1122334455667788") { exception.message }
+        expect("JSON value doesn't match - expected 0, was 1122334455667788") { exception.message }
     }
 
     @Test fun `should test long integer property as decimal`() {
@@ -709,7 +709,7 @@ class JSONExpectTest4 {
                 property("aaa", BigDecimal.ZERO)
             }
         }
-        expect("/aaa: JSON value doesn't match - Expected 0, was 123123123123") { exception.message }
+        expect("/aaa: JSON value doesn't match - expected 0, was 123123123123") { exception.message }
     }
 
     @Test fun `should test long integer array item as decimal`() {
@@ -726,7 +726,7 @@ class JSONExpectTest4 {
                 item(0, BigDecimal.ZERO)
             }
         }
-        expect("/0: JSON value doesn't match - Expected 0, was 1234567812345678") { exception.message }
+        expect("/0: JSON value doesn't match - expected 0, was 1234567812345678") { exception.message }
     }
 
     @Test fun `should test long integer value in decimal range`() {
@@ -743,7 +743,7 @@ class JSONExpectTest4 {
                 value(BigDecimal.ZERO..BigDecimal(999999999999999))
             }
         }
-        expect("JSON value not in range - 9876543298765432") { exception.message }
+        expect("JSON value not in range 0..999999999999999 - 9876543298765432") { exception.message }
     }
 
     @Test fun `should test long integer property in decimal range`() {
@@ -760,7 +760,7 @@ class JSONExpectTest4 {
                 property("abcde", BigDecimal.ZERO..BigDecimal(9999999999999999))
             }
         }
-        expect("/abcde: JSON value not in range - -1234567812345678") { exception.message }
+        expect("/abcde: JSON value not in range 0..9999999999999999 - -1234567812345678") { exception.message }
     }
 
     @Test fun `should test long integer array item in decimal range`() {
@@ -777,7 +777,7 @@ class JSONExpectTest4 {
                 item(0, BigDecimal.ZERO..BigDecimal(9999999999999999))
             }
         }
-        expect("/0: JSON value not in range - -1122334455667788") { exception.message }
+        expect("/0: JSON value not in range 0..9999999999999999 - -1122334455667788") { exception.message }
     }
 
     @Test fun `should test scale of integer value as 0`() {

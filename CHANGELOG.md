@@ -2,6 +2,14 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [Unreleased]
+### Changed
+- `JSONExpect`: moved named lambda tests to separate file
+- `JSONExpect`: made error messages for range tests more consistent
+- `JSONExpect`: added range and collection tests for `java.time` classes _etc._
+### Added
+- `Lambda`: named lambda tests
+
 ## [2.2] - 2022-06-17
 ### Changed
 - `JSONExpect`: added `value`, `property` and `item` tests for `Enum` values
