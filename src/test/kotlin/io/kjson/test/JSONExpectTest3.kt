@@ -36,7 +36,7 @@ class JSONExpectTest3 {
     @Test fun `should test that value is a string`() {
         val json = "\"I am a string\""
         expectJSON(json) {
-            value(string)
+            value(isString)
         }
     }
 
@@ -44,7 +44,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(string)
+                value(isString)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -53,7 +53,7 @@ class JSONExpectTest3 {
     @Test fun `should test that property is a string`() {
         val json = """{"abc":"I am a string"}"""
         expectJSON(json) {
-            property("abc", string)
+            property("abc", isString)
         }
     }
 
@@ -61,7 +61,7 @@ class JSONExpectTest3 {
         val json = """{"abc":12345}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", string)
+                property("abc", isString)
             }
         }
         expect("/abc: JSON type doesn't match - expected string, was integer") { exception.message }
@@ -70,7 +70,7 @@ class JSONExpectTest3 {
     @Test fun `should test that array item is a string`() {
         val json = """["I am a string"]"""
         expectJSON(json) {
-            item(0, string)
+            item(0, isString)
         }
     }
 
@@ -78,7 +78,7 @@ class JSONExpectTest3 {
         val json = """[12345]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, string)
+                item(0, isString)
             }
         }
         expect("/0: JSON type doesn't match - expected string, was integer") { exception.message }
@@ -87,7 +87,7 @@ class JSONExpectTest3 {
     @Test fun `should test that value is an integer`() {
         val json = "12345"
         expectJSON(json) {
-            value(integer)
+            value(isInteger)
         }
     }
 
@@ -95,7 +95,7 @@ class JSONExpectTest3 {
         val json = "\"I am a string\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(integer)
+                value(isInteger)
             }
         }
         expect("JSON type doesn't match - expected integer, was string") { exception.message }
@@ -104,7 +104,7 @@ class JSONExpectTest3 {
     @Test fun `should test that property is an integer`() {
         val json = """{"abc":12345}"""
         expectJSON(json) {
-            property("abc", integer)
+            property("abc", isInteger)
         }
     }
 
@@ -112,7 +112,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"I am a string"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", integer)
+                property("abc", isInteger)
             }
         }
         expect("/abc: JSON type doesn't match - expected integer, was string") { exception.message }
@@ -121,7 +121,7 @@ class JSONExpectTest3 {
     @Test fun `should test that array item is an integer`() {
         val json = """[12345]"""
         expectJSON(json) {
-            item(0, integer)
+            item(0, isInteger)
         }
     }
 
@@ -129,7 +129,7 @@ class JSONExpectTest3 {
         val json = """["I am a string"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, integer)
+                item(0, isInteger)
             }
         }
         expect("/0: JSON type doesn't match - expected integer, was string") { exception.message }
@@ -138,7 +138,7 @@ class JSONExpectTest3 {
     @Test fun `should test that value is a long integer`() {
         val json = "123456789123456789"
         expectJSON(json) {
-            value(longInteger)
+            value(isLongInteger)
         }
     }
 
@@ -146,7 +146,7 @@ class JSONExpectTest3 {
         val json = "\"I am a string\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(longInteger)
+                value(isLongInteger)
             }
         }
         expect("JSON type doesn't match - expected long integer, was string") { exception.message }
@@ -155,7 +155,7 @@ class JSONExpectTest3 {
     @Test fun `should test that property is a long integer`() {
         val json = """{"abc":123456789123456789}"""
         expectJSON(json) {
-            property("abc", longInteger)
+            property("abc", isLongInteger)
         }
     }
 
@@ -163,7 +163,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"I am a string"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", longInteger)
+                property("abc", isLongInteger)
             }
         }
         expect("/abc: JSON type doesn't match - expected long integer, was string") { exception.message }
@@ -172,7 +172,7 @@ class JSONExpectTest3 {
     @Test fun `should test that array item is a long integer`() {
         val json = """[123456789123456789]"""
         expectJSON(json) {
-            item(0, longInteger)
+            item(0, isLongInteger)
         }
     }
 
@@ -180,7 +180,7 @@ class JSONExpectTest3 {
         val json = """["I am a string"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, longInteger)
+                item(0, isLongInteger)
             }
         }
         expect("/0: JSON type doesn't match - expected long integer, was string") { exception.message }
@@ -189,7 +189,7 @@ class JSONExpectTest3 {
     @Test fun `should test that value is a decimal`() {
         val json = "0.5"
         expectJSON(json) {
-            value(decimal)
+            value(isDecimal)
         }
     }
 
@@ -197,7 +197,7 @@ class JSONExpectTest3 {
         val json = "\"I am a string\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(decimal)
+                value(isDecimal)
             }
         }
         expect("JSON type doesn't match - expected decimal, was string") { exception.message }
@@ -206,7 +206,7 @@ class JSONExpectTest3 {
     @Test fun `should test that property is a decimal`() {
         val json = """{"abc":0.5}"""
         expectJSON(json) {
-            property("abc", decimal)
+            property("abc", isDecimal)
         }
     }
 
@@ -214,7 +214,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"I am a string"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", decimal)
+                property("abc", isDecimal)
             }
         }
         expect("/abc: JSON type doesn't match - expected decimal, was string") { exception.message }
@@ -223,7 +223,7 @@ class JSONExpectTest3 {
     @Test fun `should test that array item is a decimal`() {
         val json = """[0.5]"""
         expectJSON(json) {
-            item(0, decimal)
+            item(0, isDecimal)
         }
     }
 
@@ -231,7 +231,7 @@ class JSONExpectTest3 {
         val json = """["I am a string"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, decimal)
+                item(0, isDecimal)
             }
         }
         expect("/0: JSON type doesn't match - expected decimal, was string") { exception.message }
@@ -240,7 +240,7 @@ class JSONExpectTest3 {
     @Test fun `should test that value is a boolean`() {
         val json = "true"
         expectJSON(json) {
-            value(boolean)
+            value(isBoolean)
         }
     }
 
@@ -248,7 +248,7 @@ class JSONExpectTest3 {
         val json = "\"I am a string\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(boolean)
+                value(isBoolean)
             }
         }
         expect("JSON type doesn't match - expected boolean, was string") { exception.message }
@@ -257,7 +257,7 @@ class JSONExpectTest3 {
     @Test fun `should test that property is a boolean`() {
         val json = """{"abc":true}"""
         expectJSON(json) {
-            property("abc", boolean)
+            property("abc", isBoolean)
         }
     }
 
@@ -265,7 +265,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"I am a string"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", boolean)
+                property("abc", isBoolean)
             }
         }
         expect("/abc: JSON type doesn't match - expected boolean, was string") { exception.message }
@@ -274,7 +274,7 @@ class JSONExpectTest3 {
     @Test fun `should test that array item is a boolean`() {
         val json = """[true]"""
         expectJSON(json) {
-            item(0, boolean)
+            item(0, isBoolean)
         }
     }
 
@@ -282,7 +282,7 @@ class JSONExpectTest3 {
         val json = """["I am a string"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, boolean)
+                item(0, isBoolean)
             }
         }
         expect("/0: JSON type doesn't match - expected boolean, was string") { exception.message }
@@ -291,7 +291,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as UUID`() {
         val json = "\"f347ab96-7f62-11ea-ba4e-27278a06d491\""
         expectJSON(json) {
-            value(uuid)
+            value(isUUID)
         }
     }
 
@@ -299,7 +299,7 @@ class JSONExpectTest3 {
         val json = "\"not a UUID\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(uuid)
+                value(isUUID)
             }
         }
         expect("JSON string is not a UUID - \"not a UUID\"") { exception.message }
@@ -313,7 +313,7 @@ class JSONExpectTest3 {
         val json = "\"f347ab96-7f62-11ea-ba4e-27278a06\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(uuid)
+                value(isUUID)
             }
         }
         expect("JSON string is not a UUID - \"f347ab96-7f62-11ea-ba4e-27278a06\"") { exception.message }
@@ -323,7 +323,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(uuid)
+                value(isUUID)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -332,7 +332,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as UUID`() {
         val json = """{"abc":"f347ab96-7f62-11ea-ba4e-27278a06d491"}"""
         expectJSON(json) {
-            property("abc", uuid)
+            property("abc", isUUID)
         }
     }
 
@@ -340,7 +340,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a UUID"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", uuid)
+                property("abc", isUUID)
             }
         }
         expect("/abc: JSON string is not a UUID - \"not a UUID\"") { exception.message }
@@ -349,7 +349,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as UUID`() {
         val json = """["f347ab96-7f62-11ea-ba4e-27278a06d491"]"""
         expectJSON(json) {
-            item(0, uuid)
+            item(0, isUUID)
         }
     }
 
@@ -357,7 +357,7 @@ class JSONExpectTest3 {
         val json = """["not a UUID"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, uuid)
+                item(0, isUUID)
             }
         }
         expect("/0: JSON string is not a UUID - \"not a UUID\"") { exception.message }
@@ -366,7 +366,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as LocalDate`() {
         val json = "\"2020-04-16\""
         expectJSON(json) {
-            value(localDate)
+            value(isLocalDate)
         }
     }
 
@@ -374,7 +374,7 @@ class JSONExpectTest3 {
         val json = "\"not a LocalDate\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(localDate)
+                value(isLocalDate)
             }
         }
         expect("JSON string is not a LocalDate - \"not a LocalDate\"") { exception.message }
@@ -384,7 +384,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(localDate)
+                value(isLocalDate)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -393,7 +393,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as LocalDate`() {
         val json = """{"abc":"2020-04-16"}"""
         expectJSON(json) {
-            property("abc", localDate)
+            property("abc", isLocalDate)
         }
     }
 
@@ -401,7 +401,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a LocalDate"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", localDate)
+                property("abc", isLocalDate)
             }
         }
         expect("/abc: JSON string is not a LocalDate - \"not a LocalDate\"") { exception.message }
@@ -410,7 +410,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as LocalDate`() {
         val json = """["2020-04-16"]"""
         expectJSON(json) {
-            item(0, localDate)
+            item(0, isLocalDate)
         }
     }
 
@@ -418,7 +418,7 @@ class JSONExpectTest3 {
         val json = """["not a LocalDate"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, localDate)
+                item(0, isLocalDate)
             }
         }
         expect("/0: JSON string is not a LocalDate - \"not a LocalDate\"") { exception.message }
@@ -427,7 +427,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as LocalDateTime`() {
         val json = "\"2020-04-16T18:31:19.123\""
         expectJSON(json) {
-            value(localDateTime)
+            value(isLocalDateTime)
         }
     }
 
@@ -435,7 +435,7 @@ class JSONExpectTest3 {
         val json = "\"not a LocalDateTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(localDateTime)
+                value(isLocalDateTime)
             }
         }
         expect("JSON string is not a LocalDateTime - \"not a LocalDateTime\"") { exception.message }
@@ -445,7 +445,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(localDateTime)
+                value(isLocalDateTime)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -454,7 +454,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as LocalDateTime`() {
         val json = """{"abc":"2020-04-16T18:31:19.123"}"""
         expectJSON(json) {
-            property("abc", localDateTime)
+            property("abc", isLocalDateTime)
         }
     }
 
@@ -462,7 +462,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a LocalDateTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", localDateTime)
+                property("abc", isLocalDateTime)
             }
         }
         expect("/abc: JSON string is not a LocalDateTime - \"not a LocalDateTime\"") { exception.message }
@@ -471,7 +471,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as LocalDateTime`() {
         val json = """["2020-04-16T18:31:19.123"]"""
         expectJSON(json) {
-            item(0, localDateTime)
+            item(0, isLocalDateTime)
         }
     }
 
@@ -479,7 +479,7 @@ class JSONExpectTest3 {
         val json = """["not a LocalDateTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, localDateTime)
+                item(0, isLocalDateTime)
             }
         }
         expect("/0: JSON string is not a LocalDateTime - \"not a LocalDateTime\"") { exception.message }
@@ -488,7 +488,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as LocalTime`() {
         val json = "\"18:31:19.123\""
         expectJSON(json) {
-            value(localTime)
+            value(isLocalTime)
         }
     }
 
@@ -496,7 +496,7 @@ class JSONExpectTest3 {
         val json = "\"not a LocalTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(localTime)
+                value(isLocalTime)
             }
         }
         expect("JSON string is not a LocalTime - \"not a LocalTime\"") { exception.message }
@@ -506,7 +506,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(localTime)
+                value(isLocalTime)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -515,7 +515,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as LocalTime`() {
         val json = """{"abc":"18:31:19.123"}"""
         expectJSON(json) {
-            property("abc", localTime)
+            property("abc", isLocalTime)
         }
     }
 
@@ -523,7 +523,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a LocalTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", localTime)
+                property("abc", isLocalTime)
             }
         }
         expect("/abc: JSON string is not a LocalTime - \"not a LocalTime\"") { exception.message }
@@ -532,7 +532,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as LocalTime`() {
         val json = """["18:31:19.123"]"""
         expectJSON(json) {
-            item(0, localTime)
+            item(0, isLocalTime)
         }
     }
 
@@ -540,7 +540,7 @@ class JSONExpectTest3 {
         val json = """["not a LocalTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, localTime)
+                item(0, isLocalTime)
             }
         }
         expect("/0: JSON string is not a LocalTime - \"not a LocalTime\"") { exception.message }
@@ -549,7 +549,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as OffsetDateTime`() {
         val json = "\"2020-04-16T18:31:19.123+10:00\""
         expectJSON(json) {
-            value(offsetDateTime)
+            value(isOffsetDateTime)
         }
     }
 
@@ -557,7 +557,7 @@ class JSONExpectTest3 {
         val json = "\"not an OffsetDateTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(offsetDateTime)
+                value(isOffsetDateTime)
             }
         }
         expect("JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { exception.message }
@@ -567,7 +567,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(offsetDateTime)
+                value(isOffsetDateTime)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -576,7 +576,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as OffsetDateTime`() {
         val json = """{"abc":"2020-04-16T18:31:19.123+10:00"}"""
         expectJSON(json) {
-            property("abc", offsetDateTime)
+            property("abc", isOffsetDateTime)
         }
     }
 
@@ -584,7 +584,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not an OffsetDateTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", offsetDateTime)
+                property("abc", isOffsetDateTime)
             }
         }
         expect("/abc: JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { exception.message }
@@ -593,7 +593,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as OffsetDateTime`() {
         val json = """["2020-04-16T18:31:19.123+10:00"]"""
         expectJSON(json) {
-            item(0, offsetDateTime)
+            item(0, isOffsetDateTime)
         }
     }
 
@@ -601,7 +601,7 @@ class JSONExpectTest3 {
         val json = """["not an OffsetDateTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, offsetDateTime)
+                item(0, isOffsetDateTime)
             }
         }
         expect("/0: JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { exception.message }
@@ -610,7 +610,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as OffsetTime`() {
         val json = "\"18:31:19.123+10:00\""
         expectJSON(json) {
-            value(offsetTime)
+            value(isOffsetTime)
         }
     }
 
@@ -618,7 +618,7 @@ class JSONExpectTest3 {
         val json = "\"not an OffsetTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(offsetTime)
+                value(isOffsetTime)
             }
         }
         expect("JSON string is not an OffsetTime - \"not an OffsetTime\"") { exception.message }
@@ -628,7 +628,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(offsetTime)
+                value(isOffsetTime)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -637,7 +637,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as OffsetTime`() {
         val json = """{"abc":"18:31:19.123+10:00"}"""
         expectJSON(json) {
-            property("abc", offsetTime)
+            property("abc", isOffsetTime)
         }
     }
 
@@ -645,7 +645,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not an OffsetTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", offsetTime)
+                property("abc", isOffsetTime)
             }
         }
         expect("/abc: JSON string is not an OffsetTime - \"not an OffsetTime\"") { exception.message }
@@ -654,7 +654,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as OffsetTime`() {
         val json = """["18:31:19.123+10:00"]"""
         expectJSON(json) {
-            item(0, offsetTime)
+            item(0, isOffsetTime)
         }
     }
 
@@ -662,7 +662,7 @@ class JSONExpectTest3 {
         val json = """["not an OffsetTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, offsetTime)
+                item(0, isOffsetTime)
             }
         }
         expect("/0: JSON string is not an OffsetTime - \"not an OffsetTime\"") { exception.message }
@@ -671,7 +671,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as ZonedDateTime`() {
         val json = "\"2020-04-16T18:31:19.123+10:00[Australia/Sydney]\""
         expectJSON(json) {
-            value(zonedDateTime)
+            value(isZonedDateTime)
         }
     }
 
@@ -679,7 +679,7 @@ class JSONExpectTest3 {
         val json = "\"not a ZonedDateTime\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(zonedDateTime)
+                value(isZonedDateTime)
             }
         }
         expect("JSON string is not a ZonedDateTime - \"not a ZonedDateTime\"") { exception.message }
@@ -689,7 +689,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(zonedDateTime)
+                value(isZonedDateTime)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -698,7 +698,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as ZonedDateTime`() {
         val json = """{"abc":"2020-04-16T18:31:19.123+10:00[Australia/Sydney]"}"""
         expectJSON(json) {
-            property("abc", zonedDateTime)
+            property("abc", isZonedDateTime)
         }
     }
 
@@ -706,7 +706,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a ZonedDateTime"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", zonedDateTime)
+                property("abc", isZonedDateTime)
             }
         }
         expect("/abc: JSON string is not a ZonedDateTime - \"not a ZonedDateTime\"") { exception.message }
@@ -715,7 +715,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as ZonedDateTime`() {
         val json = """["2020-04-16T18:31:19.123+10:00[Australia/Sydney]"]"""
         expectJSON(json) {
-            item(0, zonedDateTime)
+            item(0, isZonedDateTime)
         }
     }
 
@@ -723,7 +723,7 @@ class JSONExpectTest3 {
         val json = """["not a ZonedDateTime"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, zonedDateTime)
+                item(0, isZonedDateTime)
             }
         }
         expect("/0: JSON string is not a ZonedDateTime - \"not a ZonedDateTime\"") { exception.message }
@@ -732,7 +732,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as YearMonth`() {
         val json = "\"2020-04\""
         expectJSON(json) {
-            value(yearMonth)
+            value(isYearMonth)
         }
     }
 
@@ -740,7 +740,7 @@ class JSONExpectTest3 {
         val json = "\"not a YearMonth\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(yearMonth)
+                value(isYearMonth)
             }
         }
         expect("JSON string is not a YearMonth - \"not a YearMonth\"") { exception.message }
@@ -750,7 +750,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(yearMonth)
+                value(isYearMonth)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -759,7 +759,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as YearMonth`() {
         val json = """{"abc":"2020-04"}"""
         expectJSON(json) {
-            property("abc", yearMonth)
+            property("abc", isYearMonth)
         }
     }
 
@@ -767,7 +767,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a YearMonth"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", yearMonth)
+                property("abc", isYearMonth)
             }
         }
         expect("/abc: JSON string is not a YearMonth - \"not a YearMonth\"") { exception.message }
@@ -776,7 +776,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as YearMonth`() {
         val json = """["2020-04"]"""
         expectJSON(json) {
-            item(0, yearMonth)
+            item(0, isYearMonth)
         }
     }
 
@@ -784,7 +784,7 @@ class JSONExpectTest3 {
         val json = """["not a YearMonth"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, yearMonth)
+                item(0, isYearMonth)
             }
         }
         expect("/0: JSON string is not a YearMonth - \"not a YearMonth\"") { exception.message }
@@ -793,7 +793,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as MonthDay`() {
         val json = "\"--04-30\""
         expectJSON(json) {
-            value(monthDay)
+            value(isMonthDay)
         }
     }
 
@@ -801,7 +801,7 @@ class JSONExpectTest3 {
         val json = "\"not a MonthDay\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(monthDay)
+                value(isMonthDay)
             }
         }
         expect("JSON string is not a MonthDay - \"not a MonthDay\"") { exception.message }
@@ -811,7 +811,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(monthDay)
+                value(isMonthDay)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -820,7 +820,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as MonthDay`() {
         val json = """{"abc":"--04-30"}"""
         expectJSON(json) {
-            property("abc", monthDay)
+            property("abc", isMonthDay)
         }
     }
 
@@ -828,7 +828,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a MonthDay"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", monthDay)
+                property("abc", isMonthDay)
             }
         }
         expect("/abc: JSON string is not a MonthDay - \"not a MonthDay\"") { exception.message }
@@ -837,7 +837,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as MonthDay`() {
         val json = """["--04-30"]"""
         expectJSON(json) {
-            item(0, monthDay)
+            item(0, isMonthDay)
         }
     }
 
@@ -845,7 +845,7 @@ class JSONExpectTest3 {
         val json = """["not a MonthDay"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, monthDay)
+                item(0, isMonthDay)
             }
         }
         expect("/0: JSON string is not a MonthDay - \"not a MonthDay\"") { exception.message }
@@ -854,7 +854,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as Year`() {
         val json = "\"2020\""
         expectJSON(json) {
-            value(year)
+            value(isYear)
         }
     }
 
@@ -862,7 +862,7 @@ class JSONExpectTest3 {
         val json = "\"not a Year\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(year)
+                value(isYear)
             }
         }
         expect("JSON string is not a Year - \"not a Year\"") { exception.message }
@@ -872,7 +872,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(year)
+                value(isYear)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -881,7 +881,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as Year`() {
         val json = """{"abc":"2020"}"""
         expectJSON(json) {
-            property("abc", year)
+            property("abc", isYear)
         }
     }
 
@@ -889,7 +889,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a Year"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", year)
+                property("abc", isYear)
             }
         }
         expect("/abc: JSON string is not a Year - \"not a Year\"") { exception.message }
@@ -898,7 +898,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as Year`() {
         val json = """["2020"]"""
         expectJSON(json) {
-            item(0, year)
+            item(0, isYear)
         }
     }
 
@@ -906,7 +906,7 @@ class JSONExpectTest3 {
         val json = """["not a Year"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, year)
+                item(0, isYear)
             }
         }
         expect("/0: JSON string is not a Year - \"not a Year\"") { exception.message }
@@ -915,7 +915,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as Java Duration`() {
         val json = "\"PT2H\""
         expectJSON(json) {
-            value(javaDuration)
+            value(isJavaDuration)
         }
     }
 
@@ -923,7 +923,7 @@ class JSONExpectTest3 {
         val json = "\"not a Duration\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(javaDuration)
+                value(isJavaDuration)
             }
         }
         expect("JSON string is not a Java Duration - \"not a Duration\"") { exception.message }
@@ -933,7 +933,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(javaDuration)
+                value(isJavaDuration)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -942,7 +942,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as Java Duration`() {
         val json = """{"abc":"PT2H"}"""
         expectJSON(json) {
-            property("abc", javaDuration)
+            property("abc", isJavaDuration)
         }
     }
 
@@ -950,7 +950,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a Duration"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", javaDuration)
+                property("abc", isJavaDuration)
             }
         }
         expect("/abc: JSON string is not a Java Duration - \"not a Duration\"") { exception.message }
@@ -959,7 +959,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as Java Duration`() {
         val json = """["PT2H"]"""
         expectJSON(json) {
-            item(0, javaDuration)
+            item(0, isJavaDuration)
         }
     }
 
@@ -967,7 +967,7 @@ class JSONExpectTest3 {
         val json = """["not a Duration"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, javaDuration)
+                item(0, isJavaDuration)
             }
         }
         expect("/0: JSON string is not a Java Duration - \"not a Duration\"") { exception.message }
@@ -976,7 +976,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as Period`() {
         val json = "\"P3M\""
         expectJSON(json) {
-            value(period)
+            value(isPeriod)
         }
     }
 
@@ -984,7 +984,7 @@ class JSONExpectTest3 {
         val json = "\"not a Period\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(period)
+                value(isPeriod)
             }
         }
         expect("JSON string is not a Period - \"not a Period\"") { exception.message }
@@ -994,7 +994,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(period)
+                value(isPeriod)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -1003,7 +1003,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as Period`() {
         val json = """{"abc":"P3M"}"""
         expectJSON(json) {
-            property("abc", period)
+            property("abc", isPeriod)
         }
     }
 
@@ -1011,7 +1011,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a Period"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", period)
+                property("abc", isPeriod)
             }
         }
         expect("/abc: JSON string is not a Period - \"not a Period\"") { exception.message }
@@ -1020,7 +1020,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as Period`() {
         val json = """["P3M"]"""
         expectJSON(json) {
-            item(0, period)
+            item(0, isPeriod)
         }
     }
 
@@ -1028,7 +1028,7 @@ class JSONExpectTest3 {
         val json = """["not a Period"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, period)
+                item(0, isPeriod)
             }
         }
         expect("/0: JSON string is not a Period - \"not a Period\"") { exception.message }
@@ -1037,7 +1037,7 @@ class JSONExpectTest3 {
     @Test fun `should test string value as Duration`() {
         val json = "\"2m 5s\""
         expectJSON(json) {
-            value(duration)
+            value(isDuration)
         }
     }
 
@@ -1045,7 +1045,7 @@ class JSONExpectTest3 {
         val json = "\"not a Duration\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(duration)
+                value(isDuration)
             }
         }
         expect("JSON string is not a Duration - \"not a Duration\"") { exception.message }
@@ -1055,7 +1055,7 @@ class JSONExpectTest3 {
         val json = "12345"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                value(duration)
+                value(isDuration)
             }
         }
         expect("JSON type doesn't match - expected string, was integer") { exception.message }
@@ -1064,7 +1064,7 @@ class JSONExpectTest3 {
     @Test fun `should test string property as Duration`() {
         val json = """{"abc":"2m 5s"}"""
         expectJSON(json) {
-            property("abc", duration)
+            property("abc", isDuration)
         }
     }
 
@@ -1072,7 +1072,7 @@ class JSONExpectTest3 {
         val json = """{"abc":"not a Duration"}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("abc", duration)
+                property("abc", isDuration)
             }
         }
         expect("/abc: JSON string is not a Duration - \"not a Duration\"") { exception.message }
@@ -1081,7 +1081,7 @@ class JSONExpectTest3 {
     @Test fun `should test string array item as Duration`() {
         val json = """["2m 5s"]"""
         expectJSON(json) {
-            item(0, duration)
+            item(0, isDuration)
         }
     }
 
@@ -1089,7 +1089,7 @@ class JSONExpectTest3 {
         val json = """["not a Duration"]"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                item(0, duration)
+                item(0, isDuration)
             }
         }
         expect("/0: JSON string is not a Duration - \"not a Duration\"") { exception.message }

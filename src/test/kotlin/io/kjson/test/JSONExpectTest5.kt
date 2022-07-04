@@ -38,15 +38,15 @@ class JSONExpectTest5 {
     @Test fun `should test value as one of multiple possibilities`() {
         val json1 = "\"2020-05-12\""
         expectJSON(json1) {
-            oneOf(localDate, test(42), test("NEVER"))
+            oneOf(isLocalDate, test(42), test("NEVER"))
         }
         val json2 = "42"
         expectJSON(json2) {
-            oneOf(localDate, test(42), test("NEVER"))
+            oneOf(isLocalDate, test(42), test("NEVER"))
         }
         val json3 = "\"NEVER\""
         expectJSON(json3) {
-            oneOf(localDate, test(42), test("NEVER"))
+            oneOf(isLocalDate, test(42), test("NEVER"))
         }
     }
 
@@ -54,7 +54,7 @@ class JSONExpectTest5 {
         val json = "\"INCORRECT\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
         expect("No successful test - value is \"INCORRECT\"") { exception.message }
@@ -64,19 +64,19 @@ class JSONExpectTest5 {
         val json1 = """{"abc":"2020-05-12"}"""
         expectJSON(json1) {
             property("abc") {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
         val json2 = """{"abc":42}"""
         expectJSON(json2) {
             property("abc") {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
         val json3 = """{"abc":"NEVER"}"""
         expectJSON(json3) {
             property("abc") {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
     }
@@ -86,7 +86,7 @@ class JSONExpectTest5 {
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 property("abc") {
-                    oneOf(localDate, test(42), test("NEVER"))
+                    oneOf(isLocalDate, test(42), test("NEVER"))
                 }
             }
         }
@@ -97,19 +97,19 @@ class JSONExpectTest5 {
         val json1 = "[\"2020-05-12\"]"
         expectJSON(json1) {
             item(0) {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
         val json2 = "[42]"
         expectJSON(json2) {
             item(0) {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
         val json3 = "[\"NEVER\"]"
         expectJSON(json3) {
             item(0) {
-                oneOf(localDate, test(42), test("NEVER"))
+                oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
     }
@@ -119,7 +119,7 @@ class JSONExpectTest5 {
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 item(0) {
-                    oneOf(localDate, test(42), test("NEVER"))
+                    oneOf(isLocalDate, test(42), test("NEVER"))
                 }
             }
         }
@@ -129,7 +129,7 @@ class JSONExpectTest5 {
     @Test fun `should include long check as one of multiple possibilities`() {
         val json = "2233445566778899"
         expectJSON(json) {
-            oneOf(localDate, test(2233445566778899), test("NEVER"))
+            oneOf(isLocalDate, test(2233445566778899), test("NEVER"))
         }
     }
 
@@ -137,7 +137,7 @@ class JSONExpectTest5 {
         val json = "0"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(2233445566778899), test("NEVER"))
+                oneOf(isLocalDate, test(2233445566778899), test("NEVER"))
             }
         }
         expect("No successful test - value is 0") { exception.message }
@@ -146,7 +146,7 @@ class JSONExpectTest5 {
     @Test fun `should include decimal check as one of multiple possibilities`() {
         val json = "1.5"
         expectJSON(json) {
-            oneOf(localDate, test(BigDecimal("1.5")), test("NEVER"))
+            oneOf(isLocalDate, test(BigDecimal("1.5")), test("NEVER"))
         }
     }
 
@@ -154,7 +154,7 @@ class JSONExpectTest5 {
         val json = "0.5"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(BigDecimal("1.5")), test("NEVER"))
+                oneOf(isLocalDate, test(BigDecimal("1.5")), test("NEVER"))
             }
         }
         expect("No successful test - value is 0.5") { exception.message }
@@ -163,7 +163,7 @@ class JSONExpectTest5 {
     @Test fun `should include boolean check as one of multiple possibilities`() {
         val json = "true"
         expectJSON(json) {
-            oneOf(localDate, test(true), test("NEVER"))
+            oneOf(isLocalDate, test(true), test("NEVER"))
         }
     }
 
@@ -171,7 +171,7 @@ class JSONExpectTest5 {
         val json = "false"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(true), test("NEVER"))
+                oneOf(isLocalDate, test(true), test("NEVER"))
             }
         }
         expect("No successful test - value is false") { exception.message }
@@ -180,7 +180,7 @@ class JSONExpectTest5 {
     @Test fun `should include null check as one of multiple possibilities`() {
         val json = "null"
         expectJSON(json) {
-            oneOf(localDate, test(null), test("NEVER"))
+            oneOf(isLocalDate, test(null), test("NEVER"))
         }
     }
 
@@ -188,7 +188,7 @@ class JSONExpectTest5 {
         val json = "0"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(null), test("NEVER"))
+                oneOf(isLocalDate, test(null), test("NEVER"))
             }
         }
         expect("No successful test - value is 0") { exception.message }
@@ -197,7 +197,7 @@ class JSONExpectTest5 {
     @Test fun `should include Regex check as one of multiple possibilities`() {
         val json = "\"abcdef\""
         expectJSON(json) {
-            oneOf(localDate, test(Regex("^[a-z]+$")), test("NEVER"))
+            oneOf(isLocalDate, test(Regex("^[a-z]+$")), test("NEVER"))
         }
     }
 
@@ -205,7 +205,7 @@ class JSONExpectTest5 {
         val json = "\"0\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(Regex("^[a-z]+$")), test("NEVER"))
+                oneOf(isLocalDate, test(Regex("^[a-z]+$")), test("NEVER"))
             }
         }
         expect("No successful test - value is \"0\"") { exception.message }
@@ -214,7 +214,7 @@ class JSONExpectTest5 {
     @Test fun `should include int range check as one of multiple possibilities`() {
         val json = "42"
         expectJSON(json) {
-            oneOf(localDate, test(0..50), test("NEVER"))
+            oneOf(isLocalDate, test(0..50), test("NEVER"))
         }
     }
 
@@ -222,7 +222,7 @@ class JSONExpectTest5 {
         val json = "51"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(0..50), test("NEVER"))
+                oneOf(isLocalDate, test(0..50), test("NEVER"))
             }
         }
         expect("No successful test - value is 51") { exception.message }
@@ -231,7 +231,7 @@ class JSONExpectTest5 {
     @Test fun `should include long range check as one of multiple possibilities`() {
         val json = "1122334455667700"
         expectJSON(json) {
-            oneOf(localDate, test(0..1122334455667788), test("NEVER"))
+            oneOf(isLocalDate, test(0..1122334455667788), test("NEVER"))
         }
     }
 
@@ -239,7 +239,7 @@ class JSONExpectTest5 {
         val json = "1122334455667799"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(0..1122334455667788), test("NEVER"))
+                oneOf(isLocalDate, test(0..1122334455667788), test("NEVER"))
             }
         }
         expect("No successful test - value is 1122334455667799") { exception.message }
@@ -248,7 +248,7 @@ class JSONExpectTest5 {
     @Test fun `should include decimal range check as one of multiple possibilities`() {
         val json = "2.5"
         expectJSON(json) {
-            oneOf(localDate, test(BigDecimal.ZERO..BigDecimal("10.0")), test("NEVER"))
+            oneOf(isLocalDate, test(BigDecimal.ZERO..BigDecimal("10.0")), test("NEVER"))
         }
     }
 
@@ -256,7 +256,7 @@ class JSONExpectTest5 {
         val json = "-2.5"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(BigDecimal.ZERO..BigDecimal("10.0")), test("NEVER"))
+                oneOf(isLocalDate, test(BigDecimal.ZERO..BigDecimal("10.0")), test("NEVER"))
             }
         }
         expect("No successful test - value is -2.5") { exception.message }
@@ -265,7 +265,7 @@ class JSONExpectTest5 {
     @Test fun `should include string range check as one of multiple possibilities`() {
         val json = "\"abc\""
         expectJSON(json) {
-            oneOf(localDate, test("aaa".."zzz"), test("NEVER"))
+            oneOf(isLocalDate, test("aaa".."zzz"), test("NEVER"))
         }
     }
 
@@ -273,7 +273,7 @@ class JSONExpectTest5 {
         val json = "\"AAA\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test("aaa".."zzz"), test("NEVER"))
+                oneOf(isLocalDate, test("aaa".."zzz"), test("NEVER"))
             }
         }
         expect("No successful test - value is \"AAA\"") { exception.message }
@@ -282,7 +282,7 @@ class JSONExpectTest5 {
     @Test fun `should include string collection check as one of multiple possibilities`() {
         val json = "\"alpha\""
         expectJSON(json) {
-            oneOf(localDate, test(setOf("alpha", "beta", "gamma")), test("NEVER"))
+            oneOf(isLocalDate, test(setOf("alpha", "beta", "gamma")), test("NEVER"))
         }
     }
 
@@ -290,7 +290,7 @@ class JSONExpectTest5 {
         val json = "\"delta\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                oneOf(localDate, test(setOf("alpha", "beta", "gamma")), test("NEVER"))
+                oneOf(isLocalDate, test(setOf("alpha", "beta", "gamma")), test("NEVER"))
             }
         }
         expect("No successful test - value is \"delta\"") { exception.message }

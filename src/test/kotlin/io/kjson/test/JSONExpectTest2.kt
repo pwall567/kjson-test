@@ -78,7 +78,14 @@ class JSONExpectTest2 {
     @Test fun `should test for property non-null`() {
         val json = """{"abc":1,"def":-8}"""
         expectJSON(json) {
-            property("def", nonNull)
+            property("def", isNonNull)
+        }
+    }
+
+    @Test fun `should test that property is null using lambda`() {
+        val json = """{"abc":1,"def":null}"""
+        expectJSON(json) {
+            property("def", isNull)
         }
     }
 
@@ -116,7 +123,7 @@ class JSONExpectTest2 {
         val json = """{"abc":1,"def":-8}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("ghi", nonNull)
+                property("ghi", isNonNull)
             }
         }
         expect("JSON property missing - ghi") { exception.message }
@@ -126,10 +133,30 @@ class JSONExpectTest2 {
         val json = """{"abc":1,"def":-8,"ghi":null}"""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
-                property("ghi", nonNull)
+                property("ghi", isNonNull)
             }
         }
         expect("/ghi: JSON item is null") { exception.message }
+    }
+
+    @Test fun `should fail on incorrect test that property is null using lambda 1`() {
+        val json = """{"abc":1,"def":-8}"""
+        val exception = assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("ghi", isNull)
+            }
+        }
+        expect("JSON property missing - ghi") { exception.message }
+    }
+
+    @Test fun `should fail on incorrect test that property is null using lambda 2`() {
+        val json = """{"abc":1,"def":-8,"ghi":""}"""
+        val exception = assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("ghi", isNull)
+            }
+        }
+        expect("/ghi: JSON item is not null - \"\"") { exception.message }
     }
 
     @Test fun `should test for nested property absent`() {
@@ -163,7 +190,7 @@ class JSONExpectTest2 {
         val json = """{"outer":{"field":99}}"""
         expectJSON(json) {
             property("outer") {
-                property("field", nonNull)
+                property("field", isNonNull)
             }
         }
     }
@@ -209,7 +236,7 @@ class JSONExpectTest2 {
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 property("outer") {
-                    property("other", nonNull)
+                    property("other", isNonNull)
                 }
             }
         }
@@ -221,7 +248,7 @@ class JSONExpectTest2 {
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
                 property("outer") {
-                    property("other", nonNull)
+                    property("other", isNonNull)
                 }
             }
         }

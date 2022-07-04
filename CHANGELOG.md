@@ -2,9 +2,9 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [Unreleased]
+## [3.0] - 2022-07-04
 ### Changed
-- `JSONExpect`: moved named lambda tests to separate file
+- `JSONExpect`: moved named lambda tests to separate file (and renamed to `isXxxx`)
 - `JSONExpect`: made error messages for range tests more consistent
 - `JSONExpect`: added range and collection tests for `java.time` classes _etc._
 ### Added

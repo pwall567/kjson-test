@@ -24,11 +24,16 @@ This is to bring the internal references within a JSON array or object into line
 There are often multiple ways of representing these classes in string form (for example, a time may include or omit
 trailing zeros on fractional seconds, or a UUID may use upper or lower case alphabetic characters), so using string
 comparisons in tests could cause those tests to fail incorrectly.
-The new tests should be used in preference to string tests in future.
+The new tests should be used in preference to string tests from now on.
 
 **New in version 2.2:** the `property`, `item` and `value` tests may now take an `enum` value as a parameter, and the
 effect of the test is to do a string comparison on the `enum` name.
 This is just a matter of convenience &ndash; the tests are simpler if they don't require a `.name` or `.toString()`.
+
+**New in version 3.0:** the `integer`, `localDate` _etc._ named lambda tests are now named `isInteger`, `isLocalDate`
+_etc._
+This for consistency with the newly-added `isObject` and `isArray` tests.
+Also, the lambda functions have been moved to standalone functions, so they each require an `import` statement.
 
 ## Contents
 
@@ -199,10 +204,10 @@ Some examples:
 The lambda parameter of the `property`, `item` or `value` tests normally takes the form of a set of tests applied to a
 nested object or array, but it can also specify a named lambda, as in the following examples:
 ```kotlin
-        property("account", integer)
-        item(0, string)
-        property("id", uuid)
-        property("created", offsetDateTime)
+        property("account", isInteger)
+        item(0, isString)
+        property("id", isUUID)
+        property("created", isOffsetDateTime)
 ```
 
 These functions test that a property or item meets a particular requirement, without specifying the exact value.
@@ -239,6 +244,7 @@ Custom name annotations, and even the conversion of dates from strings to `Local
 
 Checking a value for `null`, e.g. `property("note", null)` will check that the named property **is present** in the JSON
 string and has the value `null`.
+Also, for convenience, a named lambda `isNull` will do the same thing.
 
 In some cases, the fact that a property is not present in the JSON may be taken as being equivalent to the property
 being present with a `null` value.
@@ -247,8 +253,8 @@ specifically for the presence or absence of a property:
 
 To test that a property...                   | Use
 -------------------------------------------- | ------------------------------
-...is present and is not null                | `property("name", nonNull)`
-...is present and is null                    | `property("name", null)`
+...is present and is not null                | `property("name", isNonNull)`
+...is present and is null                    | `property("name", isNull)`
 ...is present whether null or not            | [`propertyPresent("name")`](#propertypresent)
 ...is not present                            | [`propertyAbsent("name")`](#propertyabsent)
 ...is not present, or is present and is null | [`propertyAbsentOrNull("name")`](#propertyabsentornull)
@@ -303,7 +309,7 @@ The [`oneOf`](#oneof) function takes any number of lambdas (as `vararg` paramete
 finds one that matches.
 ```kotlin
     property("elapsedTime") {
-        oneOf(duration, integer)
+        oneOf(isDuration, isInteger)
     }
 ```
 
@@ -464,8 +470,8 @@ Examples:
         property("name", "William")
         property("dob", LocalDate.of(1996, 7, 4))
         property("count", 0..9999)
-        property("amount", decimal)
-        property("reference", uuid)
+        property("amount", isDecimal)
+        property("reference", isUUID)
         property("address", length(1..80))
         property("code", setOf("AAA", "PQR", "XYZ"))
         property("details") {
@@ -515,9 +521,9 @@ Examples:
         item(0, 22)
         item(5, "William")
         item(4, 2.hours)
-        item(7, decimal)
+        item(7, isDecimal)
         item(7, scale(0..2))
-        item(1, uuid)
+        item(1, isUUID)
         item(0) {
             // nested tests
         }
@@ -561,9 +567,9 @@ parameter of `value`.
 Examples:
 ```kotlin
         value(0..9999)
-        value(decimal)
+        value(isDecimal)
         value(scale(0..2))
-        value(localDate)
+        value(isLocalDate)
 ```
 
 ### `length`
@@ -612,7 +618,7 @@ lambdas for this purpose).
 Examples:
 ```kotlin
         property("id") {
-            oneOf(integer, uuid)
+            oneOf(isInteger, isUUID)
         }
         property("result") {
             oneof(test(0..99999), test("ERROR"))
@@ -663,7 +669,7 @@ It takes one parameter - the property name (`String`).
 Examples:
 ```kotlin
         property("controls") {
-            property("openingDate", localDate)
+            property("openingDate", isLocalDate)
             propertyAbsent("closingDate")
         }
 ```
@@ -676,7 +682,7 @@ It takes one parameter - the property name (`String`).
 Examples:
 ```kotlin
         property("controls") {
-            property("openingDate", localDate)
+            property("openingDate", isLocalDate)
             propertyAbsentOrNull("closingDate")
         }
 ```
@@ -727,26 +733,29 @@ These may be used with the form of [`property`](#property), [`item`](#item) or [
 parameter.
 They are useful when only the general nature of the value is to be tested, and the actual value is not important.
 
-Name             | Tests that the value is...
----------------- | -----------------------------------------------------------------------------------
-`nonNull`        | ...non-null
-`string`         | ...a `String`
-`integer`        | ...an `Int`
-`longInteger`    | ...a `Long`
-`decimal`        | ...a `BigDecimal` (a number with an optional decimal fraction)
-`uuid`           | ...a `String` containing a valid UUID
-`localDate`      | ...a `String` containing a valid `LocalDate`
-`localDateTime`  | ...a `String` containing a valid `LocalDateTime`
-`localTime`      | ...a `String` containing a valid `LocalTime`
-`offsetDateTime` | ...a `String` containing a valid `OffsetDateTime`
-`offsetTime`     | ...a `String` containing a valid `OffsetTime`
-`zonedDateTime`  | ...a `String` containing a valid `ZonedDateTime`
-`year`           | ...a `String` containing a valid `Year`
-`yearMonth`      | ...a `String` containing a valid `YearMonth`
-`monthDay`       | ...a `String` containing a valid `MonthDay`
-`javaDuration`   | ...a `String` containing a valid `java.time.Duration`
-`period`         | ...a `String` containing a valid `Period`
-`duration`       | ...a `String` containing a valid `kotlin.time.Duration`
+Name               | Tests that the value is...
+------------------ | -----------------------------------------------------------------------------------
+`isNull`           | ...null
+`isNonNull`        | ...non-null
+`isObject`         | ...an object
+`isArray`          | ...an array
+`isString`         | ...a `String`
+`isInteger`        | ...an `Int`
+`isLongInteger`    | ...a `Long`
+`isDecimal`        | ...a `BigDecimal` (a number with an optional decimal fraction)
+`isUUID`           | ...a `String` containing a valid UUID
+`isLocalDate`      | ...a `String` containing a valid `LocalDate`
+`isLocalDateTime`  | ...a `String` containing a valid `LocalDateTime`
+`isLocalTime`      | ...a `String` containing a valid `LocalTime`
+`isOffsetDateTime` | ...a `String` containing a valid `OffsetDateTime`
+`isOffsetTime`     | ...a `String` containing a valid `OffsetTime`
+`isZonedDateTime`  | ...a `String` containing a valid `ZonedDateTime`
+`isYear`           | ...a `String` containing a valid `Year`
+`isYearMonth`      | ...a `String` containing a valid `YearMonth`
+`isMonthDay`       | ...a `String` containing a valid `MonthDay`
+`isJavaDuration`   | ...a `String` containing a valid `java.time.Duration`
+`isPeriod`         | ...a `String` containing a valid `Period`
+`isDuration`       | ...a `String` containing a valid `kotlin.time.Duration`
 
 Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the `longInteger` test
 passes if the value is `Int` or `Long`, and the `decimal` test passes if the value is `Int` or `Long` or `BigDecimal`.
@@ -754,7 +763,7 @@ passes if the value is `Int` or `Long`, and the `decimal` test passes if the val
 
 ## Dependency Specification
 
-The latest version of the library is 2.2 and it may be obtained from the Maven Central repository.
+The latest version of the library is 3.0 and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -763,19 +772,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>2.2</version>
+      <version>3.0</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:2.2'
+    testImplementation 'io.kjson:kjson-test:3.0'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:2.2")
+    testImplementation("io.kjson:kjson-test:3.0")
 ```
 
 Peter Wall
 
-2022-06-17
+2022-07-04

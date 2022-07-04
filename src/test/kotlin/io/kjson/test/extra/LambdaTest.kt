@@ -27,9 +27,9 @@ package io.kjson.test.extra
 
 import kotlin.test.Test
 import io.kjson.test.JSONExpect.Companion.expectJSON
-import io.kjson.test.integer
+import io.kjson.test.isInteger
 import io.kjson.test.isObject
-import io.kjson.test.nonNull
+import io.kjson.test.isNonNull
 
 class LambdaTest {
 
@@ -37,8 +37,8 @@ class LambdaTest {
         val json = """{"abc":123}"""
         expectJSON(json) {
             value(isObject)
-            property("abc", integer)
-            property("abc", nonNull)
+            property("abc", isInteger)
+            property("abc", isNonNull)
         }
     }
 
