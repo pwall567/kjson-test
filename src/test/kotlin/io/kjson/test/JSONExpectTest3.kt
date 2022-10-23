@@ -1149,6 +1149,60 @@ class JSONExpectTest3 {
         }
     }
 
+    @Test fun `should test that value is empty array`() {
+        val json = "[]"
+        expectJSON(json) {
+            value(isEmptyArray)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of value as empty array`() {
+        val json = "[2]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                value(isEmptyArray)
+            }
+        }.let {
+            expect("JSON array is not empty - size 1") { it.message }
+        }
+    }
+
+    @Test fun `should test that property is empty array`() {
+        val json = """{"abc":[]}"""
+        expectJSON(json) {
+            property("abc", isEmptyArray)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of property as empty array`() {
+        val json = """{"abc":[3,4]}"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("abc", isEmptyArray)
+            }
+        }.let {
+            expect("/abc: JSON array is not empty - size 2") { it.message }
+        }
+    }
+
+    @Test fun `should test that array item is empty array`() {
+        val json = "[[]]"
+        expectJSON(json) {
+            item(0, isEmptyArray)
+        }
+    }
+
+    @Test fun `should fail on incorrect test of array item as empty array`() {
+        val json = "[[4,5,6,7]]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                item(0, isEmptyArray)
+            }
+        }.let {
+            expect("/0: JSON array is not empty - size 4") { it.message }
+        }
+    }
+
     @Test fun `should test that value is object`() {
         val json = "{}"
         expectJSON(json) {

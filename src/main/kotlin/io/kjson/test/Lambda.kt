@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+@file:Suppress("unused")
 package io.kjson.test
 
 import kotlin.time.Duration
@@ -44,7 +45,6 @@ import java.util.UUID
 import net.pwall.json.validation.JSONValidation
 
 /** Check that a value is null. */
-@Suppress("unused")
 val JSONExpect.isNull: JSONExpect.() -> Unit
     get() = {
         if (node != null)
@@ -52,7 +52,6 @@ val JSONExpect.isNull: JSONExpect.() -> Unit
     }
 
 /** Check that a value is non-null. */
-@Suppress("unused")
 val JSONExpect.isNonNull: JSONExpect.() -> Unit
     get() = {
         if (node == null)
@@ -60,7 +59,6 @@ val JSONExpect.isNonNull: JSONExpect.() -> Unit
     }
 
 /** Check that a value is a string. */
-@Suppress("unused")
 val JSONExpect.isString: JSONExpect.() -> Unit
     get() = {
         if (node !is String)
@@ -68,7 +66,6 @@ val JSONExpect.isString: JSONExpect.() -> Unit
     }
 
 /** Check that a value is an integer. */
-@Suppress("unused")
 val JSONExpect.isInteger: JSONExpect.() -> Unit
     get() = {
         if (node !is Int)
@@ -76,7 +73,6 @@ val JSONExpect.isInteger: JSONExpect.() -> Unit
     }
 
 /** Check that a value is a long integer. */
-@Suppress("unused")
 val JSONExpect.isLongInteger: JSONExpect.() -> Unit
     get() = {
         if (!(node is Long || node is Int))
@@ -84,7 +80,6 @@ val JSONExpect.isLongInteger: JSONExpect.() -> Unit
     }
 
 /** Check that a value is a decimal. */
-@Suppress("unused")
 val JSONExpect.isDecimal: JSONExpect.() -> Unit
     get() = {
         if (!(node is BigDecimal || node is Long || node is Int))
@@ -92,7 +87,6 @@ val JSONExpect.isDecimal: JSONExpect.() -> Unit
     }
 
 /** Check that a value is a boolean. */
-@Suppress("unused")
 val JSONExpect.isBoolean: JSONExpect.() -> Unit
     get() = {
         if (node !is Boolean)
@@ -100,7 +94,6 @@ val JSONExpect.isBoolean: JSONExpect.() -> Unit
     }
 
 /** Check that a string value is a valid [UUID]. */
-@Suppress("unused")
 val JSONExpect.isUUID: JSONExpect.() -> Unit
     get() = {
         if (!JSONValidation.isUUID(nodeAsString))
@@ -108,71 +101,66 @@ val JSONExpect.isUUID: JSONExpect.() -> Unit
     }
 
 /** Check that a string value is a valid [LocalDate]. */
-@Suppress("unused")
 val JSONExpect.isLocalDate: JSONExpect.() -> Unit
     get() = { nodeAsLocalDate }
 
 /** Check that a string value is a valid [LocalDateTime]. */
-@Suppress("unused")
 val JSONExpect.isLocalDateTime: JSONExpect.() -> Unit
     get() = { nodeAsLocalDateTime }
 
 /** Check that a string value is a valid [LocalTime]. */
-@Suppress("unused")
 val JSONExpect.isLocalTime: JSONExpect.() -> Unit
     get() = { nodeAsLocalTime }
 
 /** Check that a string value is a valid [OffsetDateTime]. */
-@Suppress("unused")
 val JSONExpect.isOffsetDateTime: JSONExpect.() -> Unit
     get() = { nodeAsOffsetDateTime }
 
 /** Check that a string value is a valid [OffsetTime]. */
-@Suppress("unused")
 val JSONExpect.isOffsetTime: JSONExpect.() -> Unit
     get() = { nodeAsOffsetTime }
 
 /** Check that a string value is a valid [ZonedDateTime]. */
-@Suppress("unused")
 val JSONExpect.isZonedDateTime: JSONExpect.() -> Unit
     get() = { nodeAsZonedDateTime }
 
 /** Check that a string value is a valid [YearMonth]. */
-@Suppress("unused")
 val JSONExpect.isYearMonth: JSONExpect.() -> Unit
     get() = { nodeAsYearMonth }
 
 /** Check that a string value is a valid [MonthDay]. */
-@Suppress("unused")
 val JSONExpect.isMonthDay: JSONExpect.() -> Unit
     get() = { nodeAsMonthDay }
 
 /** Check that a string value is a valid [Year]. */
-@Suppress("unused")
 val JSONExpect.isYear: JSONExpect.() -> Unit
     get() = { nodeAsYear }
 
 /** Check that a string value is a valid [JavaDuration]. */
-@Suppress("unused")
 val JSONExpect.isJavaDuration: JSONExpect.() -> Unit
     get() = { nodeAsJavaDuration }
 
 /** Check that a string value is a valid [Period]. */
-@Suppress("unused")
 val JSONExpect.isPeriod: JSONExpect.() -> Unit
     get() = { nodeAsPeriod }
 
 /** Check that a string value is a valid [Duration]. */
-@Suppress("unused")
 val JSONExpect.isDuration: JSONExpect.() -> Unit
     get() = { nodeAsDuration }
 
 /** Check that a value is an array. */
-@Suppress("unused")
 val JSONExpect.isArray: JSONExpect.() -> Unit
     get() = { nodeAsArray }
 
 /** Check that a value is an array. */
-@Suppress("unused")
 val JSONExpect.isObject: JSONExpect.() -> Unit
     get() = { nodeAsObject }
+
+/** Check that a value is an empty array. */
+val JSONExpect.isEmptyArray: JSONExpect.() -> Unit
+    get() = {
+        nodeAsArray.let {
+            if (it.isNotEmpty())
+                error("JSON array is not empty - size ${it.size}")
+        }
+    }

@@ -1460,7 +1460,7 @@ class JSONExpect private constructor(
                 test.invoke(this)
                 return
             }
-            catch (e: AssertionError) {}
+            catch (_: AssertionError) {}
         }
         error("No successful test - value is ${showNode()}")
     }

@@ -251,13 +251,13 @@ being present with a `null` value.
 If it is important to distinguish between a `null` property and an omitted property, there are functions which test
 specifically for the presence or absence of a property:
 
-To test that a property...                   | Use
--------------------------------------------- | ------------------------------
-...is present and is not null                | `property("name", isNonNull)`
-...is present and is null                    | `property("name", isNull)`
-...is present whether null or not            | [`propertyPresent("name")`](#propertypresent)
-...is not present                            | [`propertyAbsent("name")`](#propertyabsent)
-...is not present, or is present and is null | [`propertyAbsentOrNull("name")`](#propertyabsentornull)
+| To test that a property...                   | Use                                                     |
+|----------------------------------------------|---------------------------------------------------------|
+| ...is present and is not null                | `property("name", isNonNull)`                           |
+| ...is present and is null                    | `property("name", isNull)`                              |
+| ...is present whether null or not            | [`propertyPresent("name")`](#propertypresent)           |
+| ...is not present                            | [`propertyAbsent("name")`](#propertyabsent)             |
+| ...is not present, or is present and is null | [`propertyAbsentOrNull("name")`](#propertyabsentornull) |
 
 Instead of checking all of the properties that are expected not to be present, it may often be simpler to use the
 [`count`](#count) function to check the number of properties that **are** present.
@@ -358,15 +358,15 @@ There are also conversion functions, each of which takes the form of a `val` wit
 These accessors either return the node in the form requested, or throw an `AssertionError` with a detailed error
 message.
 
-Accessor        | Type
---------------- | -----------
-`nodeAsString`  | `String`
-`nodeAsInt`     | `Int`
-`nodeAsLong`    | `Long`
-`nodeAsDecimal` | `BigDecimal`
-`nodeAsBoolean` | `Boolean`
-`nodeAsArray`   | `List<*>`
-`nodeAsObject`  | `Map<*, *>`
+| Accessor        | Type         |
+|-----------------|--------------|
+| `nodeAsString`  | `String`     |
+| `nodeAsInt`     | `Int`        |
+| `nodeAsLong`    | `Long`       |
+| `nodeAsDecimal` | `BigDecimal` |
+| `nodeAsBoolean` | `Boolean`    |
+| `nodeAsArray`   | `List<*>`    |
+| `nodeAsObject`  | `Map<*, *>`  |
 
 To report errors, the [`error`](#error) function will create an `AssertionError` with the message provided, prepending
 the JSON pointer location for the current node in the JSON.
@@ -422,33 +422,33 @@ Tests the value of a property of an object.
 In all cases, the first parameter is the name of the property; the second parameter varies according to the test being
 performed.
 
-Signature                                 | Check that the property...
------------------------------------------ | ----------------------------------------------------------------
-`property(String, String?)`               | ...is equal to a `String` or `null`
-`property(String, Int)`                   | ...is equal to an `Int`
-`property(String, Long)`                  | ...is equal to a `Long`
-`property(String, BigDecimal)`            | ...is equal to a `BigDecimal`
-`property(String, Boolean)`               | ...is equal to a `Boolean`
-`property(String, Regex)`                 | ...is a `String` matching the given `Regex`
-`property(String, LocalDate)`             | ...is a `String` matching the given `LocalDate`
-`property(String, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`
-`property(String, LocalTime)`             | ...is a `String` matching the given `LocalTime`
-`property(String, OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`
-`property(String, OffsetTime)`            | ...is a `String` matching the given `OffsetTime`
-`property(String, ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`
-`property(String, YearMonth)`             | ...is a `String` matching the given `YearMonth`
-`property(String, MonthDay)`              | ...is a `String` matching the given `MonthDay`
-`property(String, Year)`                  | ...is a `String` matching the given `Year`
-`property(String, java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`
-`property(String, Period)`                | ...is a `String` matching the given `Period`
-`property(String, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
-`property(String, UUID)`                  | ...is a `String` matching the given `UUID`
-`property(String, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`
-`property(String, IntRange)`              | ...is in a given range
-`property(String, LongRange)`             | ...is in a given range
-`property(String, ClosedRange<*>)`        | ...is in a given range
-`property(String, Collection<*>)`         | ...is in a given collection
-`property(String, JSONExpect.() -> Unit)` | ...satisfies the given lambda
+| Signature                                 | Check that the property...                                 |
+|-------------------------------------------|------------------------------------------------------------|
+| `property(String, String?)`               | ...is equal to a `String` or `null`                        |
+| `property(String, Int)`                   | ...is equal to an `Int`                                    |
+| `property(String, Long)`                  | ...is equal to a `Long`                                    |
+| `property(String, BigDecimal)`            | ...is equal to a `BigDecimal`                              |
+| `property(String, Boolean)`               | ...is equal to a `Boolean`                                 |
+| `property(String, Regex)`                 | ...is a `String` matching the given `Regex`                |
+| `property(String, LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
+| `property(String, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
+| `property(String, LocalTime)`             | ...is a `String` matching the given `LocalTime`            |
+| `property(String, OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`       |
+| `property(String, OffsetTime)`            | ...is a `String` matching the given `OffsetTime`           |
+| `property(String, ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`        |
+| `property(String, YearMonth)`             | ...is a `String` matching the given `YearMonth`            |
+| `property(String, MonthDay)`              | ...is a `String` matching the given `MonthDay`             |
+| `property(String, Year)`                  | ...is a `String` matching the given `Year`                 |
+| `property(String, java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`   |
+| `property(String, Period)`                | ...is a `String` matching the given `Period`               |
+| `property(String, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
+| `property(String, UUID)`                  | ...is a `String` matching the given `UUID`                 |
+| `property(String, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`     |
+| `property(String, IntRange)`              | ...is in a given range                                     |
+| `property(String, LongRange)`             | ...is in a given range                                     |
+| `property(String, ClosedRange<*>)`        | ...is in a given range                                     |
+| `property(String, Collection<*>)`         | ...is in a given collection                                |
+| `property(String, JSONExpect.() -> Unit)` | ...satisfies the given lambda                              |
 
 In the case of a `ClosedRange` or `Collection`, the parameter type must be `Int`, `Long`, `BigDecimal` or `String`,
 although in practice a range of `Int` or `Long` would be more likely to use `IntRange` or `LongRange` respectively.
@@ -486,33 +486,33 @@ Tests the value of an array item.
 In all cases, the first parameter is the index of the array item (must be non-negative).
 The second parameter varies according to the test being performed.
 
-Signature                          | Check that the array item...
----------------------------------- | ----------------------------------------------------------------
-`item(Int, String?)`               | ...is equal to a `String` or `null`
-`item(Int, Int)`                   | ...is equal to an `Int`
-`item(Int, Long)`                  | ...is equal to a `Long`
-`item(Int, BigDecimal)`            | ...is equal to a `BigDecimal`
-`item(Int, Boolean)`               | ...is equal to a `Boolean`
-`item(Int, Regex)`                 | ...is a `String` matching the given `Regex`
-`item(Int, LocalDate)`             | ...is a `String` matching the given `LocalDate`
-`item(Int, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`
-`item(Int, LocalTime)`             | ...is a `String` matching the given `LocalTime`
-`item(Int, OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`
-`item(Int, OffsetTime)`            | ...is a `String` matching the given `OffsetTime`
-`item(Int, ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`
-`item(Int, YearMonth)`             | ...is a `String` matching the given `YearMonth`
-`item(Int, MonthDay)`              | ...is a `String` matching the given `MonthDay`
-`item(Int, Year)`                  | ...is a `String` matching the given `Year`
-`item(Int, java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`
-`item(Int, Period)`                | ...is a `String` matching the given `Period`
-`item(Int, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
-`item(Int, UUID)`                  | ...is a `String` matching the given `UUID`
-`item(Int, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`
-`item(Int, IntRange)`              | ...is in a given range
-`item(Int, LongRange)`             | ...is in a given range
-`item(Int, ClosedRange<*>)`        | ...is in a given range
-`item(Int, Collection<*>)`         | ...is in a given collection
-`item(Int, JSONExpect.() -> Unit)` | ...satisfies the given lambda
+| Signature                          | Check that the array item...                               |
+|------------------------------------|------------------------------------------------------------|
+| `item(Int, String?)`               | ...is equal to a `String` or `null`                        |
+| `item(Int, Int)`                   | ...is equal to an `Int`                                    |
+| `item(Int, Long)`                  | ...is equal to a `Long`                                    |
+| `item(Int, BigDecimal)`            | ...is equal to a `BigDecimal`                              |
+| `item(Int, Boolean)`               | ...is equal to a `Boolean`                                 |
+| `item(Int, Regex)`                 | ...is a `String` matching the given `Regex`                |
+| `item(Int, LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
+| `item(Int, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
+| `item(Int, LocalTime)`             | ...is a `String` matching the given `LocalTime`            |
+| `item(Int, OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`       |
+| `item(Int, OffsetTime)`            | ...is a `String` matching the given `OffsetTime`           |
+| `item(Int, ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`        |
+| `item(Int, YearMonth)`             | ...is a `String` matching the given `YearMonth`            |
+| `item(Int, MonthDay)`              | ...is a `String` matching the given `MonthDay`             |
+| `item(Int, Year)`                  | ...is a `String` matching the given `Year`                 |
+| `item(Int, java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`   |
+| `item(Int, Period)`                | ...is a `String` matching the given `Period`               |
+| `item(Int, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
+| `item(Int, UUID)`                  | ...is a `String` matching the given `UUID`                 |
+| `item(Int, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`     |
+| `item(Int, IntRange)`              | ...is in a given range                                     |
+| `item(Int, LongRange)`             | ...is in a given range                                     |
+| `item(Int, ClosedRange<*>)`        | ...is in a given range                                     |
+| `item(Int, Collection<*>)`         | ...is in a given collection                                |
+| `item(Int, JSONExpect.() -> Unit)` | ...satisfies the given lambda                              |
 
 The notes following [`property`](#property) describing the options for the second parameter apply equally to `item`.
 
@@ -533,33 +533,33 @@ Examples:
 
 This function takes one parameter, which varies according to the test being performed.
 
-Signature                      | Check that the value...
------------------------------- | ----------------------------------------------------------------
-`value(String?)`               | ...is equal to a `String` or `null`
-`value(Int)`                   | ...is equal to an `Int`
-`value(Long)`                  | ...is equal to a `Long`
-`value(BigDecimal)`            | ...is equal to a `BigDecimal`
-`value(Boolean)`               | ...is equal to a `Boolean`
-`value(Regex)`                 | ...is a `String` matching the given `Regex`
-`value(LocalDate)`             | ...is a `String` matching the given `LocalDate`
-`value(LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`
-`value(LocalTime)`             | ...is a `String` matching the given `LocalTime`
-`value(OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`
-`value(OffsetTime)`            | ...is a `String` matching the given `OffsetTime`
-`value(ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`
-`value(YearMonth)`             | ...is a `String` matching the given `YearMonth`
-`value(MonthDay)`              | ...is a `String` matching the given `MonthDay`
-`value(Year)`                  | ...is a `String` matching the given `Year`
-`value(java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`
-`value(Period)`                | ...is a `String` matching the given `Period`
-`value(kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration`
-`value(UUID)`                  | ...is a `String` matching the given `UUID`
-`value(Enum<*>)`               | ...is a `String` matching a member of the given `Enum`
-`value(IntRange)`              | ...is in a given range
-`value(LongRange)`             | ...is in a given range
-`value(ClosedRange<*>)`        | ...is in a given range
-`value(Collection<*>)`         | ...is in a given collection
-`value(JSONExpect.() -> Unit)` | ...satisfies the given lambda
+| Signature                      | Check that the value...                                    |
+|--------------------------------|------------------------------------------------------------|
+| `value(String?)`               | ...is equal to a `String` or `null`                        |
+| `value(Int)`                   | ...is equal to an `Int`                                    |
+| `value(Long)`                  | ...is equal to a `Long`                                    |
+| `value(BigDecimal)`            | ...is equal to a `BigDecimal`                              |
+| `value(Boolean)`               | ...is equal to a `Boolean`                                 |
+| `value(Regex)`                 | ...is a `String` matching the given `Regex`                |
+| `value(LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
+| `value(LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
+| `value(LocalTime)`             | ...is a `String` matching the given `LocalTime`            |
+| `value(OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`       |
+| `value(OffsetTime)`            | ...is a `String` matching the given `OffsetTime`           |
+| `value(ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`        |
+| `value(YearMonth)`             | ...is a `String` matching the given `YearMonth`            |
+| `value(MonthDay)`              | ...is a `String` matching the given `MonthDay`             |
+| `value(Year)`                  | ...is a `String` matching the given `Year`                 |
+| `value(java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`   |
+| `value(Period)`                | ...is a `String` matching the given `Period`               |
+| `value(kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
+| `value(UUID)`                  | ...is a `String` matching the given `UUID`                 |
+| `value(Enum<*>)`               | ...is a `String` matching a member of the given `Enum`     |
+| `value(IntRange)`              | ...is in a given range                                     |
+| `value(LongRange)`             | ...is in a given range                                     |
+| `value(ClosedRange<*>)`        | ...is in a given range                                     |
+| `value(Collection<*>)`         | ...is in a given collection                                |
+| `value(JSONExpect.() -> Unit)` | ...satisfies the given lambda                              |
 
 The notes following [`property`](#property) describing the options for the second parameter apply equally to the sole
 parameter of `value`.
@@ -630,31 +630,31 @@ Examples:
 Creates a lambda, principally for use with the [`oneOf`](#oneof) function.
 It takes one parameter, which varies according to the type of test.
 
-Signature                     | Create a test for...
------------------------------ | -------------------------------------------------------------
-`test(String?)`               | ...value equal to a `String` or `null`
-`test(Int)`                   | ...value equal to an `Int`
-`test(Long)`                  | ...value equal to a `Long`
-`test(BigDecimal)`            | ...value equal to a `BigDecimal`
-`test(Boolean)`               | ...value equal to a `Boolean`
-`test(Regex)`                 | ...value a `String` matching the given `Regex`
-`test(LocalDate)`             | ...value a `String` matching the given `LocalDate`
-`test(LocalDateTime)`         | ...value a `String` matching the given `LocalDateTime`
-`test(LocalTime)`             | ...value a `String` matching the given `LocalTime`
-`test(OffsetDateTime)`        | ...value a `String` matching the given `OffsetDateTime`
-`test(OffsetTime)`            | ...value a `String` matching the given `OffsetTime`
-`test(ZonedDateTime)`         | ...value a `String` matching the given `ZonedDateTime`
-`test(YearMonth)`             | ...value a `String` matching the given `YearMonth`
-`test(MonthDay)`              | ...value a `String` matching the given `MonthDay`
-`test(Year)`                  | ...value a `String` matching the given `Year`
-`test(java.time.Duration)`    | ...value a `String` matching the given `java.time.Duration`
-`test(Period)`                | ...value a `String` matching the given `Period`
-`test(kotlin.time.Duration)`  | ...value a `String` matching the given `kotlin.time.Duration`
-`test(UUID)`                  | ...value a `String` matching the given `UUID`
-`test(IntRange)`              | ...value in a given range
-`test(LongRange)`             | ...value in a given range
-`test(ClosedRange<*>)`        | ...value in a given range
-`test(Collection<*>)`         | ...value in a given collection
+| Signature                    | Create a test for...                                          |
+|------------------------------|---------------------------------------------------------------|
+| `test(String?)`              | ...value equal to a `String` or `null`                        |
+| `test(Int)`                  | ...value equal to an `Int`                                    |
+| `test(Long)`                 | ...value equal to a `Long`                                    |
+| `test(BigDecimal)`           | ...value equal to a `BigDecimal`                              |
+| `test(Boolean)`              | ...value equal to a `Boolean`                                 |
+| `test(Regex)`                | ...value a `String` matching the given `Regex`                |
+| `test(LocalDate)`            | ...value a `String` matching the given `LocalDate`            |
+| `test(LocalDateTime)`        | ...value a `String` matching the given `LocalDateTime`        |
+| `test(LocalTime)`            | ...value a `String` matching the given `LocalTime`            |
+| `test(OffsetDateTime)`       | ...value a `String` matching the given `OffsetDateTime`       |
+| `test(OffsetTime)`           | ...value a `String` matching the given `OffsetTime`           |
+| `test(ZonedDateTime)`        | ...value a `String` matching the given `ZonedDateTime`        |
+| `test(YearMonth)`            | ...value a `String` matching the given `YearMonth`            |
+| `test(MonthDay)`             | ...value a `String` matching the given `MonthDay`             |
+| `test(Year)`                 | ...value a `String` matching the given `Year`                 |
+| `test(java.time.Duration)`   | ...value a `String` matching the given `java.time.Duration`   |
+| `test(Period)`               | ...value a `String` matching the given `Period`               |
+| `test(kotlin.time.Duration)` | ...value a `String` matching the given `kotlin.time.Duration` |
+| `test(UUID)`                 | ...value a `String` matching the given `UUID`                 |
+| `test(IntRange)`             | ...value in a given range                                     |
+| `test(LongRange)`            | ...value in a given range                                     |
+| `test(ClosedRange<*>)`       | ...value in a given range                                     |
+| `test(Collection<*>)`        | ...value in a given collection                                |
 
 The notes following [`property`](#property) describing the options for the second parameter apply equally to the sole
 parameter of `test`.
@@ -703,16 +703,16 @@ Examples:
 
 In custom tests the current node can be accessed by one of the following:
 
-`val` name      | Type
---------------- | ------------
-`node`          | `Any?`
-`nodeAsString`  | `String`
-`nodeAsInt`     | `Int`
-`nodeAsLong`    | `Long`
-`nodeAsDecimal` | `BigDecimal`
-`nodeAsBoolean` | `Boolean`
-`nodeAsObject`  | `Map<*, *>`
-`nodeAsArray`   | `List<*>`
+| `val` name      | Type         |
+|-----------------|--------------|
+| `node`          | `Any?`       |
+| `nodeAsString`  | `String`     |
+| `nodeAsInt`     | `Int`        |
+| `nodeAsLong`    | `Long`       |
+| `nodeAsDecimal` | `BigDecimal` |
+| `nodeAsBoolean` | `Boolean`    |
+| `nodeAsObject`  | `Map<*, *>`  |
+| `nodeAsArray`   | `List<*>`    |
 
 If the node as not of the required type, an `AssertionError` will be thrown.
 
@@ -733,29 +733,29 @@ These may be used with the form of [`property`](#property), [`item`](#item) or [
 parameter.
 They are useful when only the general nature of the value is to be tested, and the actual value is not important.
 
-Name               | Tests that the value is...
------------------- | -----------------------------------------------------------------------------------
-`isNull`           | ...null
-`isNonNull`        | ...non-null
-`isObject`         | ...an object
-`isArray`          | ...an array
-`isString`         | ...a `String`
-`isInteger`        | ...an `Int`
-`isLongInteger`    | ...a `Long`
-`isDecimal`        | ...a `BigDecimal` (a number with an optional decimal fraction)
-`isUUID`           | ...a `String` containing a valid UUID
-`isLocalDate`      | ...a `String` containing a valid `LocalDate`
-`isLocalDateTime`  | ...a `String` containing a valid `LocalDateTime`
-`isLocalTime`      | ...a `String` containing a valid `LocalTime`
-`isOffsetDateTime` | ...a `String` containing a valid `OffsetDateTime`
-`isOffsetTime`     | ...a `String` containing a valid `OffsetTime`
-`isZonedDateTime`  | ...a `String` containing a valid `ZonedDateTime`
-`isYear`           | ...a `String` containing a valid `Year`
-`isYearMonth`      | ...a `String` containing a valid `YearMonth`
-`isMonthDay`       | ...a `String` containing a valid `MonthDay`
-`isJavaDuration`   | ...a `String` containing a valid `java.time.Duration`
-`isPeriod`         | ...a `String` containing a valid `Period`
-`isDuration`       | ...a `String` containing a valid `kotlin.time.Duration`
+| Name               | Tests that the value is...                                     |
+|--------------------|----------------------------------------------------------------|
+| `isNull`           | ...null                                                        |
+| `isNonNull`        | ...non-null                                                    |
+| `isObject`         | ...an object                                                   |
+| `isArray`          | ...an array                                                    |
+| `isString`         | ...a `String`                                                  |
+| `isInteger`        | ...an `Int`                                                    |
+| `isLongInteger`    | ...a `Long`                                                    |
+| `isDecimal`        | ...a `BigDecimal` (a number with an optional decimal fraction) |
+| `isUUID`           | ...a `String` containing a valid UUID                          |
+| `isLocalDate`      | ...a `String` containing a valid `LocalDate`                   |
+| `isLocalDateTime`  | ...a `String` containing a valid `LocalDateTime`               |
+| `isLocalTime`      | ...a `String` containing a valid `LocalTime`                   |
+| `isOffsetDateTime` | ...a `String` containing a valid `OffsetDateTime`              |
+| `isOffsetTime`     | ...a `String` containing a valid `OffsetTime`                  |
+| `isZonedDateTime`  | ...a `String` containing a valid `ZonedDateTime`               |
+| `isYear`           | ...a `String` containing a valid `Year`                        |
+| `isYearMonth`      | ...a `String` containing a valid `YearMonth`                   |
+| `isMonthDay`       | ...a `String` containing a valid `MonthDay`                    |
+| `isJavaDuration`   | ...a `String` containing a valid `java.time.Duration`          |
+| `isPeriod`         | ...a `String` containing a valid `Period`                      |
+| `isDuration`       | ...a `String` containing a valid `kotlin.time.Duration`        |
 
 Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the `longInteger` test
 passes if the value is `Int` or `Long`, and the `decimal` test passes if the value is `Int` or `Long` or `BigDecimal`.
@@ -763,7 +763,7 @@ passes if the value is `Int` or `Long`, and the `decimal` test passes if the val
 
 ## Dependency Specification
 
-The latest version of the library is 3.0 and it may be obtained from the Maven Central repository.
+The latest version of the library is 3.1 and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -772,19 +772,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.0</version>
+      <version>3.1</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.0'
+    testImplementation 'io.kjson:kjson-test:3.1'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.0")
+    testImplementation("io.kjson:kjson-test:3.1")
 ```
 
 Peter Wall
 
-2022-07-04
+2022-10-24

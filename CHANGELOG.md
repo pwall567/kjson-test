@@ -2,6 +2,13 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.1] - 2022-10-24
+### Changed
+- `Lambda`: switched to use file:Suppress
+- `Lambda`: added `isEmptyArray`
+- `pom.xml`: added properties to avoid IntelliJ problem
+- `pom.xml`: made `kotlin-test-junit` optional
+
 ## [3.0] - 2022-07-04
 ### Changed
 - `JSONExpect`: moved named lambda tests to separate file (and renamed to `isXxxx`)

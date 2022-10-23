@@ -5,7 +5,7 @@
 
   <groupId>io.kjson</groupId>
   <artifactId>kjson-test</artifactId>
-  <version>3.0</version>
+  <version>3.1</version>
   <name>Library for testing Kotlin JSON applications</name>
   <description>Kotlin classes for testing JSON applications.</description>
   <packaging>jar</packaging>
@@ -16,6 +16,9 @@
     <java.version>1.8</java.version>
     <kotlin.version>1.6.10</kotlin.version>
     <dokka.version>1.6.10</dokka.version>
+    <!-- Stop IntelliJ doing stupid things with Java version! -->
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
 
   <licenses>
@@ -100,6 +103,7 @@
           <artifactId>junit</artifactId>
         </exclusion>
       </exclusions>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
