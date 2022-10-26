@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [Unreleased]
+### Changed
+- `JSONExpect`: removed dependency on `kotlin-test-junit` library
+- `pom.xml`: changed scope of `kotlin-test-junit` dependency to `test`
+
 ## [3.1] - 2022-10-24
 ### Changed
 - `Lambda`: switched to use file:Suppress

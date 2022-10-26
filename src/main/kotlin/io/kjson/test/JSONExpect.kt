@@ -27,7 +27,6 @@ package io.kjson.test
 
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
-import kotlin.test.fail
 import kotlin.time.Duration
 
 import java.math.BigDecimal
@@ -1717,7 +1716,7 @@ class JSONExpect private constructor(
      * @param   message     the error message
      */
     fun error(message: String): Nothing {
-        fail(pointer?.let { "$it: $message" } ?: message)
+        throw AssertionError(pointer?.let { "$it: $message" } ?: message)
     }
 
     /**
@@ -1813,14 +1812,14 @@ class JSONExpect private constructor(
          *
          * @param   json            the JSON string
          * @param   tests           the tests to be performed on the JSON
-         * @throws  AssertionError  if any of the tests fail
+         * @throws  AssertionError  if any of the tests fail (including failure to parse the JSON)
          */
         fun expectJSON(json: String, tests: JSONExpect.() -> Unit) {
             val obj = try {
                 JSONSimple.parse(json)
             }
             catch (e: Exception) {
-                fail("Unable to parse JSON - ${e.message}")
+                throw AssertionError("Unable to parse JSON - ${e.message}")
             }
             JSONExpect(obj).tests()
         }
