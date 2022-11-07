@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.3] - 2022-11-07
+### Changed
+- `pom.xml`: updated dependency versions
+- `README.md`: minor corrections
+
 ## [3.2] - 2022-10-26
 ### Changed
 - `JSONExpect`: removed dependency on `kotlin-test-junit` library

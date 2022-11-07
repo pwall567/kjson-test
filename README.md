@@ -171,7 +171,7 @@ Some examples:
 
 ### Testing Array Items
 
-The [`item`](#item) function declares a test (or a group of tests) to be performed on a item of an array.
+The [`item`](#item) function declares a test (or a group of tests) to be performed on an item of an array.
 As with `property`, there are several forms of the `item` function, each taking an index (`Int`) as the first parameter,
 and an expected value or a lambda as the second.
 
@@ -271,8 +271,8 @@ For example:
 ```
 This test will succeed if the value of the property is one of the members of the set.
 
-The `Collection` must be of the appropriate type for the value being checked, and each of the functions `value`,
-`property` and `item` has an overloaded version that takes a `Collection`.
+The `Collection` must be of the appropriate type for the value being checked, and each of the functions `property`,
+`item` and `value` has an overloaded version that takes a `Collection`.
 
 ### Check for Value in Range
 
@@ -282,8 +282,8 @@ For example:
     property("number", 1000..9999)
 ```
 
-As with `Collection`, the range must be of the appropriate type, and each of the functions `value`, `property` and
-`item` has an overloaded version that takes a range.
+As with `Collection`, the range must be of the appropriate type, and each of the functions `property`, `item` and
+`value` has an overloaded version that takes a range.
 
 ### Check for String Length
 
@@ -757,13 +757,13 @@ They are useful when only the general nature of the value is to be tested, and t
 | `isPeriod`         | ...a `String` containing a valid `Period`                      |
 | `isDuration`       | ...a `String` containing a valid `kotlin.time.Duration`        |
 
-Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the `longInteger` test
-passes if the value is `Int` or `Long`, and the `decimal` test passes if the value is `Int` or `Long` or `BigDecimal`.
+Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the `isLongInteger` test
+passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the value is `Int` or `Long` or `BigDecimal`.
 
 
 ## Dependency Specification
 
-The latest version of the library is 3.2 and it may be obtained from the Maven Central repository.
+The latest version of the library is 3.3, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -772,19 +772,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.2</version>
+      <version>3.3</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.2'
+    testImplementation 'io.kjson:kjson-test:3.3'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.2")
+    testImplementation("io.kjson:kjson-test:3.3")
 ```
 
 Peter Wall
 
-2022-10-26
+2022-11-07
