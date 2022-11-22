@@ -164,3 +164,12 @@ val JSONExpect.isEmptyArray: JSONExpect.() -> Unit
                 error("JSON array is not empty - size ${it.size}")
         }
     }
+
+/** Check that a value is an empty object. */
+val JSONExpect.isEmptyObject: JSONExpect.() -> Unit
+    get() = {
+        nodeAsObject.let {
+            if (it.isNotEmpty())
+                error("JSON object is not empty - size ${it.size}")
+        }
+    }

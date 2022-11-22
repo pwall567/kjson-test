@@ -738,7 +738,9 @@ They are useful when only the general nature of the value is to be tested, and t
 | `isNull`           | ...null                                                        |
 | `isNonNull`        | ...non-null                                                    |
 | `isObject`         | ...an object                                                   |
+| `isEmptyObject`    | ...an empty object (an object with no properties)              |
 | `isArray`          | ...an array                                                    |
+| `isEmptyArray`     | ...an empty array                                              |
 | `isString`         | ...a `String`                                                  |
 | `isInteger`        | ...an `Int`                                                    |
 | `isLongInteger`    | ...a `Long`                                                    |
