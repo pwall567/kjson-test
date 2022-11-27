@@ -302,6 +302,22 @@ It is also possible to check a string against a `Regex`, for example:
     property("name", Regex("^[A-Za-z]+$"))
 ```
 
+### Exhaustive Checks
+
+To confirm that all properties of an object or all items in an array are tested, the tests may be enclosed in an
+`exhaustive` block, for example:
+```kotlin
+    property("address") {
+        exhaustive {
+            property("number", 27)
+            property("streetName", "23rd")
+            property("streetType", "St")
+        }
+    }
+```
+This will cause an error to be reported if the object contains other properties in addition to those tested.
+An `exhaustive` block can also check that all items in an array have been tested.
+
 ### Multiple Possibilities
 
 You can also check for a value matching one of a number of possibilities.
@@ -774,19 +790,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.4</version>
+      <version>3.5</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.4'
+    testImplementation 'io.kjson:kjson-test:3.5'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.4")
+    testImplementation("io.kjson:kjson-test:3.5")
 ```
 
 Peter Wall
 
-2022-11-20
+2022-11-27

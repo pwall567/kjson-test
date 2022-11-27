@@ -41,6 +41,7 @@ import java.time.Period
 import java.time.Year
 import java.time.YearMonth
 import java.time.ZonedDateTime
+import java.util.BitSet
 import java.util.UUID
 
 import net.pwall.json.JSONFunctions
@@ -58,6 +59,9 @@ class JSONExpect private constructor(
     /** The context node pointer. */
     val pointer: String? = null,
 ) {
+
+    private var accessedProperties: MutableSet<String>? = null
+    private var accessedItems: BitSet? = null
 
     /** The context node as [Int]. */
     val nodeAsInt: Int
@@ -1378,6 +1382,35 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check the contents of an object or array exhaustively, that is, perform all checks and then confirm that every
+     * object property or array item has been tested.
+     *
+     * @param   tests           the tests to be performed on the item
+     * @throws  AssertionError  if there are untested object properties or array items
+     */
+    fun exhaustive(tests: JSONExpect.() -> Unit) {
+        when (node) {
+            is Map<*, *> -> {
+                val accessed = mutableSetOf<String>()
+                accessedProperties = accessed
+                tests.invoke(this)
+                val notAccessed = node.keys.filter { it !in accessed }
+                if (notAccessed.isNotEmpty())
+                    error("JSON ${propertiesText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
+            }
+            is List<*> -> {
+                val accessed = BitSet()
+                accessedItems = accessed
+                tests.invoke(this)
+                val notAccessed = (0 until node.size).filter { !accessed[it] }
+                if (notAccessed.isNotEmpty())
+                    error("JSON ${itemsText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
+            }
+            else -> errorOnType("object or array")
+        }
+    }
+
+    /**
      * Check the count of array items or object properties.
      *
      * @param   expected        the expected count
@@ -1421,6 +1454,7 @@ class JSONExpect private constructor(
         require(name.isNotEmpty()) { "JSON property name must not be empty" }
         if (nodeAsObject.containsKey(name))
             error("JSON property not absent - $name")
+        accessedProperties?.add(name)
     }
 
     /**
@@ -1433,6 +1467,7 @@ class JSONExpect private constructor(
         require(name.isNotEmpty()) { "JSON property name must not be empty" }
         if (nodeAsObject[name] != null)
             error("JSON property not absent or null - $name")
+        accessedProperties?.add(name)
     }
 
     /**
@@ -1445,6 +1480,7 @@ class JSONExpect private constructor(
         require(name.isNotEmpty()) { "JSON property name must not be empty" }
         if (!nodeAsObject.containsKey(name))
             error("JSON property not present - $name")
+        accessedProperties?.add(name)
     }
 
     /**
@@ -1790,18 +1826,24 @@ class JSONExpect private constructor(
     private fun getProperty(name: String): Any? = nodeAsObject.let {
         if (!it.containsKey(name))
             error("JSON property missing - $name")
+        accessedProperties?.add(name)
         it[name]
     }
 
     private fun getItem(index: Int): Any? = nodeAsArray.let {
         if (index !in it.indices)
             error("JSON array index out of bounds - $index")
+        accessedItems?.set(index)
         it[index]
     }
 
     private fun propertyPointer(name: String) = if (pointer != null) "$pointer/$name" else "/$name"
 
     private fun itemPointer(index: Int) = if (pointer != null) "$pointer/$index" else "/$index"
+
+    private fun propertiesText(count: Int) = if (count == 1) "object property" else "object properties"
+
+    private fun itemsText(count: Int) = if (count == 1) "array item" else "array items"
 
     companion object {
 

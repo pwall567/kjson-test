@@ -2,9 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [3.5] - 2022-11-22
+## [3.5] - 2022-11-27
 ### Changed
 - `Lambda`: added `isEmptyObject` (for consistency)
+- `JSONExpect`: added `exhaustive`
+- `pom.xml`: updated dependency versions
 
 ## [3.4] - 2022-11-20
 ### Changed
