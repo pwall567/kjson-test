@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.6] - 2023-01-06
+### Changed
+- `pom.xml`: updated dependency versions
+
 ## [3.5] - 2022-11-27
 ### Changed
 - `Lambda`: added `isEmptyObject` (for consistency)
