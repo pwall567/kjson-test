@@ -5,7 +5,7 @@
 
   <groupId>io.kjson</groupId>
   <artifactId>kjson-test</artifactId>
-  <version>3.6</version>
+  <version>3.7</version>
   <name>Library for testing Kotlin JSON applications</name>
   <description>Kotlin classes for testing JSON applications.</description>
   <packaging>jar</packaging>
@@ -14,8 +14,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
-    <kotlin.version>1.6.10</kotlin.version>
-    <dokka.version>1.6.10</dokka.version>
+    <kotlin.version>1.7.21</kotlin.version>
+    <dokka.version>1.7.20</dokka.version>
     <!-- Stop IntelliJ doing stupid things with Java version! -->
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -60,7 +60,7 @@
     <dependency>
       <groupId>net.pwall.json</groupId>
       <artifactId>json-simple</artifactId>
-      <version>1.7.3</version>
+      <version>1.7.4</version>
     </dependency>
     <dependency>
       <groupId>net.pwall.json</groupId>
@@ -88,22 +88,9 @@
       <version>${kotlin.version}</version>
     </dependency>
     <dependency>
-      <!-- This is required because kotlin-test-junit 1.6.10 includes junit 4.12 -->
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-test-junit</artifactId>
       <version>${kotlin.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -118,7 +105,7 @@
         <version>${kotlin.version}</version>
         <configuration>
           <jvmTarget>1.8</jvmTarget>
-          <languageVersion>1.6</languageVersion>
+          <languageVersion>1.7</languageVersion>
         </configuration>
         <executions>
           <execution>
@@ -140,7 +127,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M5</version>
+        <version>3.1.2</version>
         <configuration>
           <includes>
             <include>DurationTest.class</include>
@@ -210,7 +197,7 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
+        <version>1.6.13</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>ossrh</serverId>

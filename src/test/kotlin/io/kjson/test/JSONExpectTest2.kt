@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest2.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021, 2022 Peter Wall
+ * Copyright (c) 2020, 2021, 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -854,7 +854,7 @@ class JSONExpectTest2 {
                 value(setOf('C'))
             }
         }
-        expect("Can't perform test using collection of class kotlin.Char") { exception.message }
+        expect("Can't perform test using collection of Char") { exception.message }
     }
 
     @Test fun `should fail on test for property as member of a collection of other class`() {
@@ -864,7 +864,7 @@ class JSONExpectTest2 {
                 property("abc", setOf('C'))
             }
         }
-        expect("/abc: Can't perform test using collection of class kotlin.Char") { exception.message }
+        expect("/abc: Can't perform test using collection of Char") { exception.message }
     }
 
     @Test fun `should fail on test for array item as member of a collection of other class`() {
@@ -874,7 +874,7 @@ class JSONExpectTest2 {
                 item(0, setOf('C'))
             }
         }
-        expect("/0: Can't perform test using collection of class kotlin.Char") { exception.message }
+        expect("/0: Can't perform test using collection of Char") { exception.message }
     }
 
 }

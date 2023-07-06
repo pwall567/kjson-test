@@ -2,6 +2,13 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.7] - 2023-07-07
+### Changed
+- `JSONExpect`: added `valueIsObject()`, `valueIsArray()`, `propertyIsObject()`, `propertyIsArray()`, `itemIsObject()`,
+  `itemIsArray()`
+- `JSONExpect`: improved error messages on tests for member of range or collection
+- `pom.xml`: updated Kotlin version to 1.7.21
+
 ## [3.6] - 2023-01-06
 ### Changed
 - `pom.xml`: updated dependency versions

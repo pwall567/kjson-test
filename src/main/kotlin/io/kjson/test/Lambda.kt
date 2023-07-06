@@ -23,7 +23,8 @@
  * SOFTWARE.
  */
 
-@file:Suppress("unused")
+@file:Suppress("UnusedReceiverParameter")
+
 package io.kjson.test
 
 import kotlin.time.Duration

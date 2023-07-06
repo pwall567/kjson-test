@@ -2,7 +2,7 @@
  * @(#) JSONExpect.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021, 2022 Peter Wall
+ * Copyright (c) 2020, 2021, 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,6 +62,8 @@ class JSONExpect private constructor(
 
     private var accessedProperties: MutableSet<String>? = null
     private var accessedItems: BitSet? = null
+
+    /* ====================================== node type conversions ====================================== */
 
     /** The context node as [Int]. */
     val nodeAsInt: Int
@@ -216,6 +218,8 @@ class JSONExpect private constructor(
         catch (_: Exception) {
             error("JSON string is not a UUID - ${showNode()}")
         }
+
+    /* ====================================== value tests ====================================== */
 
     /**
      * Check the value as an [Int].
@@ -542,7 +546,7 @@ class JSONExpect private constructor(
                 if (nodeAsUUID as T !in expected)
                     errorInRange(expected.start, expected.endInclusive)
             }
-            else -> error("Can't perform test using range of $itemClass")
+            else -> error("Can't perform test using range of ${itemClass.displayName}")
         }
     }
 
@@ -648,7 +652,7 @@ class JSONExpect private constructor(
                             errorInCollection()
                     }
                     else
-                        error("Can't perform test using collection of $itemClass")
+                        error("Can't perform test using collection of ${itemClass.displayName}")
                 }
             }
         }
@@ -674,6 +678,45 @@ class JSONExpect private constructor(
     fun value(tests: JSONExpect.() -> Unit) {
         tests.invoke(this)
     }
+
+    /**
+     * Check that the value is an object and optionally apply pre-configured tests.
+     *
+     * @param   tests           the tests
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun valueIsObject(tests: JSONExpect.() -> Unit = {}) {
+        nodeAsObject
+        tests.invoke(this)
+    }
+
+    /**
+     * Check that the value is an array and optionally apply pre-configured tests.
+     *
+     * @param   tests           the tests
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun valueIsArray(tests: JSONExpect.() -> Unit = {}) {
+        nodeAsArray
+        tests.invoke(this)
+    }
+
+    /**
+     * Check that the value is an array of the specified size and optionally apply nested tests.
+     *
+     * @param   size            the expected size of the array
+     * @param   tests           the tests to be performed on the property
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun valueIsArray(size: Int, tests: JSONExpect.() -> Unit = {}) {
+        require(size >= 0) { "JSON array size must not be negative" }
+        val arraySize = nodeAsArray.size
+        if (arraySize != size)
+            error("JSON array size doesn't match - Expected $size, was $arraySize")
+        tests.invoke(this)
+    }
+
+    /* ====================================== property tests ====================================== */
 
     /**
      * Check a property as an [Int].
@@ -1029,6 +1072,99 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check that a property is an object and optionally apply nested tests.
+     *
+     * @param   name            the property name
+     * @param   tests           the tests to be performed on the property
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun propertyIsObject(name: String, tests: JSONExpect.() -> Unit = {}) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).apply {
+                nodeAsObject
+                tests()
+            }
+        }
+    }
+
+    /**
+     * Check that a property is an array and optionally apply nested tests.
+     *
+     * @param   name            the property name
+     * @param   tests           the tests to be performed on the property
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun propertyIsArray(name: String, tests: JSONExpect.() -> Unit = {}) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).apply {
+                nodeAsArray
+                tests()
+            }
+        }
+    }
+
+    /**
+     * Check that a property is an array of the specified size and optionally apply nested tests.
+     *
+     * @param   name            the property name
+     * @param   size            the expected size of the array
+     * @param   tests           the tests to be performed on the property
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun propertyIsArray(name: String, size: Int, tests: JSONExpect.() -> Unit = {}) {
+        require(size >= 0) { "JSON array size must not be negative" }
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).apply {
+                val arraySize = nodeAsArray.size
+                if (arraySize != size)
+                    error("JSON array size doesn't match - Expected $size, was $arraySize")
+                tests()
+            }
+        }
+    }
+
+    /**
+     * Check that a property is absent from an object.
+     *
+     * @param   name            the property name
+     * @throws  AssertionError  if the property is present
+     */
+    fun propertyAbsent(name: String) {
+        require(name.isNotEmpty()) { "JSON property name must not be empty" }
+        if (nodeAsObject.containsKey(name))
+            error("JSON property not absent - $name")
+        accessedProperties?.add(name)
+    }
+
+    /**
+     * Check that a property is absent from an object, or if present, is `null`.
+     *
+     * @param   name            the property name
+     * @throws  AssertionError  if the property is present and not `null`
+     */
+    fun propertyAbsentOrNull(name: String) {
+        require(name.isNotEmpty()) { "JSON property name must not be empty" }
+        if (nodeAsObject[name] != null)
+            error("JSON property not absent or null - $name")
+        accessedProperties?.add(name)
+    }
+
+    /**
+     * Check that a property is present in an object.
+     *
+     * @param   name            the property name
+     * @throws  AssertionError  if the property is absent
+     */
+    fun propertyPresent(name: String) {
+        require(name.isNotEmpty()) { "JSON property name must not be empty" }
+        if (!nodeAsObject.containsKey(name))
+            error("JSON property not present - $name")
+        accessedProperties?.add(name)
+    }
+
+    /* ====================================== item tests ====================================== */
+
+    /**
      * Check an array item as an [Int].
      *
      * @param   index           the array index
@@ -1382,123 +1518,58 @@ class JSONExpect private constructor(
     }
 
     /**
-     * Check the contents of an object or array exhaustively, that is, perform all checks and then confirm that every
-     * object property or array item has been tested.
+     * Check that an array item is an object and optionally apply nested tests.
      *
+     * @param   index           the array index
      * @param   tests           the tests to be performed on the item
-     * @throws  AssertionError  if there are untested object properties or array items
+     * @throws  AssertionError  if thrown by any of the tests
      */
-    fun exhaustive(tests: JSONExpect.() -> Unit) {
-        when (node) {
-            is Map<*, *> -> {
-                val accessed = mutableSetOf<String>()
-                accessedProperties = accessed
-                tests.invoke(this)
-                val notAccessed = node.keys.filter { it !in accessed }
-                if (notAccessed.isNotEmpty())
-                    error("JSON ${propertiesText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
+    fun itemIsObject(index: Int, tests: JSONExpect.() -> Unit = {}) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).apply {
+                nodeAsObject
+                tests()
             }
-            is List<*> -> {
-                val accessed = BitSet()
-                accessedItems = accessed
-                tests.invoke(this)
-                val notAccessed = (0 until node.size).filter { !accessed[it] }
-                if (notAccessed.isNotEmpty())
-                    error("JSON ${itemsText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
+        }
+    }
+
+    /**
+     * Check that an array item is an array and optionally apply nested tests.
+     *
+     * @param   index           the array index
+     * @param   tests           the tests to be performed on the item
+     * @throws  AssertionError  if thrown by any of the tests
+     */
+    fun itemIsArray(index: Int, tests: JSONExpect.() -> Unit = {}) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).apply {
+                nodeAsArray
+                tests()
             }
-            else -> errorOnType("object or array")
         }
     }
 
     /**
-     * Check the count of array items or object properties.
+     * Check that an array item is an array of the specified size and optionally apply nested tests.
      *
-     * @param   expected        the expected count
-     * @throws  AssertionError  if the value is incorrect
+     * @param   index           the array index
+     * @param   size            the expected size of the array
+     * @param   tests           the tests to be performed on the property
+     * @throws  AssertionError  if thrown by any of the tests
      */
-    fun count(expected: Int) {
-        require(expected >= 0) { "JSON array or object count must not be negative" }
-        val length = when (node) {
-            is List<*> -> node.size
-            is Map<*, *> -> node.size
-            else -> error("JSON count check not on array or object")
-        }
-        if (length != expected)
-            error("JSON count doesn't match - Expected $expected, was $length")
-    }
-
-    /**
-     * Check the count of array items or object properties as a range.
-     *
-     * @param   expected        the expected range
-     * @throws  AssertionError  if the value is incorrect
-     */
-    fun count(expected: IntRange) {
-        require(expected.first >= 0) { "JSON array or object count must not be negative" }
-        val length = when (node) {
-            is List<*> -> node.size
-            is Map<*, *> -> node.size
-            else -> error("JSON count check not on array or object")
-        }
-        if (length !in expected)
-            error("JSON count doesn't match - Expected $expected, was $length")
-    }
-
-    /**
-     * Check that a property is absent from an object.
-     *
-     * @param   name            the property name
-     * @throws  AssertionError  if the property is present
-     */
-    fun propertyAbsent(name: String) {
-        require(name.isNotEmpty()) { "JSON property name must not be empty" }
-        if (nodeAsObject.containsKey(name))
-            error("JSON property not absent - $name")
-        accessedProperties?.add(name)
-    }
-
-    /**
-     * Check that a property is absent from an object, or if present, is `null`.
-     *
-     * @param   name            the property name
-     * @throws  AssertionError  if the property is present and not `null`
-     */
-    fun propertyAbsentOrNull(name: String) {
-        require(name.isNotEmpty()) { "JSON property name must not be empty" }
-        if (nodeAsObject[name] != null)
-            error("JSON property not absent or null - $name")
-        accessedProperties?.add(name)
-    }
-
-    /**
-     * Check that a property is present in an object.
-     *
-     * @param   name            the property name
-     * @throws  AssertionError  if the property is absent
-     */
-    fun propertyPresent(name: String) {
-        require(name.isNotEmpty()) { "JSON property name must not be empty" }
-        if (!nodeAsObject.containsKey(name))
-            error("JSON property not present - $name")
-        accessedProperties?.add(name)
-    }
-
-    /**
-     * Check that the value matches one of a number of tests.
-     *
-     * @param   tests           the tests (as lambdas)
-     * @throws  AssertionError  if all of the tests fail
-     */
-    fun oneOf(vararg tests: JSONExpect.() -> Unit) {
-        for (test in tests) {
-            try {
-                test.invoke(this)
-                return
+    fun itemIsArray(index: Int, size: Int, tests: JSONExpect.() -> Unit = {}) {
+        require(size >= 0) { "JSON array size must not be negative" }
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).apply {
+                val arraySize = nodeAsArray.size
+                if (arraySize != size)
+                    error("JSON array size doesn't match - Expected $size, was $arraySize")
+                tests()
             }
-            catch (_: AssertionError) {}
         }
-        error("No successful test - value is ${showNode()}")
     }
+
+    /* ====================================== "test" lambda functions ====================================== */
 
     /**
      * Convert an [Int] equality check to a lambda for use in a multiple test check.
@@ -1694,6 +1765,88 @@ class JSONExpect private constructor(
      */
     inline fun <reified T : Any> test(expected: Collection<T>): JSONExpect.() -> Unit = { value(expected) }
 
+    /* ====================================== other functions ====================================== */
+
+    /**
+     * Check the contents of an object or array exhaustively, that is, perform all checks and then confirm that every
+     * object property or array item has been tested.
+     *
+     * @param   tests           the tests to be performed on the item
+     * @throws  AssertionError  if there are untested object properties or array items
+     */
+    fun exhaustive(tests: JSONExpect.() -> Unit) {
+        when (node) {
+            is Map<*, *> -> {
+                val accessed = mutableSetOf<String>()
+                accessedProperties = accessed
+                tests.invoke(this)
+                val notAccessed = node.keys.filter { it !in accessed }
+                if (notAccessed.isNotEmpty())
+                    error("JSON ${propertiesText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
+            }
+            is List<*> -> {
+                val accessed = BitSet()
+                accessedItems = accessed
+                tests.invoke(this)
+                val notAccessed = (0 until node.size).filter { !accessed[it] }
+                if (notAccessed.isNotEmpty())
+                    error("JSON ${itemsText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
+            }
+            else -> errorOnType("object or array")
+        }
+    }
+
+    /**
+     * Check that the value matches one of a number of tests.
+     *
+     * @param   tests           the tests (as lambdas)
+     * @throws  AssertionError  if all of the tests fail
+     */
+    fun oneOf(vararg tests: JSONExpect.() -> Unit) {
+        for (test in tests) {
+            try {
+                test.invoke(this)
+                return
+            }
+            catch (_: AssertionError) {}
+        }
+        error("No successful test - value is ${showNode()}")
+    }
+
+    /**
+     * Check the count of array items or object properties.
+     *
+     * @param   expected        the expected count
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun count(expected: Int) {
+        require(expected >= 0) { "JSON array or object count must not be negative" }
+        val length = when (node) {
+            is List<*> -> node.size
+            is Map<*, *> -> node.size
+            else -> error("JSON count check not on array or object")
+        }
+        if (length != expected)
+            error("JSON count doesn't match - Expected $expected, was $length")
+    }
+
+    /**
+     * Check the count of array items or object properties as a range.
+     *
+     * @param   expected        the expected range
+     * @throws  AssertionError  if the value is incorrect
+     */
+    fun count(expected: IntRange) {
+        require(expected.first >= 0) { "JSON array or object count must not be negative" }
+        val length = when (node) {
+            is List<*> -> node.size
+            is Map<*, *> -> node.size
+            else -> error("JSON count check not on array or object")
+        }
+        if (length !in expected)
+            error("JSON count doesn't match - Expected $expected, was $length")
+    }
+
     /**
      * Check the length of a string value.
      *
@@ -1865,6 +2018,12 @@ class JSONExpect private constructor(
             }
             JSONExpect(obj).tests()
         }
+
+        private val KClass<*>.displayName: String
+            get() = when (val qName = qualifiedName) {
+                null -> "<unknown>"
+                else -> if (qName.startsWith("kotlin.") && qName.indexOf('.', 7) < 0) qName.drop(7) else qName
+            }
 
     }
 

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/pwall567/kjson-test.svg?branch=main)](https://app.travis-ci.com/github/pwall567/kjson-test)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.6.10&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.10)
+[![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.7.21&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.7.21)
 [![Maven Central](https://img.shields.io/maven-central/v/io.kjson/kjson-test?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.kjson%22%20AND%20a:%22kjson-test%22)
 
 Library for testing Kotlin JSON applications
@@ -83,7 +83,7 @@ those properties is equally valid.
 Also, the JSON specification allows for whitespace to be added at many points in the JSON string, without affecting the
 meaning of the content.
 
-All of this means that it is not possible to test the results of a function returning JSON by simply performing a string
+All of this means that it is not possible to test the results of a function returning JSON simply by performing a string
 comparison on the output.
 We need a means of checking the data content of the JSON, regardless of the formatting.
 
@@ -152,6 +152,8 @@ This parses the JSON into an internal form and then performs the tests in the su
 
 If any of the tests fail an `AssertionError` will be thrown with a detailed error message, usually including expected
 and actual values.
+The message will in most cases be prefixed by the location of the node in error in
+[JSON Pointer](https://tools.ietf.org/html/rfc6901) form
 
 ### Testing JSON Properties
 
@@ -169,6 +171,24 @@ Some examples:
         }
 ```
 
+The last of these examples above may be made more specific:
+```kotlin
+        propertyIsObject("details") {
+            // tests on nested object
+        }
+        propertyIsArray("list") {
+            // tests on nested array
+        }
+```
+These functions confirm that the property is of the correct type before applying the nested tests.
+
+And if the property is an array, the array size may be checked in the same operation:
+```kotlin
+        propertyIsArray("list", size = 2) {
+            // tests on nested array
+        }
+```
+
 ### Testing Array Items
 
 The [`item`](#item) function declares a test (or a group of tests) to be performed on an item of an array.
@@ -182,6 +202,19 @@ Some examples:
         item(1, true)
         item(4) {
             // tests on nested object or array
+        }
+```
+
+As with property tests, if the array item is expected to be an object or an array, additional functions are available:
+```kotlin
+        itemAsObject(3) {
+            // tests on nested object
+        }
+        itemAsArray(0) {
+            // tests on nested array
+        }
+        itemAsArray(0, size = 2) {
+            // tests on nested array
         }
 ```
 
@@ -496,6 +529,39 @@ Examples:
 ```
 
 
+### `propertyAsObject`
+
+Tests a property of an object as a nested object.
+The first parameter is the name of the property in the outer object; the second is an **optional** lambda of tests to be
+applied to the nested object.
+
+Examples:
+```kotlin
+        propertyAsObject("address") {
+            // tests on address object
+        }
+        propertyAsObject("details") // no tests on content, just confirm that it is an object
+```
+
+
+### `propertyAsArray`
+
+Tests a property of an object as an array.
+Two forms are available: one which takes the name of the array property, and an optional lambda of tests to be applied
+to it, and a second which includes a `size` parameter to check the size of the array.
+
+Examples:
+```kotlin
+        propertyAsArray("lines") {
+            // tests on lines array
+        }
+        propertyAsArray("details") // no tests on content, just confirm that it is an array
+        propertyAsArray("lines", size = 4) {
+            // tests on lines array, after checking that there are 4 items in the array
+        }
+```
+
+
 ### `item`
 
 Tests the value of an array item.
@@ -545,6 +611,40 @@ Examples:
         }
 ```
 
+
+### `itemAsObject`
+
+Tests an array item as an object.
+The first parameter is the index of the array item; the second is an **optional** lambda of tests to be applied to the
+object.
+
+Examples:
+```kotlin
+        itemAsObject(0) {
+            // tests on object
+        }
+        itemAsObject(1) // no tests on content, just confirm that it is an object
+```
+
+
+### `itemAsArray`
+
+Tests an array item as a nested array.
+Two forms are available: one which takes the index of the array item, and an optional lambda of tests to be applied
+to it, and a second which includes a `size` parameter to check the size of the nested array.
+
+Examples:
+```kotlin
+        itemAsArray(0) {
+            // tests on nested array
+        }
+        itemAsArray(2) // no tests on content, just confirm that it is an array
+        itemAsArray(5, size = 2) {
+            // tests on nested array, after checking that there are 2 items in the array
+        }
+```
+
+
 ### `value`
 
 This function takes one parameter, which varies according to the test being performed.
@@ -587,6 +687,40 @@ Examples:
         value(scale(0..2))
         value(isLocalDate)
 ```
+
+### `valueAsObject`
+
+Tests the value as an object.
+The parameter is an **optional** lambda of tests to be applied to the object.
+
+Examples:
+```kotlin
+        valueAsObject {
+            // tests on object
+        }
+        valueAsObject() // no tests on content, just confirm that it is an object
+```
+It is not usually necessary to perform this test; the first access to a property will raise an exception if the value is
+not an object.
+
+### `valueAsArray`
+
+Tests the value as an array.
+Two forms are available: one which takes an optional lambda of tests to be applied to it, and a second which includes a
+`size` parameter to check the size of the array.
+
+Examples:
+```kotlin
+        valueAsArray {
+            // tests on array
+        }
+        valueAsArray() // no tests on content, just confirm that it is an array
+        valueAsArray(size = 2) {
+            // tests on array, after checking that there are 2 items in the array
+        }
+```
+It is not usually necessary to perform this test; the first access to an array item will raise an exception if the value
+is not an array.
 
 ### `length`
 
@@ -781,7 +915,7 @@ passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the v
 
 ## Dependency Specification
 
-The latest version of the library is 3.6, and it may be obtained from the Maven Central repository.
+The latest version of the library is 3.7, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -790,19 +924,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.6</version>
+      <version>3.7</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.6'
+    testImplementation 'io.kjson:kjson-test:3.7'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.6")
+    testImplementation("io.kjson:kjson-test:3.7")
 ```
 
 Peter Wall
 
-2023-01-08
+2023-07-07
