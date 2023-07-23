@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/pwall567/kjson-test.svg?branch=main)](https://app.travis-ci.com/github/pwall567/kjson-test)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.7.21&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.7.21)
+[![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.8.22&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.8.22)
 [![Maven Central](https://img.shields.io/maven-central/v/io.kjson/kjson-test?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.kjson%22%20AND%20a:%22kjson-test%22)
 
 Library for testing Kotlin JSON applications
@@ -915,7 +915,7 @@ passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the v
 
 ## Dependency Specification
 
-The latest version of the library is 3.7, and it may be obtained from the Maven Central repository.
+The latest version of the library is 3.8, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -924,19 +924,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.7</version>
+      <version>3.8</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.7'
+    testImplementation 'io.kjson:kjson-test:3.8'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.7")
+    testImplementation("io.kjson:kjson-test:3.8")
 ```
 
 Peter Wall
 
-2023-07-07
+2023-07-23
