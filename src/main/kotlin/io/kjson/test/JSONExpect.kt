@@ -223,9 +223,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as an [Int].
-     *
-     * @param   expected        the expected [Int] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Int) {
         if (nodeAsInt != expected)
@@ -234,9 +231,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [Long].
-     *
-     * @param   expected        the expected [Long] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Long) {
         if (nodeAsLong != expected)
@@ -245,9 +239,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [BigDecimal].
-     *
-     * @param   expected        the expected [BigDecimal] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: BigDecimal) {
         if (nodeAsDecimal.compareTo(expected) != 0)
@@ -256,9 +247,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [Boolean].
-     *
-     * @param   expected        the expected [Boolean] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Boolean) {
         if (nodeAsBoolean != expected)
@@ -267,9 +255,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [String] or `null`.
-     *
-     * @param   expected        the expected [String] value (or `null`)
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: String?) {
         when (expected) {
@@ -286,9 +271,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [LocalDate].
-     *
-     * @param   expected        the expected [LocalDate] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: LocalDate) {
         if (nodeAsLocalDate != expected)
@@ -297,9 +279,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [LocalDateTime].
-     *
-     * @param   expected        the expected [LocalDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: LocalDateTime) {
         if (nodeAsLocalDateTime != expected)
@@ -308,9 +287,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [LocalTime].
-     *
-     * @param   expected        the expected [LocalTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: LocalTime) {
         if (nodeAsLocalTime != expected)
@@ -319,9 +295,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as an [OffsetDateTime].
-     *
-     * @param   expected        the expected [OffsetDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: OffsetDateTime) {
         if (nodeAsOffsetDateTime != expected)
@@ -330,9 +303,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as an [OffsetTime].
-     *
-     * @param   expected        the expected [OffsetTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: OffsetTime) {
         if (nodeAsOffsetTime != expected)
@@ -341,9 +311,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [ZonedDateTime].
-     *
-     * @param   expected        the expected [ZonedDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: ZonedDateTime) {
         if (nodeAsZonedDateTime != expected)
@@ -352,9 +319,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [YearMonth].
-     *
-     * @param   expected        the expected [YearMonth] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: YearMonth) {
         if (nodeAsYearMonth != expected)
@@ -363,9 +327,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [Year].
-     *
-     * @param   expected        the expected [Year] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Year) {
         if (nodeAsYear != expected)
@@ -374,9 +335,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [MonthDay].
-     *
-     * @param   expected        the expected [MonthDay] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: MonthDay) {
         if (nodeAsMonthDay != expected)
@@ -385,9 +343,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [JavaDuration].
-     *
-     * @param   expected        the expected [JavaDuration] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: JavaDuration) {
         if (nodeAsJavaDuration != expected)
@@ -396,9 +351,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [Period].
-     *
-     * @param   expected        the expected [Period] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Period) {
         if (nodeAsPeriod != expected)
@@ -407,9 +359,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [Duration].
-     *
-     * @param   expected        the expected [Duration] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Duration) {
         if (nodeAsDuration != expected)
@@ -418,9 +367,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [UUID].
-     *
-     * @param   expected        the expected [UUID] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: UUID) {
         if (nodeAsUUID != expected)
@@ -429,9 +375,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as an [Enum] member.
-     *
-     * @param   expected        the expected [Enum] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Enum<*>) {
         if (nodeAsString != expected.name)
@@ -440,9 +383,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a [String] against a [Regex].
-     *
-     * @param   expected        the [Regex]
-     * @throws  AssertionError  if the value is incorrect
      */
     fun value(expected: Regex) {
         if (!(expected matches nodeAsString))
@@ -451,9 +391,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a member of an [IntRange].
-     *
-     * @param   expected        the [IntRange]
-     * @throws  AssertionError  if the value is not within the [IntRange]
      */
     fun value(expected: IntRange) {
         if (nodeAsInt !in expected)
@@ -462,9 +399,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a member of a [LongRange].
-     *
-     * @param   expected        the [LongRange]
-     * @throws  AssertionError  if the value is not within the [LongRange]
      */
     fun value(expected: LongRange) {
         if (nodeAsLong !in expected)
@@ -473,11 +407,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a member of a [ClosedRange].  This will normally be invoked via the inline function.
-     *
-     * @param   expected        the [ClosedRange]
-     * @param   itemClass       the class of the elements of the [ClosedRange]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     @Suppress("UNCHECKED_CAST")
     fun <T : Comparable<T>> valueInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
@@ -552,10 +481,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a member of a [ClosedRange].
-     *
-     * @param   expected        the [ClosedRange]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     inline fun <reified T : Comparable<T>> value(expected: ClosedRange<T>) {
         valueInRange(expected, T::class)
@@ -563,11 +488,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a member of a [Collection].  This will normally be invoked via the inline function.
-     *
-     * @param   expected        the [Collection]
-     * @param   itemClass       the class of the elements of the [Collection]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> valueInCollection(expected: Collection<T?>, itemClass: KClass<*>) {
@@ -660,10 +580,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the value as a member of a [Collection].
-     *
-     * @param   expected        the [Collection]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     inline fun <reified T : Any> value(expected: Collection<T?>) {
         valueInCollection(expected, T::class)
@@ -671,9 +587,6 @@ class JSONExpect private constructor(
 
     /**
      * Apply pre-configured tests to the value.
-     *
-     * @param   tests           the tests
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun value(tests: JSONExpect.() -> Unit) {
         tests.invoke(this)
@@ -681,9 +594,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that the value is an object and optionally apply pre-configured tests.
-     *
-     * @param   tests           the tests
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun valueIsObject(tests: JSONExpect.() -> Unit = {}) {
         nodeAsObject
@@ -692,9 +602,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that the value is an array and optionally apply pre-configured tests.
-     *
-     * @param   tests           the tests
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun valueIsArray(tests: JSONExpect.() -> Unit = {}) {
         nodeAsArray
@@ -703,10 +610,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that the value is an array of the specified size and optionally apply nested tests.
-     *
-     * @param   size            the expected size of the array
-     * @param   tests           the tests to be performed on the property
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun valueIsArray(size: Int, tests: JSONExpect.() -> Unit = {}) {
         require(size >= 0) { "JSON array size must not be negative" }
@@ -720,10 +623,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as an [Int].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Int] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Int) {
         checkName(name).let {
@@ -733,10 +632,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [Long].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Long] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Long) {
         checkName(name).let {
@@ -746,10 +641,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [BigDecimal].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [BigDecimal] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: BigDecimal) {
         checkName(name).let {
@@ -759,10 +650,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [Boolean].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Boolean] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Boolean) {
         checkName(name).let {
@@ -772,10 +659,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [String] or `null`.
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [String] value (or `null`)
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: String?) {
         checkName(name).let {
@@ -785,10 +668,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [LocalDate].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [LocalDate] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: LocalDate) {
         checkName(name).let {
@@ -798,10 +677,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [LocalDateTime].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [LocalDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: LocalDateTime) {
         checkName(name).let {
@@ -811,10 +686,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [LocalTime].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [LocalTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: LocalTime) {
         checkName(name).let {
@@ -824,10 +695,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as an [OffsetDateTime].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [OffsetDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: OffsetDateTime) {
         checkName(name).let {
@@ -837,10 +704,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as an [OffsetTime].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [OffsetTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: OffsetTime) {
         checkName(name).let {
@@ -850,10 +713,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [ZonedDateTime].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [ZonedDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: ZonedDateTime) {
         checkName(name).let {
@@ -863,10 +722,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [YearMonth].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [YearMonth] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: YearMonth) {
         checkName(name).let {
@@ -876,10 +731,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [MonthDay].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [MonthDay] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: MonthDay) {
         checkName(name).let {
@@ -889,10 +740,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [Year].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Year] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Year) {
         checkName(name).let {
@@ -902,10 +749,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [JavaDuration].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [JavaDuration] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: JavaDuration) {
         checkName(name).let {
@@ -915,10 +758,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [Period].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Period] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Period) {
         checkName(name).let {
@@ -928,10 +767,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [Duration].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Duration] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Duration) {
         checkName(name).let {
@@ -941,10 +776,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [UUID].
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [UUID] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: UUID) {
         checkName(name).let {
@@ -954,10 +785,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as an [Enum] member.
-     *
-     * @param   name            the property name
-     * @param   expected        the expected [Enum] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Enum<*>) {
         checkName(name).let {
@@ -967,10 +794,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [String] against a [Regex].
-     *
-     * @param   name            the property name
-     * @param   expected        the [Regex]
-     * @throws  AssertionError  if the value is incorrect
      */
     fun property(name: String, expected: Regex) {
         checkName(name).let {
@@ -980,10 +803,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a member of an [IntRange].
-     *
-     * @param   name            the property name
-     * @param   expected        the [IntRange]
-     * @throws  AssertionError  if the value is not within the [IntRange]
      */
     fun property(name: String, expected: IntRange) {
         checkName(name).let {
@@ -993,10 +812,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a member of a [LongRange].
-     *
-     * @param   name            the property name
-     * @param   expected        the [LongRange]
-     * @throws  AssertionError  if the value is not within the [LongRange]
      */
     fun property(name: String, expected: LongRange) {
         checkName(name).let {
@@ -1006,12 +821,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a member of a [ClosedRange].  This will normally be invoked via the inline function.
-     *
-     * @param   name            the property name
-     * @param   expected        the [ClosedRange]
-     * @param   itemClass       the class of the elements of the [ClosedRange]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     fun <T : Comparable<T>> propertyInRange(name: String, expected: ClosedRange<T>, itemClass: KClass<*>) {
         checkName(name).let {
@@ -1021,11 +830,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a member of a [ClosedRange].
-     *
-     * @param   name            the property name
-     * @param   expected        the [ClosedRange]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     inline fun <reified T : Comparable<T>> property(name: String, expected: ClosedRange<T>) {
         propertyInRange(name, expected, T::class)
@@ -1033,12 +837,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a member of a [Collection].  This will normally be invoked via the inline function.
-     *
-     * @param   name            the property name
-     * @param   expected        the [Collection]
-     * @param   itemClass       the class of the elements of the [Collection]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     fun <T : Any> propertyInCollection(name: String, expected: Collection<T?>, itemClass: KClass<*>) {
         checkName(name).let {
@@ -1048,11 +846,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a member of a [Collection].
-     *
-     * @param   name            the property name
-     * @param   expected        the [Collection]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     inline fun <reified T : Any> property(name: String, expected: Collection<T?>) {
         propertyInCollection(name, expected, T::class)
@@ -1060,10 +853,6 @@ class JSONExpect private constructor(
 
     /**
      * Select a property for nested tests.
-     *
-     * @param   name            the property name
-     * @param   tests           the tests to be performed on the property
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun property(name: String, tests: JSONExpect.() -> Unit) {
         checkName(name).let {
@@ -1073,10 +862,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that a property is an object and optionally apply nested tests.
-     *
-     * @param   name            the property name
-     * @param   tests           the tests to be performed on the property
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun propertyIsObject(name: String, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
@@ -1086,10 +871,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that a property is an array and optionally apply nested tests.
-     *
-     * @param   name            the property name
-     * @param   tests           the tests to be performed on the property
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun propertyIsArray(name: String, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
@@ -1099,11 +880,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that a property is an array of the specified size and optionally apply nested tests.
-     *
-     * @param   name            the property name
-     * @param   size            the expected size of the array
-     * @param   tests           the tests to be performed on the property
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun propertyIsArray(name: String, size: Int, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
@@ -1113,9 +889,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that a property is absent from an object.
-     *
-     * @param   name            the property name
-     * @throws  AssertionError  if the property is present
      */
     fun propertyAbsent(name: String) {
         require(name.isNotEmpty()) { "JSON property name must not be empty" }
@@ -1126,9 +899,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that a property is absent from an object, or if present, is `null`.
-     *
-     * @param   name            the property name
-     * @throws  AssertionError  if the property is present and not `null`
      */
     fun propertyAbsentOrNull(name: String) {
         require(name.isNotEmpty()) { "JSON property name must not be empty" }
@@ -1139,9 +909,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that a property is present in an object.
-     *
-     * @param   name            the property name
-     * @throws  AssertionError  if the property is absent
      */
     fun propertyPresent(name: String) {
         require(name.isNotEmpty()) { "JSON property name must not be empty" }
@@ -1154,10 +921,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as an [Int].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Int] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Int) {
         checkIndex(index).let {
@@ -1167,10 +930,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [Long].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Long] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Long) {
         checkIndex(index).let {
@@ -1180,10 +939,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [BigDecimal].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [BigDecimal] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: BigDecimal) {
         checkIndex(index).let {
@@ -1193,10 +948,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [Boolean].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Boolean] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Boolean) {
         checkIndex(index).let {
@@ -1206,10 +957,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [String] or `null`.
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [String] value (or `null`)
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: String?) {
         checkIndex(index).let {
@@ -1219,10 +966,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [LocalDate].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [LocalDate] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: LocalDate) {
         checkIndex(index).let {
@@ -1232,10 +975,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [LocalDateTime].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [LocalDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: LocalDateTime) {
         checkIndex(index).let {
@@ -1245,10 +984,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [LocalTime].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [LocalTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: LocalTime) {
         checkIndex(index).let {
@@ -1258,10 +993,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as an [OffsetDateTime].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [OffsetDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: OffsetDateTime) {
         checkIndex(index).let {
@@ -1271,10 +1002,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as an [OffsetTime].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [OffsetTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: OffsetTime) {
         checkIndex(index).let {
@@ -1284,10 +1011,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [ZonedDateTime].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [ZonedDateTime] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: ZonedDateTime) {
         checkIndex(index).let {
@@ -1297,10 +1020,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [YearMonth].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [YearMonth] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: YearMonth) {
         checkIndex(index).let {
@@ -1310,10 +1029,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [MonthDay].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [MonthDay] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: MonthDay) {
         checkIndex(index).let {
@@ -1323,10 +1038,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [Year].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Year] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Year) {
         checkIndex(index).let {
@@ -1336,10 +1047,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [JavaDuration].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [JavaDuration] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: JavaDuration) {
         checkIndex(index).let {
@@ -1349,10 +1056,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [Period].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Period] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Period) {
         checkIndex(index).let {
@@ -1362,10 +1065,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [Duration].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Duration] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Duration) {
         checkIndex(index).let {
@@ -1375,10 +1074,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a [UUID].
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [UUID] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: UUID) {
         checkIndex(index).let {
@@ -1388,10 +1083,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as an [Enum] member.
-     *
-     * @param   index           the array index
-     * @param   expected        the expected [Enum] value
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Enum<*>) {
         checkIndex(index).let {
@@ -1401,10 +1092,6 @@ class JSONExpect private constructor(
 
     /**
      * Check a property as a [String] against a [Regex].
-     *
-     * @param   index           the array index
-     * @param   expected        the [Regex]
-     * @throws  AssertionError  if the value is incorrect
      */
     fun item(index: Int, expected: Regex) {
         checkIndex(index).let {
@@ -1414,10 +1101,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a member of an [IntRange].
-     *
-     * @param   index           the array index
-     * @param   expected        the [IntRange]
-     * @throws  AssertionError  if the value is not within the [IntRange]
      */
     fun item(index: Int, expected: IntRange) {
         checkIndex(index).let {
@@ -1427,10 +1110,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a member of a [LongRange].
-     *
-     * @param   index           the array index
-     * @param   expected        the [LongRange]
-     * @throws  AssertionError  if the value is not within the [LongRange]
      */
     fun item(index: Int, expected: LongRange) {
         checkIndex(index).let {
@@ -1440,12 +1119,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a member of a [ClosedRange].  This will normally be invoked via the inline function.
-     *
-     * @param   index           the array index
-     * @param   expected        the [ClosedRange]
-     * @param   itemClass       the class of the elements of the [ClosedRange]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     fun <T : Comparable<T>> itemInRange(index: Int, expected: ClosedRange<T>, itemClass: KClass<*>) {
         checkIndex(index).let {
@@ -1455,11 +1128,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a member of a [ClosedRange].
-     *
-     * @param   index           the array index
-     * @param   expected        the [ClosedRange]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value is not within the [ClosedRange]
      */
     inline fun <reified T : Comparable<T>> item(index: Int, expected: ClosedRange<T>) {
         itemInRange(index, expected, T::class)
@@ -1467,12 +1135,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a member of a [Collection].  This will normally be invoked via the inline function.
-     *
-     * @param   index           the array index
-     * @param   expected        the [Collection]
-     * @param   itemClass       the class of the elements of the [Collection]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     fun <T : Any> itemInCollection(index: Int, expected: Collection<T?>, itemClass: KClass<*>) {
         checkIndex(index).let {
@@ -1482,11 +1144,6 @@ class JSONExpect private constructor(
 
     /**
      * Check an array item as a member of a [Collection].
-     *
-     * @param   index           the array index
-     * @param   expected        the [Collection]
-     * @param   T               the type of the value
-     * @throws  AssertionError  if the value does not match any element of the [Collection]
      */
     inline fun <reified T : Any> item(index: Int, expected: Collection<T?>) {
         itemInCollection(index, expected, T::class)
@@ -1494,10 +1151,6 @@ class JSONExpect private constructor(
 
     /**
      * Select an array item for nested tests.
-     *
-     * @param   index           the array index
-     * @param   tests           the tests to be performed on the item
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun item(index: Int, tests: JSONExpect.() -> Unit) {
         checkIndex(index).let {
@@ -1507,10 +1160,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that an array item is an object and optionally apply nested tests.
-     *
-     * @param   index           the array index
-     * @param   tests           the tests to be performed on the item
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun itemIsObject(index: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
@@ -1520,10 +1169,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that an array item is an array and optionally apply nested tests.
-     *
-     * @param   index           the array index
-     * @param   tests           the tests to be performed on the item
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun itemIsArray(index: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
@@ -1533,11 +1178,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that an array item is an array of the specified size and optionally apply nested tests.
-     *
-     * @param   index           the array index
-     * @param   size            the expected size of the array
-     * @param   tests           the tests to be performed on the property
-     * @throws  AssertionError  if thrown by any of the tests
      */
     fun itemIsArray(index: Int, size: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
@@ -1777,195 +1417,121 @@ class JSONExpect private constructor(
 
     /**
      * Convert an [Int] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Int] value
-     * @return              the lambda
      */
     fun test(expected: Int): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Long] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Long] value
-     * @return              the lambda
      */
     fun test(expected: Long): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [BigDecimal] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [BigDecimal] value
-     * @return              the lambda
      */
     fun test(expected: BigDecimal): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Boolean] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Boolean] value
-     * @return              the lambda
      */
     fun test(expected: Boolean): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [String] or `null` equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [String] value (or `null`)
-     * @return              the lambda
      */
     fun test(expected: String?): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [LocalDate] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [LocalDate] value
-     * @return              the lambda
      */
     fun test(expected: LocalDate): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [LocalDateTime] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [LocalDateTime] value
-     * @return              the lambda
      */
     fun test(expected: LocalDateTime): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [LocalTime] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [LocalTime] value
-     * @return              the lambda
      */
     fun test(expected: LocalTime): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert an [OffsetDateTime] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [OffsetDateTime] value
-     * @return              the lambda
      */
     fun test(expected: OffsetDateTime): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert an [OffsetTime] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [OffsetTime] value
-     * @return              the lambda
      */
     fun test(expected: OffsetTime): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [ZonedDateTime] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [ZonedDateTime] value
-     * @return              the lambda
      */
     fun test(expected: ZonedDateTime): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [YearMonth] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [YearMonth] value
-     * @return              the lambda
      */
     fun test(expected: YearMonth): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [MonthDay] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [MonthDay] value
-     * @return              the lambda
      */
     fun test(expected: MonthDay): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Year] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Year] value
-     * @return              the lambda
      */
     fun test(expected: Year): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [JavaDuration] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [JavaDuration] value
-     * @return              the lambda
      */
     fun test(expected: JavaDuration): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Period] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Period] value
-     * @return              the lambda
      */
     fun test(expected: Period): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Duration] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Duration] value
-     * @return              the lambda
      */
     fun test(expected: Duration): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [UUID] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [UUID] value
-     * @return              the lambda
      */
     fun test(expected: UUID): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert an [Enum] equality check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the expected [Enum] value
-     * @return              the lambda
      */
     fun test(expected: Enum<*>): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [String] [Regex] check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the [Regex]
-     * @return              the lambda
      */
     fun test(expected: Regex): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert an [Int] range check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the [IntRange]
-     * @return              the lambda
      */
     fun test(expected: IntRange): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Long] range check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the [LongRange]
-     * @return              the lambda
      */
     fun test(expected: LongRange): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [ClosedRange] check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the [ClosedRange]
-     * @param   T           the type of the value
-     * @return              the lambda
      */
     inline fun <reified T : Comparable<T>> test(expected: ClosedRange<T>): JSONExpect.() -> Unit = { value(expected) }
 
     /**
      * Convert a [Collection] check to a lambda for use in a multiple test check.
-     *
-     * @param   expected    the [Collection]
-     * @param   T           the type of the value
-     * @return              the lambda
      */
     inline fun <reified T : Any> test(expected: Collection<T>): JSONExpect.() -> Unit = { value(expected) }
 
@@ -1974,9 +1540,6 @@ class JSONExpect private constructor(
     /**
      * Check the contents of an object or array exhaustively, that is, perform all checks and then confirm that every
      * object property or array item has been tested.
-     *
-     * @param   tests           the tests to be performed on the item
-     * @throws  AssertionError  if there are untested object properties or array items
      */
     fun exhaustive(tests: JSONExpect.() -> Unit) {
         when (node) {
@@ -2002,9 +1565,6 @@ class JSONExpect private constructor(
 
     /**
      * Check that the value matches one of a number of tests.
-     *
-     * @param   tests           the tests (as lambdas)
-     * @throws  AssertionError  if all of the tests fail
      */
     fun oneOf(vararg tests: JSONExpect.() -> Unit) {
         for (test in tests) {
@@ -2019,9 +1579,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the count of array items or object properties.
-     *
-     * @param   expected        the expected count
-     * @throws  AssertionError  if the value is incorrect
      */
     fun count(expected: Int) {
         require(expected >= 0) { "JSON array or object count must not be negative" }
@@ -2036,9 +1593,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the count of array items or object properties as a range.
-     *
-     * @param   expected        the expected range
-     * @throws  AssertionError  if the value is incorrect
      */
     fun count(expected: IntRange) {
         require(expected.first >= 0) { "JSON array or object count must not be negative" }
@@ -2053,9 +1607,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the length of a string value.
-     *
-     * @param   expected        the expected length
-     * @throws  AssertionError  if the length is incorrect
      */
     fun length(expected: Int): JSONExpect.() -> Unit = {
         nodeAsString.length.let {
@@ -2066,9 +1617,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the length of a string value as a range.
-     *
-     * @param   expected        the expected length as a range
-     * @throws  AssertionError  if the length is incorrect
      */
     fun length(expected: IntRange): JSONExpect.() -> Unit = {
         nodeAsString.length.let {
@@ -2079,9 +1627,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the scale of a decimal value.
-     *
-     * @param   expected        the expected scale
-     * @throws  AssertionError  if the scale is incorrect
      */
     fun scale(expected: Int): JSONExpect.() -> Unit = {
         nodeAsDecimal.scale().let {
@@ -2092,9 +1637,6 @@ class JSONExpect private constructor(
 
     /**
      * Check the scale of a decimal value as a range.
-     *
-     * @param   expected        the expected scale as a range
-     * @throws  AssertionError  if the scale is incorrect
      */
     fun scale(expected: IntRange): JSONExpect.() -> Unit = {
         nodeAsDecimal.scale().let {
@@ -2105,8 +1647,6 @@ class JSONExpect private constructor(
 
     /**
      * Report error, including context path.
-     *
-     * @param   message     the error message
      */
     fun error(message: String): Nothing {
         throw AssertionError(pointer?.let { "$it: $message" } ?: message)
@@ -2114,15 +1654,11 @@ class JSONExpect private constructor(
 
     /**
      * Create a display form of the current node, for use in error messages.
-     *
-     * @return      a text string describing the node
      */
     fun showNode() = showValue(node)
 
     /**
      * Create a display form of a value, for use in error messages.
-     *
-     * @return      a text string describing the value
      */
     fun showValue(value: Any?): String = when (value) {
         null -> "null"
@@ -2220,10 +1756,6 @@ class JSONExpect private constructor(
 
         /**
          * Check that a JSON string matches the defined expectations.
-         *
-         * @param   json            the JSON string
-         * @param   tests           the tests to be performed on the JSON
-         * @throws  AssertionError  if any of the tests fail (including failure to parse the JSON)
          */
         fun expectJSON(json: String, tests: JSONExpect.() -> Unit) {
             val obj = try {

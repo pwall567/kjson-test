@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [3.9] - 2023-09-18
 ### Changed
 - `JSONExpect`: added `anyItem()`, `anyItemIsObject()`, `anyItemIsArray()`
+- `JSONExpect`: simplified KDoc in line with Kotlin recommendations
 
 ## [3.8] - 2023-07-22
 ### Changed
