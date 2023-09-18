@@ -2,7 +2,7 @@
  * @(#) YearTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,22 @@ class YearTest {
         }.let {
             expect("/0: JSON value not in collection - \"2022\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has Year value`() {
+        val json = """["2023","2024","2025"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(Year.of(2024))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has Year value`() {
+        val json = """["2023","2024","2025"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(Year.of(2026))
+            }
+        }.let { expect("No JSON array item has value \"2026\"") { it.message } }
     }
 
 }

@@ -2,7 +2,7 @@
  * @(#) ZonedDateTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -241,6 +241,24 @@ class ZonedDateTimeTest {
                 it.message
             }
         }
+    }
+
+    @Test fun `should test that any item has ZonedDateTime value`() {
+        val json = "[\"2023-09-18T19:30:15+10:00[Australia/Sydney]\",\"2023-09-18T19:30:30+10:00[Australia/Sydney]\"," +
+                "\"2023-09-18T19:30:45+10:00[Australia/Sydney]\"]"
+        JSONExpect.expectJSON(json) {
+            anyItem(ZonedDateTime.of(2023, 9, 18, 19, 30, 45, 0, zoneIdSydney))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has ZonedDateTime value`() {
+        val json = "[\"2023-09-18T19:30:15+10:00[Australia/Sydney]\",\"2023-09-18T19:30:30+10:00[Australia/Sydney]\"," +
+                "\"2023-09-18T19:30:45+10:00[Australia/Sydney]\"]"
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(ZonedDateTime.of(2023, 9, 18, 19, 30, 55, 0, zoneIdSydney))
+            }
+        }.let { expect("No JSON array item has value \"2023-09-18T19:30:55+10:00[Australia/Sydney]\"") { it.message } }
     }
 
     companion object {

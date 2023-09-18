@@ -2,7 +2,7 @@
  * @(#) OffsetDateTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -234,6 +234,22 @@ class OffsetDateTimeTest {
         }.let {
             expect("/0: JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has OffsetDateTime value`() {
+        val json = """["2023-09-18T19:30:15+10:00","2023-09-18T19:30:30+10:00","2023-09-18T19:30:45+10:00"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(OffsetDateTime.of(2023, 9, 18, 19, 30, 45, 0, offset10))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has OffsetDateTime value`() {
+        val json = """["2023-09-18T19:30:15","2023-09-18T19:30:30","2023-09-18T19:30:45"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(OffsetDateTime.of(2023, 9, 18, 19, 30, 55, 0, offset10))
+            }
+        }.let { expect("No JSON array item has value \"2023-09-18T19:30:55+10:00\"") { it.message } }
     }
 
     companion object {

@@ -2,7 +2,7 @@
  * @(#) UUIDTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -224,6 +224,22 @@ class UUIDTest {
         }.let {
             expect("/0: JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has UUID value`() {
+        val json = """["$uuid0","$uuid1","$uuid2"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(uuid2)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has UUID value`() {
+        val json = """["$uuid0","$uuid1"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(uuid2)
+            }
+        }.let { expect("No JSON array item has value \"$uuid2\"") { it.message } }
     }
 
     companion object {

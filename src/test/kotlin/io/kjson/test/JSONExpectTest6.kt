@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest6.kt
  *
  * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ package io.kjson.test
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.expect
+
+import java.math.BigDecimal
 
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
@@ -124,6 +126,289 @@ class JSONExpectTest6 {
                 }
             }
         }.let { expect("/aaa: JSON type doesn't match - expected object or array, was integer") { it.message } }
+    }
+
+    @Test fun `should test that any item has integer value`() {
+        val json = "[7,8,9]"
+        expectJSON(json) {
+            anyItem(8)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has integer value`() {
+        val json = "[7,8,9]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(6)
+            }
+        }.let { expect("No JSON array item has value 6") { it.message } }
+    }
+
+    @Test fun `should test that any item has integer value - exhaustive`() {
+        val json = "[7,8,9]"
+        expectJSON(json) {
+            exhaustive {
+                anyItem(8)
+                anyItem(9)
+                anyItem(7)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has integer value - exhaustive`() {
+        val json = "[7,8,9,5]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                exhaustive {
+                    anyItem(8)
+                    anyItem(9)
+                }
+            }
+        }.let { expect("JSON array items not tested: 0, 3") { it.message } }
+    }
+
+    @Test fun `should test that any item of nested array has integer value`() {
+        val json = """{"aaa":[7,8,9]}"""
+        expectJSON(json) {
+            property("aaa") {
+                anyItem(8)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item of nested array has integer value`() {
+        val json = """{"aaa":[7,8,9]}"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                property("aaa") {
+                    anyItem(6)
+                }
+            }
+        }.let { expect("/aaa: No JSON array item has value 6") { it.message } }
+    }
+
+    @Test fun `should test that any item has long value`() {
+        val json = "[123456789123456777,123456789123456789,123456789123456799]"
+        expectJSON(json) {
+            anyItem(123456789123456789)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has long value`() {
+        val json = "[123456789123456777,123456789123456789,123456789123456799]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(123456789123456788)
+            }
+        }.let { expect("No JSON array item has value 123456789123456788") { it.message } }
+    }
+
+    @Test fun `should test that any item has decimal value`() {
+        val json = "[1.5,2.5,3.5]"
+        expectJSON(json) {
+            anyItem(BigDecimal("3.5"))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has decimal value`() {
+        val json = "[1.5,2.5,3.5]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(BigDecimal("4.5"))
+            }
+        }.let { expect("No JSON array item has value 4.5") { it.message } }
+    }
+
+    @Test fun `should test that any item has boolean value`() {
+        val json = "[false,false,true]"
+        expectJSON(json) {
+            anyItem(true)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has boolean value`() {
+        val json = "[false,false,false]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(true)
+            }
+        }.let { expect("No JSON array item has value true") { it.message } }
+    }
+
+    @Test fun `should test that any item has string value`() {
+        val json = """["alpha","beta","gamma"]"""
+        expectJSON(json) {
+            anyItem("alpha")
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has string value`() {
+        val json = """["alpha","beta","gamma"]"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem("delta")
+            }
+        }.let { expect("No JSON array item has value \"delta\"") { it.message } }
+    }
+
+    @Test fun `should test that any item matches a Regex`() {
+        val json = """["alpha","beta","gamma"]"""
+        expectJSON(json) {
+            anyItem(Regex("^[a-z]+$"))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item matches a Regex`() {
+        val json = """["alpha","beta","gamma"]"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(Regex("^[0-9]+$"))
+            }
+        }.let { expect("No JSON array item has value matching given Regex") { it.message } }
+    }
+
+    @Test fun `should test that any item is in an IntRange`() {
+        val json = "[5,10,15]"
+        expectJSON(json) {
+            anyItem(15..19)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is in an IntRange`() {
+        val json = "[5,10,15]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(20..24)
+            }
+        }.let { expect("No JSON array item has value in range") { it.message } }
+    }
+
+    @Test fun `should test that any item is in a LongRange`() {
+        val json = "[123456789123456780,123456789123456781,123456789123456782]"
+        expectJSON(json) {
+            anyItem(123456789123456782..123456789123456789)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is in a LongRange`() {
+        val json = "[123456789123456780,123456789123456781,123456789123456782]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(123456789123456783..123456789123456789)
+            }
+        }.let { expect("No JSON array item has value in range") { it.message } }
+    }
+
+    @Test fun `should test that any item is in a ClosedRange`() {
+        val json = "[1.5,2.5,3.5]"
+        expectJSON(json) {
+            anyItem(BigDecimal("3.0")..BigDecimal("4.0"))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is in a ClosedRange`() {
+        val json = "[1.5,2.5,3.5]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(BigDecimal("4.0")..BigDecimal("5.0"))
+            }
+        }.let { expect("No JSON array item has value in range") { it.message } }
+    }
+
+    @Test fun `should test that any item is in a Collection`() {
+        val json = """["alpha","beta","gamma"]"""
+        expectJSON(json) {
+            anyItem(setOf("gamma", "mu", "omega"))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is in a Collection`() {
+        val json = """["alpha","beta","gamma"]"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem(setOf("delta", "mu", "omega"))
+            }
+        }.let { expect("No JSON array item has value in collection") { it.message } }
+    }
+
+    @Test fun `should test that any item has complex value`() {
+        val json = """[{"a":1},{"b":2}]"""
+        expectJSON(json) {
+            anyItem {
+                property("a", 1)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has complex value`() {
+        val json = """[{"a":1},{"b":2}]"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItem {
+                    property("a", 2)
+                }
+            }
+        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+    }
+
+    @Test fun `should test that any item is an object with further tests`() {
+        val json = """[{"a":1},{"b":2}]"""
+        expectJSON(json) {
+            anyItemIsObject {
+                property("a", 1)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is an object with further tests`() {
+        val json = """[{"a":1},{"b":2}]"""
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItemIsObject {
+                    property("a", 2)
+                }
+            }
+        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+    }
+
+    @Test fun `should test that any item is an array with further tests`() {
+        val json = "[[1,2],[3,4]]"
+        expectJSON(json) {
+            anyItemIsArray {
+                item(0, 1)
+                item(1, 2)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is an array with further tests`() {
+        val json = "[[1,2],[3,4]]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItemIsArray {
+                    item(0, 4)
+                }
+            }
+        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+    }
+
+    @Test fun `should test that any item is an array of a given size with further tests`() {
+        val json = "[[1,2],[3,4]]"
+        expectJSON(json) {
+            anyItemIsArray(2) {
+                item(0, 1)
+                item(1, 2)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item is an array of a given size`() {
+        val json = "[[1,2],[3,4]]"
+        assertFailsWith<AssertionError> {
+            expectJSON(json) {
+                anyItemIsArray(3)
+            }
+        }.let { expect("No JSON array item has value matching given tests") { it.message } }
     }
 
 }

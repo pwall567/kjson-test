@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [3.9] - 2023-09-18
+### Changed
+- `JSONExpect`: added `anyItem()`, `anyItemIsObject()`, `anyItemIsArray()`
+
 ## [3.8] - 2023-07-22
 ### Changed
 - `pom.xml`: updated Kotlin version to 1.8.22

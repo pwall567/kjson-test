@@ -2,7 +2,7 @@
  * @(#) JavaDurationTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,22 @@ class JavaDurationTest {
         }.let {
             expect("/0: JSON value not in collection - \"PT34S\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has Java Duration value`() {
+        val json = """["PT30S","PT35S","PT40S"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(Duration.ofSeconds(30))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has Java Duration value`() {
+        val json = """["PT30S","PT35S","PT40S"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(Duration.ofSeconds(45))
+            }
+        }.let { expect("No JSON array item has value \"PT45S\"") { it.message } }
     }
 
 }

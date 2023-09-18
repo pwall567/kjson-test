@@ -32,8 +32,10 @@ This is just a matter of convenience &ndash; the tests are simpler if they don't
 
 **New in version 3.0:** the `integer`, `localDate` _etc._ named lambda tests are now named `isInteger`, `isLocalDate`
 _etc._
-This for consistency with the newly-added `isObject` and `isArray` tests.
+This is for consistency with the newly-added `isObject` and `isArray` tests.
 Also, the lambda functions have been moved to standalone functions, so they each require an `import` statement.
+
+**New in version 3.9:** the `anyItem` test allows for the checking of array items in an unordered set.
 
 ## Contents
 
@@ -75,8 +77,8 @@ In a test class:
 
 Many Kotlin applications return their result in the form of a JSON object, or in some cases, as an array of JSON
 objects.
-When we attempt to test these applications, we run into a simple problem - there may be many valid JSON representations
-of the same object.
+When we attempt to test these applications, we run into a simple problem &ndash; there may be many valid JSON
+representations of the same object.
 The properties of a JSON object do not have a pre-determined order, and given a valid set of properties, any sequence of
 those properties is equally valid.
 
@@ -150,7 +152,7 @@ This parses the JSON into an internal form and then performs the tests in the su
     }
 ```
 
-If any of the tests fail an `AssertionError` will be thrown with a detailed error message, usually including expected
+If any of the tests fail, an `AssertionError` will be thrown with a detailed error message, usually including expected
 and actual values.
 The message will in most cases be prefixed by the location of the node in error in
 [JSON Pointer](https://tools.ietf.org/html/rfc6901) form
@@ -207,13 +209,37 @@ Some examples:
 
 As with property tests, if the array item is expected to be an object or an array, additional functions are available:
 ```kotlin
-        itemAsObject(3) {
+        itemIsObject(3) {
             // tests on nested object
         }
-        itemAsArray(0) {
+        itemIsArray(0) {
             // tests on nested array
         }
-        itemAsArray(0, size = 2) {
+        itemIsArray(0, size = 2) {
+            // tests on nested array
+        }
+```
+
+In the case of a JSON array representing an unordered set, the [`anyItem`](#anyitem) function tests whether any item in
+an array matches the specified test.
+For example, an authorisation function may return a set of permissions, but the order of the entries is immaterial:
+```kotlin
+        property("permissions") {
+            anyItem("customer:read")
+            anyItem("product:read")
+        }
+```
+(See also the section on [Exhaustive Checks](#exhaustive-checks) below.)
+
+And again, if the array item is expected to be an object or an array, additional functions are available:
+```kotlin
+        anyItemIsObject {
+            // tests on nested object
+        }
+        anyItemIsArray {
+            // tests on nested array
+        }
+        anyItemIsArray(size = 2) {
             // tests on nested array
         }
 ```
@@ -349,7 +375,20 @@ To confirm that all properties of an object or all items in an array are tested,
     }
 ```
 This will cause an error to be reported if the object contains other properties in addition to those tested.
+
 An `exhaustive` block can also check that all items in an array have been tested.
+This can be particularly useful when paired with the [`anyItem`](#anyitem) test, for example:
+```kotlin
+    property("members") {
+        exhaustive {
+            anyItem("Tom")
+            anyItem("Dick")
+            anyItem("Harry")
+        }
+    }
+```
+This tests that the array at `members` contains the items `"Tom"`, `"Dick"` and `"Harry"` in any order, and no other
+entries.
 
 ### Multiple Possibilities
 
@@ -492,7 +531,7 @@ performed.
 | `property(String, Period)`                | ...is a `String` matching the given `Period`               |
 | `property(String, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
 | `property(String, UUID)`                  | ...is a `String` matching the given `UUID`                 |
-| `property(String, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`     |
+| `property(String, Enum<*>)`               | ...is a `String` matching the given `Enum` member          |
 | `property(String, IntRange)`              | ...is in a given range                                     |
 | `property(String, LongRange)`             | ...is in a given range                                     |
 | `property(String, ClosedRange<*>)`        | ...is in a given range                                     |
@@ -507,7 +546,7 @@ against `null`.
 This does not mean that only `String` properties can be tested for `null` - a `null` property in the JSON is typeless
 so a test for `null` would work, regardless of the type that the property would otherwise hold.
 
-The last function signature in the list is the one that specifies a lambda - as is usual in Kotlin, when the last
+The last function signature in the list is the one that specifies a lambda &ndash; as is usual in Kotlin, when the last
 parameter is a lambda it is usually written outside the parentheses of the function call.
 This is the pattern followed when the lambda is an inline set of tests to be applied to the property, but this function
 signature is also used for the [general test lambdas](#general-test-lambdas), or the [`length`](#length) or
@@ -529,7 +568,7 @@ Examples:
 ```
 
 
-### `propertyAsObject`
+### `propertyIsObject`
 
 Tests a property of an object as a nested object.
 The first parameter is the name of the property in the outer object; the second is an **optional** lambda of tests to be
@@ -537,14 +576,14 @@ applied to the nested object.
 
 Examples:
 ```kotlin
-        propertyAsObject("address") {
+        propertyIsObject("address") {
             // tests on address object
         }
-        propertyAsObject("details") // no tests on content, just confirm that it is an object
+        propertyIsObject("details") // no tests on content, just confirm that it is an object
 ```
 
 
-### `propertyAsArray`
+### `propertyIsArray`
 
 Tests a property of an object as an array.
 Two forms are available: one which takes the name of the array property, and an optional lambda of tests to be applied
@@ -552,11 +591,11 @@ to it, and a second which includes a `size` parameter to check the size of the a
 
 Examples:
 ```kotlin
-        propertyAsArray("lines") {
+        propertyIsArray("lines") {
             // tests on lines array
         }
-        propertyAsArray("details") // no tests on content, just confirm that it is an array
-        propertyAsArray("lines", size = 4) {
+        propertyIsArray("details") // no tests on content, just confirm that it is an array
+        propertyIsArray("lines", size = 4) {
             // tests on lines array, after checking that there are 4 items in the array
         }
 ```
@@ -589,7 +628,7 @@ The second parameter varies according to the test being performed.
 | `item(Int, Period)`                | ...is a `String` matching the given `Period`               |
 | `item(Int, kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
 | `item(Int, UUID)`                  | ...is a `String` matching the given `UUID`                 |
-| `item(Int, Enum<*>)`               | ...is a `String` matching a member of the given `Enum`     |
+| `item(Int, Enum<*>)`               | ...is a `String` matching the given `Enum` member          |
 | `item(Int, IntRange)`              | ...is in a given range                                     |
 | `item(Int, LongRange)`             | ...is in a given range                                     |
 | `item(Int, ClosedRange<*>)`        | ...is in a given range                                     |
@@ -612,7 +651,7 @@ Examples:
 ```
 
 
-### `itemAsObject`
+### `itemIsObject`
 
 Tests an array item as an object.
 The first parameter is the index of the array item; the second is an **optional** lambda of tests to be applied to the
@@ -620,14 +659,14 @@ object.
 
 Examples:
 ```kotlin
-        itemAsObject(0) {
+        itemIsObject(0) {
             // tests on object
         }
-        itemAsObject(1) // no tests on content, just confirm that it is an object
+        itemIsObject(1) // no tests on content, just confirm that it is an object
 ```
 
 
-### `itemAsArray`
+### `itemIsArray`
 
 Tests an array item as a nested array.
 Two forms are available: one which takes the index of the array item, and an optional lambda of tests to be applied
@@ -635,11 +674,93 @@ to it, and a second which includes a `size` parameter to check the size of the n
 
 Examples:
 ```kotlin
-        itemAsArray(0) {
+        itemIsArray(0) {
             // tests on nested array
         }
-        itemAsArray(2) // no tests on content, just confirm that it is an array
-        itemAsArray(5, size = 2) {
+        itemIsArray(2) // no tests on content, just confirm that it is an array
+        itemIsArray(5, size = 2) {
+            // tests on nested array, after checking that there are 2 items in the array
+        }
+```
+
+
+### `anyItem`
+
+Tests whether an array contains an item matching one or more tests.
+The parameter varies according to the test being performed.
+
+| Signature                        | Check that an array item...                                |
+|----------------------------------|------------------------------------------------------------|
+| `anyItem(String?)`               | ...is equal to a `String` or `null`                        |
+| `anyItem(Int)`                   | ...is equal to an `Int`                                    |
+| `anyItem(Long)`                  | ...is equal to a `Long`                                    |
+| `anyItem(BigDecimal)`            | ...is equal to a `BigDecimal`                              |
+| `anyItem(Boolean)`               | ...is equal to a `Boolean`                                 |
+| `anyItem(Regex)`                 | ...is a `String` matching the given `Regex`                |
+| `anyItem(LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
+| `anyItem(LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
+| `anyItem(LocalTime)`             | ...is a `String` matching the given `LocalTime`            |
+| `anyItem(OffsetDateTime)`        | ...is a `String` matching the given `OffsetDateTime`       |
+| `anyItem(OffsetTime)`            | ...is a `String` matching the given `OffsetTime`           |
+| `anyItem(ZonedDateTime)`         | ...is a `String` matching the given `ZonedDateTime`        |
+| `anyItem(YearMonth)`             | ...is a `String` matching the given `YearMonth`            |
+| `anyItem(MonthDay)`              | ...is a `String` matching the given `MonthDay`             |
+| `anyItem(Year)`                  | ...is a `String` matching the given `Year`                 |
+| `anyItem(java.time.Duration)`    | ...is a `String` matching the given `java.time.Duration`   |
+| `anyItem(Period)`                | ...is a `String` matching the given `Period`               |
+| `anyItem(kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
+| `anyItem(UUID)`                  | ...is a `String` matching the given `UUID`                 |
+| `anyItem(Enum<*>)`               | ...is a `String` matching the given `Enum` member          |
+| `anyItem(IntRange)`              | ...is in a given range                                     |
+| `anyItem(LongRange)`             | ...is in a given range                                     |
+| `anyItem(ClosedRange<*>)`        | ...is in a given range                                     |
+| `anyItem(Collection<*>)`         | ...is in a given collection                                |
+| `anyItem(JSONExpect.() -> Unit)` | ...satisfies the given lambda                              |
+
+The notes following [`property`](#property) describing the options for the second parameter apply equally to `anyItem`.
+
+Examples:
+```kotlin
+        anyItem(22)
+        anyItem("William")
+        anyItem(2.hours)
+        anyItem(isDecimal)
+        anyItem(scale(0..2))
+        anyItem(isUUID)
+        anyItem {
+            // nested tests
+        }
+```
+
+
+### `anyItemIsObject`
+
+Tests whether an array contains an item which is an object, optionally matching a set of tests.
+The parameter is an **optional** lambda of tests to be applied to the object.
+
+Examples:
+```kotlin
+        anyItemIsObject {
+            // tests on object
+        }
+        anyItemIsObject() // no tests on content, just confirm that any item is an object
+```
+
+
+### `anyItemIsArray`
+
+Tests whether an array contains an item which is a nested array, optionally matching a set of tests, and also optionally
+checking the array size.
+Two forms are available: one which takes an optional lambda of tests to be applied to it, and a second which includes a
+`size` parameter to check the size of the nested array.
+
+Examples:
+```kotlin
+        anyItemIsArray {
+            // tests on nested array
+        }
+        anyItemIsArray() // no tests on content, just confirm that any item is a nested array
+        anyItemIsArray(size = 2) {
             // tests on nested array, after checking that there are 2 items in the array
         }
 ```
@@ -670,7 +791,7 @@ This function takes one parameter, which varies according to the test being perf
 | `value(Period)`                | ...is a `String` matching the given `Period`               |
 | `value(kotlin.time.Duration)`  | ...is a `String` matching the given `kotlin.time.Duration` |
 | `value(UUID)`                  | ...is a `String` matching the given `UUID`                 |
-| `value(Enum<*>)`               | ...is a `String` matching a member of the given `Enum`     |
+| `value(Enum<*>)`               | ...is a `String` matching the given `Enum` member          |
 | `value(IntRange)`              | ...is in a given range                                     |
 | `value(LongRange)`             | ...is in a given range                                     |
 | `value(ClosedRange<*>)`        | ...is in a given range                                     |
@@ -801,6 +922,7 @@ It takes one parameter, which varies according to the type of test.
 | `test(Period)`               | ...value a `String` matching the given `Period`               |
 | `test(kotlin.time.Duration)` | ...value a `String` matching the given `kotlin.time.Duration` |
 | `test(UUID)`                 | ...value a `String` matching the given `UUID`                 |
+| `test(Enum<*>)`              | ...value a `String` matching the given `Enum` member          |
 | `test(IntRange)`             | ...value in a given range                                     |
 | `test(LongRange)`            | ...value in a given range                                     |
 | `test(ClosedRange<*>)`       | ...value in a given range                                     |
@@ -915,7 +1037,7 @@ passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the v
 
 ## Dependency Specification
 
-The latest version of the library is 3.8, and it may be obtained from the Maven Central repository.
+The latest version of the library is 3.9, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -924,19 +1046,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.8</version>
+      <version>3.9</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.8'
+    testImplementation 'io.kjson:kjson-test:3.9'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.8")
+    testImplementation("io.kjson:kjson-test:3.9")
 ```
 
 Peter Wall
 
-2023-07-23
+2023-09-18

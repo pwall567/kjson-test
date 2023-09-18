@@ -2,7 +2,7 @@
  * @(#) LocalDateTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,22 @@ class LocalDateTest {
         }.let {
             expect("/0: JSON value not in collection - \"2022-06-15\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has LocalDate value`() {
+        val json = """["2023-09-18","2023-09-19","2023-09-20"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(LocalDate.of(2023, 9, 19))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has LocalDate value`() {
+        val json = """["2023-09-18","2023-09-19","2023-09-20"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(LocalDate.of(2023, 9, 21))
+            }
+        }.let { expect("No JSON array item has value \"2023-09-21\"") { it.message } }
     }
 
 }

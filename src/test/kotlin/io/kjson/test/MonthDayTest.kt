@@ -2,7 +2,7 @@
  * @(#) MonthDayTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,22 @@ class MonthDayTest {
         }.let {
             expect("/0: JSON value not in collection - \"--06-15\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has MonthDay value`() {
+        val json = """["--09-18","--09-19","--09-20"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(MonthDay.of(9, 20))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has MonthDay value`() {
+        val json = """["--09-18","--09-19","--09-20"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(MonthDay.of(9, 21))
+            }
+        }.let { expect("No JSON array item has value \"--09-21\"") { it.message } }
     }
 
 }

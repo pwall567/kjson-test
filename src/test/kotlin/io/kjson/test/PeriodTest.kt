@@ -2,7 +2,7 @@
  * @(#) PeriodTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -161,6 +161,22 @@ class PeriodTest {
         }.let {
             expect("/0: JSON value not in collection - \"P45D\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has Period value`() {
+        val json = """["P10D","P20D","P30D"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(Period.ofDays(20))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has Period value`() {
+        val json = """["P10D","P20D","P30D"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(Period.ofDays(40))
+            }
+        }.let { expect("No JSON array item has value \"P40D\"") { it.message } }
     }
 
 }

@@ -1080,10 +1080,7 @@ class JSONExpect private constructor(
      */
     fun propertyIsObject(name: String, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).apply {
-                nodeAsObject
-                tests()
-            }
+            JSONExpect(getProperty(it), propertyPointer(it)).valueIsObject(tests)
         }
     }
 
@@ -1096,10 +1093,7 @@ class JSONExpect private constructor(
      */
     fun propertyIsArray(name: String, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).apply {
-                nodeAsArray
-                tests()
-            }
+            JSONExpect(getProperty(it), propertyPointer(it)).valueIsArray(tests)
         }
     }
 
@@ -1112,14 +1106,8 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if thrown by any of the tests
      */
     fun propertyIsArray(name: String, size: Int, tests: JSONExpect.() -> Unit = {}) {
-        require(size >= 0) { "JSON array size must not be negative" }
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).apply {
-                val arraySize = nodeAsArray.size
-                if (arraySize != size)
-                    error("JSON array size doesn't match - Expected $size, was $arraySize")
-                tests()
-            }
+            JSONExpect(getProperty(it), propertyPointer(it)).valueIsArray(size, tests)
         }
     }
 
@@ -1526,10 +1514,7 @@ class JSONExpect private constructor(
      */
     fun itemIsObject(index: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).apply {
-                nodeAsObject
-                tests()
-            }
+            JSONExpect(getItem(it), itemPointer(it)).valueIsObject(tests)
         }
     }
 
@@ -1542,10 +1527,7 @@ class JSONExpect private constructor(
      */
     fun itemIsArray(index: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).apply {
-                nodeAsArray
-                tests()
-            }
+            JSONExpect(getItem(it), itemPointer(it)).valueIsArray(tests)
         }
     }
 
@@ -1558,14 +1540,236 @@ class JSONExpect private constructor(
      * @throws  AssertionError  if thrown by any of the tests
      */
     fun itemIsArray(index: Int, size: Int, tests: JSONExpect.() -> Unit = {}) {
-        require(size >= 0) { "JSON array size must not be negative" }
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).apply {
-                val arraySize = nodeAsArray.size
-                if (arraySize != size)
-                    error("JSON array size doesn't match - Expected $size, was $arraySize")
-                tests()
+            JSONExpect(getItem(it), itemPointer(it)).valueIsArray(size, tests)
+        }
+    }
+
+    /* ====================================== anyItem tests ====================================== */
+
+    /**
+     * Check that any item in array matches an [Int].
+     */
+    fun anyItem(expected: Int) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [Long].
+     */
+    fun anyItem(expected: Long) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [BigDecimal].
+     */
+    fun anyItem(expected: BigDecimal) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [Boolean].
+     */
+    fun anyItem(expected: Boolean) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [String] or `null`.
+     */
+    fun anyItem(expected: String?) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [LocalDate].
+     */
+    fun anyItem(expected: LocalDate) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [LocalDateTime].
+     */
+    fun anyItem(expected: LocalDateTime) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [LocalTime].
+     */
+    fun anyItem(expected: LocalTime) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches an [OffsetDateTime].
+     */
+    fun anyItem(expected: OffsetDateTime) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches an [OffsetTime].
+     */
+    fun anyItem(expected: OffsetTime) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [ZonedDateTime].
+     */
+    fun anyItem(expected: ZonedDateTime) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [YearMonth].
+     */
+    fun anyItem(expected: YearMonth) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [MonthDay].
+     */
+    fun anyItem(expected: MonthDay) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [Year].
+     */
+    fun anyItem(expected: Year) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [JavaDuration].
+     */
+    fun anyItem(expected: JavaDuration) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [Period].
+     */
+    fun anyItem(expected: Period) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [Duration].
+     */
+    fun anyItem(expected: Duration) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [UUID].
+     */
+    fun anyItem(expected: UUID) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches an [Enum] member.
+     */
+    fun anyItem(expected: Enum<*>) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [Regex].
+     */
+    fun anyItem(expected: Regex) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.MATCHING_REGEX)
+    }
+
+    /**
+     * Check that any item in array is a member of an [IntRange].
+     */
+    fun anyItem(expected: IntRange) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.IN_RANGE)
+    }
+
+    /**
+     * Check that any item in array is a member of a [LongRange].
+     */
+    fun anyItem(expected: LongRange) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.IN_RANGE)
+    }
+
+    /**
+     * Check that any item in array is a member of a [ClosedRange].  This will normally be invoked via the inline
+     * function.
+     */
+    fun <T : Comparable<T>> anyItemInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
+        anyItemCheck { valueInRange(expected, itemClass) } || errorOnAnyItem(ErrorEnum.IN_RANGE)
+    }
+
+    /**
+     * Check that any item in array is a member of a [ClosedRange].
+     */
+    inline fun <reified T : Comparable<T>> anyItem(expected: ClosedRange<T>) {
+        anyItemInRange(expected, T::class)
+    }
+
+    /**
+     * Check that any item in array is a member of a [Collection].  This will normally be invoked via the inline
+     * function.
+     */
+    fun <T : Any> anyItemInCollection(expected: Collection<T?>, itemClass: KClass<*>) {
+        anyItemCheck { valueInCollection(expected, itemClass) } || errorOnAnyItem(ErrorEnum.IN_COLLECTION)
+    }
+
+    /**
+     * Check that any item in array is a member of a [Collection].
+     */
+    inline fun <reified T : Any> anyItem(expected: Collection<T?>) {
+        anyItemInCollection(expected, T::class)
+    }
+
+    /**
+     * Check that any item in array matches the given tests.
+     */
+    fun anyItem(tests: JSONExpect.() -> Unit) {
+        anyItemCheck { value(tests) } || errorOnAnyItem(ErrorEnum.VALUE_MATCHING)
+    }
+
+    /**
+     * Check that any item in array is an object and apply optional tests.
+     */
+    fun anyItemIsObject(tests: JSONExpect.() -> Unit = {}) {
+        anyItemCheck { valueIsObject(tests) } || errorOnAnyItem(ErrorEnum.VALUE_MATCHING)
+    }
+
+    /**
+     * Check that any item in array is an array and apply optional tests.
+     */
+    fun anyItemIsArray(tests: JSONExpect.() -> Unit = {}) {
+        anyItemCheck { valueIsArray(tests) } || errorOnAnyItem(ErrorEnum.VALUE_MATCHING)
+    }
+
+    /**
+     * Check that any item in array is an array of the specified size and apply optional tests.
+     */
+    fun anyItemIsArray(size: Int, tests: JSONExpect.() -> Unit = {}) {
+        anyItemCheck { valueIsArray(size, tests) } || errorOnAnyItem(ErrorEnum.VALUE_MATCHING)
+    }
+
+    private fun anyItemCheck(itemTest: JSONExpect.() -> Unit): Boolean {
+        nodeAsArray.let {
+            for (i in it.indices) {
+                try {
+                    JSONExpect(it[i], itemPointer(i)).itemTest()
+                    accessedItems?.set(i)
+                    return true
+                }
+                catch (_: AssertionError) {}
             }
+            return false
         }
     }
 
@@ -1922,6 +2126,7 @@ class JSONExpect private constructor(
      */
     fun showValue(value: Any?): String = when (value) {
         null -> "null"
+        is ErrorEnum -> value.text
         is Number,
         is Boolean -> value.toString()
         is LocalDate -> showFormatted(value, DateOutput::appendLocalDate)
@@ -1937,6 +2142,13 @@ class JSONExpect private constructor(
         else -> JSONFunctions.displayString(value.toString(), maxStringDisplayLength)
     }
 
+    enum class ErrorEnum(val text: String) {
+        VALUE_MATCHING("matching given tests"),
+        MATCHING_REGEX("matching given Regex"),
+        IN_RANGE("in range"),
+        IN_COLLECTION("in collection"),
+    }
+
     private fun <T : Any> showFormatted(value: T, outputFunction: (Appendable, T) -> Unit): String =
         StringBuilder().apply {
             append('"')
@@ -1946,6 +2158,10 @@ class JSONExpect private constructor(
 
     private fun errorOnValue(expected: Any?): Nothing {
         error("JSON value doesn't match - expected ${showValue(expected)}, was ${showNode()}")
+    }
+
+    private fun errorOnAnyItem(expected: Any?): Nothing {
+        error("No JSON array item has value ${showValue(expected)}")
     }
 
     internal fun errorOnType(expected: String): Nothing {

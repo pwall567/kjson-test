@@ -2,7 +2,7 @@
  * @(#) EnumTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -139,6 +139,22 @@ class EnumTest {
         }.let {
             expect("/0: JSON value not in collection - \"OPEN\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has Enum value`() {
+        val json = """["OPEN","CLOSED","INDETERMINATE"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(Status.INDETERMINATE)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has Enum value`() {
+        val json = """["OPEN","CLOSED"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(Status.INDETERMINATE)
+            }
+        }.let { expect("No JSON array item has value \"INDETERMINATE\"") { it.message } }
     }
 
     enum class Status { OPEN, CLOSED, INDETERMINATE }

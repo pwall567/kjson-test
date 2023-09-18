@@ -5,7 +5,7 @@
 
   <groupId>io.kjson</groupId>
   <artifactId>kjson-test</artifactId>
-  <version>3.8</version>
+  <version>3.9</version>
   <name>Library for testing Kotlin JSON applications</name>
   <description>Kotlin classes for testing JSON applications.</description>
   <packaging>jar</packaging>

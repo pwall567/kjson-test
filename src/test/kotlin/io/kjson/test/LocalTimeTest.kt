@@ -2,7 +2,7 @@
  * @(#) LocalTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2023 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,22 @@ class LocalTimeTest {
         }.let {
             expect("/0: JSON value not in collection - \"17:05:09\"") { it.message }
         }
+    }
+
+    @Test fun `should test that any item has LocalTime value`() {
+        val json = """["19:30:15","19:30:30","19:30:45"]"""
+        JSONExpect.expectJSON(json) {
+            anyItem(LocalTime.of(19, 30, 45))
+        }
+    }
+
+    @Test fun `should fail on incorrect test that any item has LocalTime value`() {
+        val json = """["19:30:15","19:30:30","19:30:45"]"""
+        assertFailsWith<AssertionError> {
+            JSONExpect.expectJSON(json) {
+                anyItem(LocalTime.of(19, 30, 55))
+            }
+        }.let { expect("No JSON array item has value \"19:30:55\"") { it.message } }
     }
 
 }
