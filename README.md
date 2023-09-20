@@ -809,22 +809,22 @@ Examples:
         value(isLocalDate)
 ```
 
-### `valueAsObject`
+### `valueIsObject`
 
 Tests the value as an object.
 The parameter is an **optional** lambda of tests to be applied to the object.
 
 Examples:
 ```kotlin
-        valueAsObject {
+        valueIsObject {
             // tests on object
         }
-        valueAsObject() // no tests on content, just confirm that it is an object
+        valueIsObject() // no tests on content, just confirm that it is an object
 ```
 It is not usually necessary to perform this test; the first access to a property will raise an exception if the value is
 not an object.
 
-### `valueAsArray`
+### `valueIsArray`
 
 Tests the value as an array.
 Two forms are available: one which takes an optional lambda of tests to be applied to it, and a second which includes a
@@ -832,11 +832,11 @@ Two forms are available: one which takes an optional lambda of tests to be appli
 
 Examples:
 ```kotlin
-        valueAsArray {
+        valueIsArray {
             // tests on array
         }
-        valueAsArray() // no tests on content, just confirm that it is an array
-        valueAsArray(size = 2) {
+        valueIsArray() // no tests on content, just confirm that it is an array
+        valueIsArray(size = 2) {
             // tests on array, after checking that there are 2 items in the array
         }
 ```
