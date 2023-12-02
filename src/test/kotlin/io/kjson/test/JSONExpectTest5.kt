@@ -252,7 +252,7 @@ class JSONExpectTest5 {
         }
     }
 
-    @Test fun `should fail on incorrect test of decimal range check as one of multiple possibilities`() {
+    @Test fun `should fail on incorrect test of decimal range check as one of multiple`() {
         val json = "-2.5"
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
@@ -286,7 +286,7 @@ class JSONExpectTest5 {
         }
     }
 
-    @Test fun `should fail on incorrect test of string collection check as one of multiple possibilities`() {
+    @Test fun `should fail on incorrect test of string collection check as one of multiple`() {
         val json = "\"delta\""
         val exception = assertFailsWith<AssertionError> {
             expectJSON(json) {
