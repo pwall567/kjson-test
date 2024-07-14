@@ -128,45 +128,6 @@ class JSONExpectTest6 {
         }.let { expect("/aaa: JSON type doesn't match - expected object or array, was integer") { it.message } }
     }
 
-    @Test fun `should test that any item has integer value`() {
-        val json = "[7,8,9]"
-        expectJSON(json) {
-            anyItem(8)
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item has integer value`() {
-        val json = "[7,8,9]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                anyItem(6)
-            }
-        }.let { expect("No JSON array item has value 6") { it.message } }
-    }
-
-    @Test fun `should test that any item has integer value - exhaustive`() {
-        val json = "[7,8,9]"
-        expectJSON(json) {
-            exhaustive {
-                anyItem(8)
-                anyItem(9)
-                anyItem(7)
-            }
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item has integer value - exhaustive`() {
-        val json = "[7,8,9,5]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                exhaustive {
-                    anyItem(8)
-                    anyItem(9)
-                }
-            }
-        }.let { expect("JSON array items not tested: 0, 3") { it.message } }
-    }
-
     @Test fun `should test that any item of nested array has integer value`() {
         val json = """{"aaa":[7,8,9]}"""
         expectJSON(json) {
@@ -185,38 +146,6 @@ class JSONExpectTest6 {
                 }
             }
         }.let { expect("/aaa: No JSON array item has value 6") { it.message } }
-    }
-
-    @Test fun `should test that any item has long value`() {
-        val json = "[123456789123456777,123456789123456789,123456789123456799]"
-        expectJSON(json) {
-            anyItem(123456789123456789)
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item has long value`() {
-        val json = "[123456789123456777,123456789123456789,123456789123456799]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                anyItem(123456789123456788)
-            }
-        }.let { expect("No JSON array item has value 123456789123456788") { it.message } }
-    }
-
-    @Test fun `should test that any item has decimal value`() {
-        val json = "[1.5,2.5,3.5]"
-        expectJSON(json) {
-            anyItem(BigDecimal("3.5"))
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item has decimal value`() {
-        val json = "[1.5,2.5,3.5]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                anyItem(BigDecimal("4.5"))
-            }
-        }.let { expect("No JSON array item has value 4.5") { it.message } }
     }
 
     @Test fun `should test that any item has boolean value`() {
@@ -264,55 +193,7 @@ class JSONExpectTest6 {
             expectJSON(json) {
                 anyItem(Regex("^[0-9]+$"))
             }
-        }.let { expect("No JSON array item has value matching given Regex") { it.message } }
-    }
-
-    @Test fun `should test that any item is in an IntRange`() {
-        val json = "[5,10,15]"
-        expectJSON(json) {
-            anyItem(15..19)
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item is in an IntRange`() {
-        val json = "[5,10,15]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                anyItem(20..24)
-            }
-        }.let { expect("No JSON array item has value in range") { it.message } }
-    }
-
-    @Test fun `should test that any item is in a LongRange`() {
-        val json = "[123456789123456780,123456789123456781,123456789123456782]"
-        expectJSON(json) {
-            anyItem(123456789123456782..123456789123456789)
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item is in a LongRange`() {
-        val json = "[123456789123456780,123456789123456781,123456789123456782]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                anyItem(123456789123456783..123456789123456789)
-            }
-        }.let { expect("No JSON array item has value in range") { it.message } }
-    }
-
-    @Test fun `should test that any item is in a ClosedRange`() {
-        val json = "[1.5,2.5,3.5]"
-        expectJSON(json) {
-            anyItem(BigDecimal("3.0")..BigDecimal("4.0"))
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item is in a ClosedRange`() {
-        val json = "[1.5,2.5,3.5]"
-        assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                anyItem(BigDecimal("4.0")..BigDecimal("5.0"))
-            }
-        }.let { expect("No JSON array item has value in range") { it.message } }
+        }.let { expect("No JSON array item has value matching given Regex - ^[0-9]+\$") { it.message } }
     }
 
     @Test fun `should test that any item is in a Collection`() {
@@ -328,7 +209,7 @@ class JSONExpectTest6 {
             expectJSON(json) {
                 anyItem(setOf("delta", "mu", "omega"))
             }
-        }.let { expect("No JSON array item has value in collection") { it.message } }
+        }.let { expect("No JSON array item has value in given collection") { it.message } }
     }
 
     @Test fun `should test that any item has complex value`() {

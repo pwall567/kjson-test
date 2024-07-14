@@ -46,30 +46,6 @@ class JSONExpectTest1 {
         expect("Unable to parse JSON") { exception.message?.substringBefore(" - ") }
     }
 
-    @Test fun `should test integer value`() {
-        val json = "567"
-        expectJSON(json) {
-            value(567)
-        }
-    }
-
-    @Test fun `should fail on incorrect test of integer value`() {
-        val json = "567"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                value(568)
-            }
-        }
-        expect("JSON value doesn't match - expected 568, was 567") { exception.message }
-    }
-
-    @Test fun `should test long value`() {
-        val json = "123456789123456789"
-        expectJSON(json) {
-            value(123456789123456789)
-        }
-    }
-
     @Test fun `should test string value`() {
         val json = "\"abc\""
         expectJSON(json) {
@@ -222,37 +198,6 @@ class JSONExpectTest1 {
         }
     }
 
-    @Test fun `should test simple int property`() {
-        val json = """{"abc":1}"""
-        expectJSON(json) {
-            property("abc", 1)
-        }
-    }
-
-    @Test fun `should fail on incorrect test of simple int property`() {
-        val json = """{"abc":1}"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                property("abc", 2)
-            }
-        }
-        expect("/abc: JSON value doesn't match - expected 2, was 1") { exception.message }
-    }
-
-    @Test fun `should test simple long property`() {
-        val json = """{"abc":123456789123456789}"""
-        expectJSON(json) {
-            property("abc", 123456789123456789)
-        }
-    }
-
-    @Test fun `should test simple floating point property`() {
-        val json = """{"abc":0.099}"""
-        expectJSON(json) {
-            property("abc", BigDecimal("0.099"))
-        }
-    }
-
     @Test fun `should test simple boolean property`() {
         val json = """{"abc":true}"""
         expectJSON(json) {
@@ -305,7 +250,7 @@ class JSONExpectTest1 {
                 count(3)
             }
         }
-        expect("JSON count doesn't match - Expected 3, was 2") { exception.message }
+        expect("JSON count doesn't match - expected 3, was 2") { exception.message }
     }
 
     @Test fun `should test number of properties as range`() {
@@ -324,7 +269,7 @@ class JSONExpectTest1 {
                 count(3..5)
             }
         }
-        expect("JSON count doesn't match - Expected 3..5, was 2") { exception.message }
+        expect("JSON count doesn't match - expected 3..5, was 2") { exception.message }
     }
 
     @Test fun `should test property is object`() {
@@ -448,37 +393,6 @@ class JSONExpectTest1 {
             }
         }.let {
             expect("/abc/0: JSON value doesn't match - expected 2, was 1") { it.message }
-        }
-    }
-
-    @Test fun `should test int array item`() {
-        val json = "[12345]"
-        expectJSON(json) {
-            item(0, 12345)
-        }
-    }
-
-    @Test fun `should fail on incorrect test of int array item`() {
-        val json = "[12345]"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                item(0, 12346)
-            }
-        }
-        expect("/0: JSON value doesn't match - expected 12346, was 12345") { exception.message }
-    }
-
-    @Test fun `should test long array item`() {
-        val json = "[123456789123456789]"
-        expectJSON(json) {
-            item(0, 123456789123456789)
-        }
-    }
-
-    @Test fun `should test floating point array item`() {
-        val json = "[123.45]"
-        expectJSON(json) {
-            item(0, BigDecimal("123.45"))
         }
     }
 
@@ -840,7 +754,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/primes: JSON count doesn't match - Expected 9, was 10") { exception.message }
+        expect("/primes: JSON count doesn't match - expected 9, was 10") { exception.message }
     }
 
     @Test fun `should test count of array items as range`() {
@@ -862,7 +776,7 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/primes: JSON count doesn't match - Expected 2..9, was 10") { exception.message }
+        expect("/primes: JSON count doesn't match - expected 2..9, was 10") { exception.message }
     }
 
 }

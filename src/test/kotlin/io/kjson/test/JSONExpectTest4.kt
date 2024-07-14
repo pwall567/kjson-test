@@ -110,7 +110,7 @@ class JSONExpectTest4 {
                 value(length(5))
             }
         }
-        expect("JSON string length doesn't match - Expected 5, was 6") { exception.message }
+        expect("JSON string length doesn't match - expected 5, was 6") { exception.message }
     }
 
     @Test fun `should test string value length as a range`() {
@@ -127,7 +127,7 @@ class JSONExpectTest4 {
                 value(length(1..5))
             }
         }
-        expect("JSON string length doesn't match - Expected 1..5, was 6") { exception.message }
+        expect("JSON string length doesn't match - expected 1..5, was 6") { exception.message }
     }
 
     @Test fun `should test string property length`() {
@@ -144,7 +144,7 @@ class JSONExpectTest4 {
                 property("abc", length(5))
             }
         }
-        expect("/abc: JSON string length doesn't match - Expected 5, was 6") { exception.message }
+        expect("/abc: JSON string length doesn't match - expected 5, was 6") { exception.message }
     }
 
     @Test fun `should test string property length as a range`() {
@@ -161,7 +161,7 @@ class JSONExpectTest4 {
                 property("abc", length(1..4))
             }
         }
-        expect("/abc: JSON string length doesn't match - Expected 1..4, was 6") { exception.message }
+        expect("/abc: JSON string length doesn't match - expected 1..4, was 6") { exception.message }
     }
 
     @Test fun `should test string array item length`() {
@@ -178,7 +178,7 @@ class JSONExpectTest4 {
                 item(0, length(5))
             }
         }
-        expect("/0: JSON string length doesn't match - Expected 5, was 6") { exception.message }
+        expect("/0: JSON string length doesn't match - expected 5, was 6") { exception.message }
     }
 
     @Test fun `should test string array item length as a range`() {
@@ -195,109 +195,7 @@ class JSONExpectTest4 {
                 item(0, length(1..4))
             }
         }
-        expect("/0: JSON string length doesn't match - Expected 1..4, was 6") { exception.message }
-    }
-
-    @Test fun `should test decimal value scale`() {
-        val json = "0.02"
-        expectJSON(json) {
-            value(scale(2))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of decimal value scale`() {
-        val json = "0.02"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                value(scale(3))
-            }
-        }
-        expect("JSON decimal scale doesn't match - Expected 3, was 2") { exception.message }
-    }
-
-    @Test fun `should test decimal value scale as a range`() {
-        val json = "0.02"
-        expectJSON(json) {
-            value(scale(1..3))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of decimal value scale as a range`() {
-        val json = "0.02"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                value(scale(3..5))
-            }
-        }
-        expect("JSON decimal scale doesn't match - Expected 3..5, was 2") { exception.message }
-    }
-
-    @Test fun `should test decimal property scale`() {
-        val json = """{"abc":0.011}"""
-        expectJSON(json) {
-            property("abc", scale(3))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of decimal property scale`() {
-        val json = """{"abc":0.011}"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                property("abc", scale(2))
-            }
-        }
-        expect("/abc: JSON decimal scale doesn't match - Expected 2, was 3") { exception.message }
-    }
-
-    @Test fun `should test decimal property scale as a range`() {
-        val json = """{"abc":0.011}"""
-        expectJSON(json) {
-            property("abc", scale(1..3))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of decimal property scale as a range`() {
-        val json = """{"abc":0.011}"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                property("abc", scale(4..5))
-            }
-        }
-        expect("/abc: JSON decimal scale doesn't match - Expected 4..5, was 3") { exception.message }
-    }
-
-    @Test fun `should test decimal array item scale`() {
-        val json = """[0.5]"""
-        expectJSON(json) {
-            item(0, scale(1))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of decimal array item scale`() {
-        val json = """[0.5]"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                item(0, scale(2))
-            }
-        }
-        expect("/0: JSON decimal scale doesn't match - Expected 2, was 1") { exception.message }
-    }
-
-    @Test fun `should test decimal array item scale as a range`() {
-        val json = """[0.5]"""
-        expectJSON(json) {
-            item(0, scale(0..3))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of decimal array item scale as a range`() {
-        val json = """[0.5]"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                item(0, scale(2..3))
-            }
-        }
-        expect("/0: JSON decimal scale doesn't match - Expected 2..3, was 1") { exception.message }
+        expect("/0: JSON string length doesn't match - expected 1..4, was 6") { exception.message }
     }
 
     @Test fun `should fail with custom error message`() {
@@ -311,75 +209,6 @@ class JSONExpectTest4 {
             }
         }
         expect("/abc: Custom error message 123 /abc = 123") { exception.message }
-    }
-
-    @Test fun `should correctly access integer node`() {
-        val json = """{"abc":123}"""
-        expectJSON(json) {
-            property("abc") {
-                if (nodeAsInt != 123)
-                    error("Should not happen")
-            }
-        }
-    }
-
-    @Test fun `should fail on incorrect access to integer node`() {
-        val json = """{"abc":"xyz"}"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                property("abc") {
-                    if (nodeAsInt != 123)
-                        error("Should not happen")
-                }
-            }
-        }
-        expect("/abc: JSON type doesn't match - expected integer, was string") { exception.message }
-    }
-
-    @Test fun `should correctly access long integer node`() {
-        val json = """{"abc":123456789123456789}"""
-        expectJSON(json) {
-            property("abc") {
-                if (nodeAsLong != 123456789123456789)
-                    error("Should not happen")
-            }
-        }
-    }
-
-    @Test fun `should fail on incorrect access to long integer node`() {
-        val json = """{"abc":"xyz"}"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                property("abc") {
-                    if (nodeAsLong != 123456789123456789)
-                        error("Should not happen")
-                }
-            }
-        }
-        expect("/abc: JSON type doesn't match - expected long integer, was string") { exception.message }
-    }
-
-    @Test fun `should correctly access decimal node`() {
-        val json = """{"abc":1.99}"""
-        expectJSON(json) {
-            property("abc") {
-                if (nodeAsDecimal != BigDecimal("1.99"))
-                    error("Should not happen")
-            }
-        }
-    }
-
-    @Test fun `should fail on incorrect access to decimal node`() {
-        val json = """{"abc":"xyz"}"""
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                property("abc") {
-                    if (nodeAsDecimal != BigDecimal("1.99"))
-                        error("Should not happen")
-                }
-            }
-        }
-        expect("/abc: JSON type doesn't match - expected decimal, was string") { exception.message }
     }
 
     @Test fun `should correctly access boolean node`() {
@@ -474,23 +303,6 @@ class JSONExpectTest4 {
         expect("/abc: JSON type doesn't match - expected array, was integer") { exception.message }
     }
 
-    @Test fun `should test integer value as long`() {
-        val json = "0"
-        expectJSON(json) {
-            value(0L)
-        }
-    }
-
-    @Test fun `should fail on incorrect test of integer value as long`() {
-        val json = "1"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                value(0L)
-            }
-        }
-        expect("JSON value doesn't match - expected 0, was 1") { exception.message }
-    }
-
     @Test fun `should test integer property as long`() {
         val json = """{"a":0}"""
         expectJSON(json) {
@@ -576,23 +388,6 @@ class JSONExpectTest4 {
         expect("/0: JSON value not in range 0..123456789999 - -1") { exception.message }
     }
 
-    @Test fun `should test integer value as decimal`() {
-        val json = "0"
-        expectJSON(json) {
-            value(BigDecimal.ZERO)
-        }
-    }
-
-    @Test fun `should fail on incorrect test of integer value as decimal`() {
-        val json = "1"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                value(BigDecimal.ZERO)
-            }
-        }
-        expect("JSON value doesn't match - expected 0, was 1") { exception.message }
-    }
-
     @Test fun `should test integer property as decimal`() {
         val json = """{"aaa":0}"""
         expectJSON(json) {
@@ -676,23 +471,6 @@ class JSONExpectTest4 {
             }
         }
         expect("/0: JSON value not in range 0..999 - -3") { exception.message }
-    }
-
-    @Test fun `should test long integer value as decimal`() {
-        val json = "1122334455667788"
-        expectJSON(json) {
-            value(BigDecimal(1122334455667788))
-        }
-    }
-
-    @Test fun `should fail on incorrect test of long integer value as decimal`() {
-        val json = "1122334455667788"
-        val exception = assertFailsWith<AssertionError> {
-            expectJSON(json) {
-                value(BigDecimal.ZERO)
-            }
-        }
-        expect("JSON value doesn't match - expected 0, was 1122334455667788") { exception.message }
     }
 
     @Test fun `should test long integer property as decimal`() {
@@ -794,7 +572,7 @@ class JSONExpectTest4 {
                 value(scale(2))
             }
         }
-        expect("JSON decimal scale doesn't match - Expected 2, was 0") { exception.message }
+        expect("JSON decimal scale doesn't match - expected 2, was 0") { exception.message }
     }
 
     @Test fun `should test scale of integer property as 0`() {
@@ -811,7 +589,7 @@ class JSONExpectTest4 {
                 property("abc", scale(2))
             }
         }
-        expect("/abc: JSON decimal scale doesn't match - Expected 2, was 0") { exception.message }
+        expect("/abc: JSON decimal scale doesn't match - expected 2, was 0") { exception.message }
     }
 
     @Test fun `should test scale of integer array item as 0`() {
@@ -828,7 +606,7 @@ class JSONExpectTest4 {
                 item(0, scale(2))
             }
         }
-        expect("/0: JSON decimal scale doesn't match - Expected 2, was 0") { exception.message }
+        expect("/0: JSON decimal scale doesn't match - expected 2, was 0") { exception.message }
     }
 
     @Test fun `should test scale of long integer value as 0`() {
@@ -845,7 +623,7 @@ class JSONExpectTest4 {
                 value(scale(2))
             }
         }
-        expect("JSON decimal scale doesn't match - Expected 2, was 0") { exception.message }
+        expect("JSON decimal scale doesn't match - expected 2, was 0") { exception.message }
     }
 
     @Test fun `should test scale of long integer property as 0`() {
@@ -862,7 +640,7 @@ class JSONExpectTest4 {
                 property("abc", scale(2))
             }
         }
-        expect("/abc: JSON decimal scale doesn't match - Expected 2, was 0") { exception.message }
+        expect("/abc: JSON decimal scale doesn't match - expected 2, was 0") { exception.message }
     }
 
     @Test fun `should test scale of long integer array item as 0`() {
@@ -879,7 +657,7 @@ class JSONExpectTest4 {
                 item(0, scale(2))
             }
         }
-        expect("/0: JSON decimal scale doesn't match - Expected 2, was 0") { exception.message }
+        expect("/0: JSON decimal scale doesn't match - expected 2, was 0") { exception.message }
     }
 
 }

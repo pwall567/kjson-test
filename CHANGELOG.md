@@ -2,6 +2,17 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.0] - 2024-07-15
+### Changed
+### Added
+- `build.yml`, `deploy.yml`: converted project to GitHub Actions
+### Changed
+- `JSONExpect`: added `value(Char)`, `property(String, Char)`, `item(Int, Char)` and `anyItem(Char)`
+- `JSONExpect`: improved error messages
+- `pom.xml`: updated Kotlin version to 1.9.24, updated dependency versions
+### Removed
+- `.travis.yml`
+
 ## [3.12] - 2024-02-18
 ### Changed
 - `pom.xml`: updated dependency versions

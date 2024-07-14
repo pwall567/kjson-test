@@ -254,6 +254,16 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check the value as a [Char].
+     */
+    fun value(expected: Char) {
+        nodeAsString.let {
+            if (it.length != 1 || it[0] != expected)
+                errorOnValue(expected)
+        }
+    }
+
+    /**
      * Check the value as a [String] or `null`.
      */
     fun value(expected: String?) {
@@ -658,6 +668,15 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check a property as a [Char].
+     */
+    fun property(name: String, expected: Char) {
+        checkName(name).let {
+            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+        }
+    }
+
+    /**
      * Check a property as a [String] or `null`.
      */
     fun property(name: String, expected: String?) {
@@ -956,6 +975,15 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check an array item as a [Char].
+     */
+    fun item(index: Int, expected: Char) {
+        checkIndex(index).let {
+            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+        }
+    }
+
+    /**
      * Check an array item as a [String] or `null`.
      */
     fun item(index: Int, expected: String?) {
@@ -1216,6 +1244,13 @@ class JSONExpect private constructor(
     }
 
     /**
+     * Check that any item in array matches a [Char].
+     */
+    fun anyItem(expected: Char) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
      * Check that any item in array matches a [String] or `null`.
      */
     fun anyItem(expected: String?) {
@@ -1324,21 +1359,21 @@ class JSONExpect private constructor(
      * Check that any item in array matches a [Regex].
      */
     fun anyItem(expected: Regex) {
-        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.MATCHING_REGEX)
+        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.MATCHING_REGEX, expected)
     }
 
     /**
      * Check that any item in array is a member of an [IntRange].
      */
     fun anyItem(expected: IntRange) {
-        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.IN_RANGE)
+        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.IN_RANGE, expected)
     }
 
     /**
      * Check that any item in array is a member of a [LongRange].
      */
     fun anyItem(expected: LongRange) {
-        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.IN_RANGE)
+        anyItemCheck { value(expected) } || errorOnAnyItem(ErrorEnum.IN_RANGE, expected)
     }
 
     /**
@@ -1346,7 +1381,7 @@ class JSONExpect private constructor(
      * function.
      */
     fun <T : Comparable<T>> anyItemInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
-        anyItemCheck { valueInRange(expected, itemClass) } || errorOnAnyItem(ErrorEnum.IN_RANGE)
+        anyItemCheck { valueInRange(expected, itemClass) } || errorOnAnyItem(ErrorEnum.IN_RANGE, expected)
     }
 
     /**
@@ -1588,7 +1623,7 @@ class JSONExpect private constructor(
             else -> error("JSON count check not on array or object")
         }
         if (length != expected)
-            error("JSON count doesn't match - Expected $expected, was $length")
+            error("JSON count doesn't match - expected $expected, was $length")
     }
 
     /**
@@ -1602,7 +1637,7 @@ class JSONExpect private constructor(
             else -> error("JSON count check not on array or object")
         }
         if (length !in expected)
-            error("JSON count doesn't match - Expected $expected, was $length")
+            error("JSON count doesn't match - expected $expected, was $length")
     }
 
     /**
@@ -1611,7 +1646,7 @@ class JSONExpect private constructor(
     fun length(expected: Int): JSONExpect.() -> Unit = {
         nodeAsString.length.let {
             if (it != expected)
-                error("JSON string length doesn't match - Expected $expected, was $it")
+                error("JSON string length doesn't match - expected $expected, was $it")
         }
     }
 
@@ -1621,7 +1656,7 @@ class JSONExpect private constructor(
     fun length(expected: IntRange): JSONExpect.() -> Unit = {
         nodeAsString.length.let {
             if (it !in expected)
-                error("JSON string length doesn't match - Expected $expected, was $it")
+                error("JSON string length doesn't match - expected $expected, was $it")
         }
     }
 
@@ -1631,7 +1666,7 @@ class JSONExpect private constructor(
     fun scale(expected: Int): JSONExpect.() -> Unit = {
         nodeAsDecimal.scale().let {
             if (it != expected)
-                error("JSON decimal scale doesn't match - Expected $expected, was $it")
+                error("JSON decimal scale doesn't match - expected $expected, was $it")
         }
     }
 
@@ -1641,7 +1676,7 @@ class JSONExpect private constructor(
     fun scale(expected: IntRange): JSONExpect.() -> Unit = {
         nodeAsDecimal.scale().let {
             if (it !in expected)
-                error("JSON decimal scale doesn't match - Expected $expected, was $it")
+                error("JSON decimal scale doesn't match - expected $expected, was $it")
         }
     }
 
@@ -1681,8 +1716,8 @@ class JSONExpect private constructor(
     enum class ErrorEnum(val text: String) {
         VALUE_MATCHING("matching given tests"),
         MATCHING_REGEX("matching given Regex"),
-        IN_RANGE("in range"),
-        IN_COLLECTION("in collection"),
+        IN_RANGE("in given range"),
+        IN_COLLECTION("in given collection"),
     }
 
     private fun <T : Any> showFormatted(value: T, outputFunction: (Appendable, T) -> Unit): String =
@@ -1696,8 +1731,18 @@ class JSONExpect private constructor(
         error("JSON value doesn't match - expected ${showValue(expected)}, was ${showNode()}")
     }
 
-    private fun errorOnAnyItem(expected: Any?): Nothing {
-        error("No JSON array item has value ${showValue(expected)}")
+    private fun errorOnAnyItem(expected: Any?, additional: Any? = null): Nothing {
+        val message = buildString {
+            append(showValue(expected))
+            if (additional != null) {
+                val additionalString = additional.toString()
+                if (additionalString.length in 1..40) {
+                    append(" - ")
+                    append(additionalString)
+                }
+            }
+        }
+        error("No JSON array item has value $message")
     }
 
     internal fun errorOnType(expected: String): Nothing {
@@ -1752,6 +1797,7 @@ class JSONExpect private constructor(
 
     companion object {
 
+        @Suppress("ConstPropertyName")
         const val maxStringDisplayLength = 49
 
         /**
@@ -1768,9 +1814,12 @@ class JSONExpect private constructor(
         }
 
         private val KClass<*>.displayName: String
-            get() = when (val qName = qualifiedName) {
-                null -> "<unknown>"
-                else -> if (qName.startsWith("kotlin.") && qName.indexOf('.', 7) < 0) qName.drop(7) else qName
+            get() {
+                val fullName = qualifiedName ?: return "<unknown>"
+                return if (fullName.startsWith("kotlin."))
+                    fullName.substringAfterLast('.')
+                else
+                    fullName
             }
 
     }

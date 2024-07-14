@@ -1,8 +1,8 @@
 # kjson-test
 
-[![Build Status](https://travis-ci.com/pwall567/kjson-test.svg?branch=main)](https://app.travis-ci.com/github/pwall567/kjson-test)
+[![Build Status](https://github.com/pwall567/kjson-test/actions/workflows/build.yml/badge.svg)](https://github.com/pwall567/kjson-test/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.8.22&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.8.22)
+[![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v1.9.24&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v1.9.24)
 [![Maven Central](https://img.shields.io/maven-central/v/io.kjson/kjson-test?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.kjson%22%20AND%20a:%22kjson-test%22)
 
 Library for testing Kotlin JSON applications
@@ -1001,8 +1001,8 @@ It takes no parameters.
 
 ### General Test Lambdas
 
-These may be used with the form of [`property`](#property), [`item`](#item) or [`value`](#value) that takes a lambda
-parameter.
+These are all functions with the signature `JSONExpect.() -> Unit`, and they may be used with the form of the
+[`property`](#property), [`item`](#item) or [`value`](#value) functions that takes a lambda parameter.
 They are useful when only the general nature of the value is to be tested, and the actual value is not important.
 
 | Name               | Tests that the value is...                                     |
@@ -1037,7 +1037,7 @@ passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the v
 
 ## Dependency Specification
 
-The latest version of the library is 3.12, and it may be obtained from the Maven Central repository.
+The latest version of the library is 4.0, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -1046,19 +1046,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>3.12</version>
+      <version>4.0</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:3.12'
+    testImplementation 'io.kjson:kjson-test:4.0'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:3.12")
+    testImplementation("io.kjson:kjson-test:4.0")
 ```
 
 Peter Wall
 
-2024-02-18
+2024-07-15
