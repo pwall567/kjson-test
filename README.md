@@ -546,6 +546,13 @@ against `null`.
 This does not mean that only `String` properties can be tested for `null` - a `null` property in the JSON is typeless
 so a test for `null` would work, regardless of the type that the property would otherwise hold.
 
+One important consideration to keep in mind when using the comparisons involving standard Java classes such as `UUID`
+and `LocalDate` &ndash; some mocking libraries allow the static functions of Java classes to be mocked; for example,
+[MockK](https://mockk.io) has a function `mockkStatic()` which will intercept calls to the static functions of a
+nominated class.
+This type of interception, when used on the standard library classes, can cause comparisons involving those classes to
+fail in unpredictable ways, and this technique should probably be avoided when using `kjson-test`.
+
 The last function signature in the list is the one that specifies a lambda &ndash; as is usual in Kotlin, when the last
 parameter is a lambda it is usually written outside the parentheses of the function call.
 This is the pattern followed when the lambda is an inline set of tests to be applied to the property, but this function
