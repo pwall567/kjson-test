@@ -24,7 +24,7 @@ class CharTest {
         }
     }
 
-    @Test fun `should fail when Char value not length 1 string`() {
+    @Test fun `should fail when Char value not string of length 1`() {
         val json = "\"ABC\""
         assertFailsWith<AssertionError> {
             JSONExpect.expectJSON(json) {
