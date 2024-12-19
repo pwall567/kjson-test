@@ -26,9 +26,9 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -37,27 +37,23 @@ class LongTest {
     @Test fun `should read nodeAsLong`() {
         val json = "123456789012345"
         JSONExpect.expectJSON(json) {
-            if (nodeAsLong != 123456789012345)
-                fail()
+            nodeAsLong shouldBe 123456789012345
         }
     }
 
     @Test fun `should read Int for nodeAsLong`() {
         val json = "12345"
         JSONExpect.expectJSON(json) {
-            if (nodeAsLong != 12345L)
-                fail()
+            nodeAsLong shouldBe 12345L
         }
     }
 
     @Test fun `should fail on invalid nodeAsLong`() {
         val json = "\"not a Long\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON type doesn't match - expected long integer, was string") {
             JSONExpect.expectJSON(json) {
                 nodeAsLong
             }
-        }.let {
-            expect("JSON type doesn't match - expected long integer, was string") { it.message }
         }
     }
 
@@ -70,12 +66,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long value`() {
         val json = "123456789012346"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected 123456789012345, was 123456789012346") {
             JSONExpect.expectJSON(json) {
                 value(123456789012345)
             }
-        }.let {
-            expect("JSON value doesn't match - expected 123456789012345, was 123456789012346") { it.message }
         }
     }
 
@@ -88,12 +82,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Int as Long value`() {
         val json = "12344"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected 12345, was 12344") {
             JSONExpect.expectJSON(json) {
                 value(12345L)
             }
-        }.let {
-            expect("JSON value doesn't match - expected 12345, was 12344") { it.message }
         }
     }
 
@@ -106,12 +98,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long value in range`() {
         val json = "123456789012350"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range 123456789012340..123456789012349 - 123456789012350") {
             JSONExpect.expectJSON(json) {
                 value(123456789012340..123456789012349)
             }
-        }.let {
-            expect("JSON value not in range 123456789012340..123456789012349 - 123456789012350") { it.message }
         }
     }
 
@@ -124,12 +114,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long value in collection`() {
         val json = "123456789012345"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - 123456789012345") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(123456789012344, 123456789012349))
             }
-        }.let {
-            expect("JSON value not in collection - 123456789012345") { it.message }
         }
     }
 
@@ -137,8 +125,7 @@ class LongTest {
         val json = """{"abc":123456789012345}"""
         JSONExpect.expectJSON(json) {
             property("abc") {
-                if (nodeAsLong != 123456789012345)
-                    fail()
+                nodeAsLong shouldBe 123456789012345
             }
         }
     }
@@ -147,22 +134,19 @@ class LongTest {
         val json = """{"abc":12345}"""
         JSONExpect.expectJSON(json) {
             property("abc") {
-                if (nodeAsLong != 12345L)
-                    fail()
+                nodeAsLong shouldBe 12345L
             }
         }
     }
 
     @Test fun `should fail on invalid property nodeAsLong`() {
         val json = """{"abc":"not a long"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON type doesn't match - expected long integer, was string") {
             JSONExpect.expectJSON(json) {
                 property("abc") {
                     nodeAsLong
                 }
             }
-        }.let {
-            expect("/abc: JSON type doesn't match - expected long integer, was string") { it.message }
         }
     }
 
@@ -175,12 +159,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long property`() {
         val json = """{"abc":123456789012346}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected 123456789012345, was 123456789012346") {
             JSONExpect.expectJSON(json) {
                 property("abc", 123456789012345)
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected 123456789012345, was 123456789012346") { it.message }
         }
     }
 
@@ -193,12 +175,11 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long property in range`() {
         val json = """{"abc":123456789012340}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range 123456789012344..123456789012348 -" +
+                " 123456789012340") {
             JSONExpect.expectJSON(json) {
                 property("abc", 123456789012344..123456789012348)
             }
-        }.let {
-            expect("/abc: JSON value not in range 123456789012344..123456789012348 - 123456789012340") { it.message }
         }
     }
 
@@ -211,12 +192,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long property in collection`() {
         val json = """{"abc":123456789012345}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - 123456789012345") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(123456789012344, 123456789012348, 123456789012340))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - 123456789012345") { it.message }
         }
     }
 
@@ -224,8 +203,7 @@ class LongTest {
         val json = "[123456789012345]"
         JSONExpect.expectJSON(json) {
             item(0) {
-                if (nodeAsLong != 123456789012345)
-                    fail()
+                nodeAsLong shouldBe 123456789012345
             }
         }
     }
@@ -234,22 +212,19 @@ class LongTest {
         val json = "[12345]"
         JSONExpect.expectJSON(json) {
             item(0) {
-                if (nodeAsLong != 12345L)
-                    fail()
+                nodeAsLong shouldBe 12345L
             }
         }
     }
 
     @Test fun `should fail on invalid array item nodeAsLong`() {
         val json = """["not a long"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON type doesn't match - expected long integer, was string") {
             JSONExpect.expectJSON(json) {
                 item(0) {
                     nodeAsLong
                 }
             }
-        }.let {
-            expect("/0: JSON type doesn't match - expected long integer, was string") { it.message }
         }
     }
 
@@ -262,12 +237,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long array item`() {
         val json = "[123456789012344]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected 123456789012345, was 123456789012344") {
             JSONExpect.expectJSON(json) {
                 item(0, 123456789012345)
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected 123456789012345, was 123456789012344") { it.message }
         }
     }
 
@@ -280,12 +253,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long array item in range`() {
         val json = "[123456789012340]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range 123456789012344..123456789012348 - 123456789012340") {
             JSONExpect.expectJSON(json) {
                 item(0, 123456789012344..123456789012348)
             }
-        }.let {
-            expect("/0: JSON value not in range 123456789012344..123456789012348 - 123456789012340") { it.message }
         }
     }
 
@@ -298,12 +269,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect Long array item in collection`() {
         val json = "[123456789012346]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - 123456789012346") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(123456789012340, 123456789012345, 123456789012350, 123456789012355))
             }
-        }.let {
-            expect("/0: JSON value not in collection - 123456789012346") { it.message }
         }
     }
 
@@ -316,11 +285,11 @@ class LongTest {
 
     @Test fun `should fail on incorrect test that any item has Long value`() {
         val json = "[123456789012345, 123456789012347, 123456789012349]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value 123456789012346") {
             JSONExpect.expectJSON(json) {
                 anyItem(123456789012346)
             }
-        }.let { expect("No JSON array item has value 123456789012346") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has Long value - exhaustive`() {
@@ -336,14 +305,14 @@ class LongTest {
 
     @Test fun `should fail on incorrect test that any item has Long value - exhaustive`() {
         val json = "[123456789012345, 123456789012347, 123456789012349, 123456789012350]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON array items not tested: 1, 2") {
             JSONExpect.expectJSON(json) {
                 exhaustive {
                     anyItem(123456789012350)
                     anyItem(123456789012345)
                 }
             }
-        }.let { expect("JSON array items not tested: 1, 2") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has Long value in range`() {
@@ -355,12 +324,10 @@ class LongTest {
 
     @Test fun `should fail on incorrect test that any item has Long value in range`() {
         val json = "[123456789012345, 123456789012347, 123456789012349]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value in given range - 123456789012342..123456789012342") {
             JSONExpect.expectJSON(json) {
                 anyItem(123456789012342..123456789012342)
             }
-        }.let {
-            expect("No JSON array item has value in given range - 123456789012342..123456789012342") { it.message }
         }
     }
 
@@ -373,11 +340,11 @@ class LongTest {
 
     @Test fun `should fail on incorrect test that any item has Long value in collection`() {
         val json = "[123456789012344, 123456789012347, 123456789012349]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value in given collection") {
             JSONExpect.expectJSON(json) {
                 anyItem(MiniSet.of(123456789012340, 123456789012345, 123456789012350, 123456789012355))
             }
-        }.let { expect("No JSON array item has value in given collection") { it.message } }
+        }
     }
 
 }

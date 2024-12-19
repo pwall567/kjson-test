@@ -2,7 +2,7 @@
  * @(#) OffsetDateTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,12 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
 
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -40,19 +40,16 @@ class OffsetDateTimeTest {
     @Test fun `should read nodeAsOffsetDateTime`() {
         val json = "\"2022-06-15T17:05:09.123+10:00\""
         JSONExpect.expectJSON(json) {
-            if (nodeAsOffsetDateTime != OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000, offset10))
-                fail()
+            nodeAsOffsetDateTime shouldBe OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000, offset10)
         }
     }
 
     @Test fun `should fail on invalid nodeAsOffsetDateTime`() {
         val json = "\"not an OffsetDateTime\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") {
             JSONExpect.expectJSON(json) {
                 nodeAsOffsetDateTime
             }
-        }.let {
-            expect("JSON string is not an OffsetDateTime - \"not an OffsetDateTime\"") { it.message }
         }
     }
 
@@ -65,13 +62,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime value`() {
         val json = "\"2022-06-15T17:05:09.123+10:00\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected \"2022-06-15T18:05:09.123+11:00\"," +
+                " was \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 value(OffsetDateTime.of(2022, 6, 15, 18, 5, 9, 123_000_000, offset11))
             }
-        }.let {
-            expect("JSON value doesn't match - expected \"2022-06-15T18:05:09.123+11:00\"," +
-                    " was \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -84,13 +79,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime property`() {
         val json = """{"abc":"2022-06-15T17:05:09.123+10:00"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected \"2022-06-15T18:05:09.123+11:00\"," +
+                " was \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", OffsetDateTime.of(2022, 6, 15, 18, 5, 9, 123_000_000, offset11))
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected \"2022-06-15T18:05:09.123+11:00\"," +
-                    " was \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -103,13 +96,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime array item`() {
         val json = """["2022-06-15T17:05:09.123+10:00"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected \"2022-06-15T18:05:09.123+11:00\"," +
+                " was \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 item(0, OffsetDateTime.of(2022, 6, 15, 18, 5, 9, 123_000_000, offset11))
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected \"2022-06-15T18:05:09.123+11:00\"," +
-                    " was \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -123,14 +114,12 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime value in range`() {
         val json = "\"2022-06-15T17:05:09.123+10:00\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range \"2022-06-15T17:05:10+10:00\".." +
+                "\"2022-06-15T17:05:11+10:00\" - \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 value(OffsetDateTime.of(2022, 6, 15, 17, 5, 10, 0, offset10)..
                         OffsetDateTime.of(2022, 6, 15, 17, 5, 11, 0, offset10))
             }
-        }.let {
-            expect("JSON value not in range \"2022-06-15T17:05:10+10:00\"..\"2022-06-15T17:05:11+10:00\"" +
-                    " - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -144,14 +133,12 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime property in range`() {
         val json = """{"abc":"2022-06-15T17:05:09.123+10:00"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range \"2022-06-15T17:05:10+10:00\".." +
+                "\"2022-06-15T17:05:11+10:00\" - \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", OffsetDateTime.of(2022, 6, 15, 17, 5, 10, 0, offset10)..
                         OffsetDateTime.of(2022, 6, 15, 17, 5, 11, 0, offset10))
             }
-        }.let {
-            expect("/abc: JSON value not in range \"2022-06-15T17:05:10+10:00\"..\"2022-06-15T17:05:11+10:00\"" +
-                    " - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -165,14 +152,12 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime array item in range`() {
         val json = "[\"2022-06-15T17:05:09.123+10:00\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range \"2022-06-15T17:05:10+10:00\".." +
+                "\"2022-06-15T17:05:11+10:00\" - \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 item(0, OffsetDateTime.of(2022, 6, 15, 17, 5, 10, 0, offset10)..
                         OffsetDateTime.of(2022, 6, 15, 17, 5, 11, 0, offset10))
             }
-        }.let {
-            expect("/0: JSON value not in range \"2022-06-15T17:05:10+10:00\"..\"2022-06-15T17:05:11+10:00\"" +
-                    " - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -186,13 +171,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime value in collection`() {
         val json = "\"2022-06-15T17:05:09.123+10:00\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 0, offset10),
                         OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 200_000_000, offset10)))
             }
-        }.let {
-            expect("JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -206,13 +189,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime property in collection`() {
         val json = """{"abc":"2022-06-15T17:05:09.123+10:00"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 0, offset10),
                         OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 200_000_000, offset10)))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -226,13 +207,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect OffsetDateTime array item in collection`() {
         val json = "[\"2022-06-15T17:05:09.123+10:00\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 0, offset10),
                         OffsetDateTime.of(2022, 6, 15, 17, 5, 9, 200_000_000, offset10)))
             }
-        }.let {
-            expect("/0: JSON value not in collection - \"2022-06-15T17:05:09.123+10:00\"") { it.message }
         }
     }
 
@@ -245,11 +224,11 @@ class OffsetDateTimeTest {
 
     @Test fun `should fail on incorrect test that any item has OffsetDateTime value`() {
         val json = """["2023-09-18T19:30:15","2023-09-18T19:30:30","2023-09-18T19:30:45"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"2023-09-18T19:30:55+10:00\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(OffsetDateTime.of(2023, 9, 18, 19, 30, 55, 0, offset10))
             }
-        }.let { expect("No JSON array item has value \"2023-09-18T19:30:55+10:00\"") { it.message } }
+        }
     }
 
     companion object {

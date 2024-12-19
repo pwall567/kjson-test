@@ -2,6 +2,13 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.1] - 2024-12-19
+### Changed
+- `JSONExpect`, `Lambda.kt`: changed to use `JSONValidation` tests where possible, improved `UUID` check and conversion
+- `Lambda.kt`: added `isNonEmptyArray`, `isNonEmptyObject`
+- `JSONExpect`: added `shouldMatchJSON`
+- tests: converted to `should-test`
+
 ## [4.0] - 2024-11-03
 ### Changed
 ### Added

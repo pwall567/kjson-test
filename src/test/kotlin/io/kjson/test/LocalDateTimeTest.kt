@@ -2,7 +2,7 @@
  * @(#) LocalDateTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
 
 import java.time.LocalDateTime
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -39,19 +39,16 @@ class LocalDateTimeTest {
     @Test fun `should read nodeAsLocalDateTime`() {
         val json = "\"2022-06-15T17:05:09.123\""
         JSONExpect.expectJSON(json) {
-            if (nodeAsLocalDateTime != LocalDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000))
-                fail()
+            nodeAsLocalDateTime shouldBe LocalDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000)
         }
     }
 
     @Test fun `should fail on invalid nodeAsLocalDateTime`() {
         val json = "\"not a LocalDateTime\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON string is not a LocalDateTime - \"not a LocalDateTime\"") {
             JSONExpect.expectJSON(json) {
                 nodeAsLocalDateTime
             }
-        }.let {
-            expect("JSON string is not a LocalDateTime - \"not a LocalDateTime\"") { it.message }
         }
     }
 
@@ -64,13 +61,10 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime value`() {
         val json = "\"2022-06-15T17:05:09.124\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected \"2022-06-15T17:05:09.123\"," +
+                " was \"2022-06-15T17:05:09.124\"") {
             JSONExpect.expectJSON(json) {
                 value(LocalDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000))
-            }
-        }.let {
-            expect("JSON value doesn't match - expected \"2022-06-15T17:05:09.123\", was \"2022-06-15T17:05:09.124\"") {
-                it.message
             }
         }
     }
@@ -84,13 +78,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime property`() {
         val json = """{"abc":"2022-06-15T17:05:09.124"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected \"2022-06-15T17:05:09.123\"," +
+                " was \"2022-06-15T17:05:09.124\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", LocalDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000))
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected \"2022-06-15T17:05:09.123\"," +
-                    " was \"2022-06-15T17:05:09.124\"") { it.message }
         }
     }
 
@@ -103,13 +95,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime array item`() {
         val json = """["2022-06-15T17:05:09.124"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected \"2022-06-15T17:05:09.123\"," +
+                " was \"2022-06-15T17:05:09.124\"") {
             JSONExpect.expectJSON(json) {
                 item(0, LocalDateTime.of(2022, 6, 15, 17, 5, 9, 123_000_000))
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected \"2022-06-15T17:05:09.123\"," +
-                    " was \"2022-06-15T17:05:09.124\"") { it.message }
         }
     }
 
@@ -122,13 +112,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime value in range`() {
         val json = "\"2022-06-15T12:00:00\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range \"2022-06-16T00:00:00\"..\"2022-06-18T00:00:00\"" +
+                " - \"2022-06-15T12:00:00\"") {
             JSONExpect.expectJSON(json) {
                 value(LocalDateTime.of(2022, 6, 16, 0, 0, 0)..LocalDateTime.of(2022, 6, 18, 0, 0, 0))
             }
-        }.let {
-            expect("JSON value not in range \"2022-06-16T00:00:00\"..\"2022-06-18T00:00:00\"" +
-                    " - \"2022-06-15T12:00:00\"") { it.message }
         }
     }
 
@@ -141,13 +129,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime property in range`() {
         val json = """{"abc":"2022-06-15T12:00:00"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range \"2022-06-16T00:00:00\"..\"2022-06-18T00:00:00\"" +
+                " - \"2022-06-15T12:00:00\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", LocalDateTime.of(2022, 6, 16, 0, 0, 0)..LocalDateTime.of(2022, 6, 18, 0, 0, 0))
             }
-        }.let {
-            expect("/abc: JSON value not in range \"2022-06-16T00:00:00\"..\"2022-06-18T00:00:00\"" +
-                    " - \"2022-06-15T12:00:00\"") { it.message }
         }
     }
 
@@ -160,13 +146,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime array item in range`() {
         val json = "[\"2022-06-15T12:00:00\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range \"2022-06-16T00:00:00\"..\"2022-06-18T00:00:00\"" +
+                " - \"2022-06-15T12:00:00\"") {
             JSONExpect.expectJSON(json) {
                 item(0, LocalDateTime.of(2022, 6, 16, 0, 0, 0)..LocalDateTime.of(2022, 6, 18, 0, 0, 0))
             }
-        }.let {
-            expect("/0: JSON value not in range \"2022-06-16T00:00:00\"..\"2022-06-18T00:00:00\"" +
-                    " - \"2022-06-15T12:00:00\"") { it.message }
         }
     }
 
@@ -179,12 +163,10 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime value in collection`() {
         val json = "\"2022-06-15T12:00:00\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - \"2022-06-15T12:00:00\"") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(LocalDateTime.of(2022, 6, 14, 12, 0, 0), LocalDateTime.of(2022, 6, 16, 12, 0, 0)))
             }
-        }.let {
-            expect("JSON value not in collection - \"2022-06-15T12:00:00\"") { it.message }
         }
     }
 
@@ -197,13 +179,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime property in collection`() {
         val json = """{"abc":"2022-06-15T12:00:00"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - \"2022-06-15T12:00:00\"") {
             JSONExpect.expectJSON(json) {
                 property("abc",
                     MiniSet.of(LocalDateTime.of(2022, 6, 14, 0, 0, 0), LocalDateTime.of(2022, 6, 16, 0, 0, 0)))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - \"2022-06-15T12:00:00\"") { it.message }
         }
     }
 
@@ -216,12 +196,10 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect LocalDateTime array item in collection`() {
         val json = "[\"2022-06-15T12:00:00\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - \"2022-06-15T12:00:00\"") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(LocalDateTime.of(2022, 6, 14, 0, 0, 0), LocalDateTime.of(2022, 6, 16, 0, 0, 0)))
             }
-        }.let {
-            expect("/0: JSON value not in collection - \"2022-06-15T12:00:00\"") { it.message }
         }
     }
 
@@ -234,11 +212,11 @@ class LocalDateTimeTest {
 
     @Test fun `should fail on incorrect test that any item has LocalDateTime value`() {
         val json = """["2023-09-18T19:30:15","2023-09-18T19:30:30","2023-09-18T19:30:45"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"2023-09-18T19:30:55\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(LocalDateTime.of(2023, 9, 18, 19, 30, 55))
             }
-        }.let { expect("No JSON array item has value \"2023-09-18T19:30:55\"") { it.message } }
+        }
     }
 
 }

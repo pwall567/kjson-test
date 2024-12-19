@@ -2,7 +2,7 @@
  * @(#) PeriodTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
 
 import java.time.Period
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -39,19 +39,16 @@ class PeriodTest {
     @Test fun `should read nodeAsPeriod`() {
         val json = "\"P45D\""
         JSONExpect.expectJSON(json) {
-            if (nodeAsPeriod != Period.ofDays(45))
-                fail()
+            nodeAsPeriod shouldBe Period.ofDays(45)
         }
     }
 
     @Test fun `should fail on invalid nodeAsPeriod`() {
         val json = "\"not a Period\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON string is not a Period - \"not a Period\"") {
             JSONExpect.expectJSON(json) {
                 nodeAsPeriod
             }
-        }.let {
-            expect("JSON string is not a Period - \"not a Period\"") { it.message }
         }
     }
 
@@ -64,12 +61,10 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect Period value`() {
         val json = "\"P44D\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected \"P45D\", was \"P44D\"") {
             JSONExpect.expectJSON(json) {
                 value(Period.ofDays(45))
             }
-        }.let {
-            expect("JSON value doesn't match - expected \"P45D\", was \"P44D\"") { it.message }
         }
     }
 
@@ -82,12 +77,10 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect Period property`() {
         val json = """{"abc":"P44D"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected \"P45D\", was \"P44D\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", Period.ofDays(45))
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected \"P45D\", was \"P44D\"") { it.message }
         }
     }
 
@@ -100,12 +93,10 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect Period array item`() {
         val json = """["P44D"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected \"P45D\", was \"P44D\"") {
             JSONExpect.expectJSON(json) {
                 item(0, Period.ofDays(45))
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected \"P45D\", was \"P44D\"") { it.message }
         }
     }
 
@@ -118,12 +109,10 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect Period value in collection`() {
         val json = "\"P45D\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - \"P45D\"") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(Period.ofDays(44), Period.ofDays(46)))
             }
-        }.let {
-            expect("JSON value not in collection - \"P45D\"") { it.message }
         }
     }
 
@@ -136,12 +125,10 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect Period property in collection`() {
         val json = """{"abc":"P45D"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - \"P45D\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(Period.ofDays(44), Period.ofDays(46)))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - \"P45D\"") { it.message }
         }
     }
 
@@ -154,12 +141,10 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect Period array item in collection`() {
         val json = "[\"P45D\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - \"P45D\"") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(Period.ofDays(44), Period.ofDays(46)))
             }
-        }.let {
-            expect("/0: JSON value not in collection - \"P45D\"") { it.message }
         }
     }
 
@@ -172,11 +157,11 @@ class PeriodTest {
 
     @Test fun `should fail on incorrect test that any item has Period value`() {
         val json = """["P10D","P20D","P30D"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"P40D\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(Period.ofDays(40))
             }
-        }.let { expect("No JSON array item has value \"P40D\"") { it.message } }
+        }
     }
 
 }

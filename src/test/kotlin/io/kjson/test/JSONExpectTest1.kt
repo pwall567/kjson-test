@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest1.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021, 2022, 2023 Peter Wall
+ * Copyright (c) 2020, 2021, 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,13 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
 import kotlin.test.fail
 
 import java.math.BigDecimal
+
+import io.kstuff.test.shouldBeNonNull
+import io.kstuff.test.shouldStartWith
+import io.kstuff.test.shouldThrow
 
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
@@ -38,12 +40,13 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on invalid JSON`() {
         val json = "["
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError> {
             expectJSON(json) {
                 fail("Tests should not be executed")
             }
+        }.let {
+            it.message.shouldBeNonNull() shouldStartWith "Unable to parse JSON - "
         }
-        expect("Unable to parse JSON") { exception.message?.substringBefore(" - ") }
     }
 
     @Test fun `should test string value`() {
@@ -83,12 +86,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of value as object`() {
         val json = "[]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON type doesn't match - expected object, was array") {
             expectJSON(json) {
                 valueIsObject()
             }
-        }.let {
-            expect("JSON type doesn't match - expected object, was array") { it.message }
         }
     }
 
@@ -103,27 +104,23 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of value as object with nested tests`() {
         val json = "[]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON type doesn't match - expected object, was array") {
             expectJSON(json) {
                 valueIsObject {
                     property("abc", 1)
                 }
             }
-        }.let {
-            expect("JSON type doesn't match - expected object, was array") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of value as object with failing nested tests`() {
         val json = """{"abc":1}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 valueIsObject {
                     property("abc", 2)
                 }
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected 2, was 1") { it.message }
         }
     }
 
@@ -136,12 +133,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of value as array`() {
         val json = "{}"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
             expectJSON(json) {
                 valueIsArray()
             }
-        }.let {
-            expect("JSON type doesn't match - expected array, was object") { it.message }
         }
     }
 
@@ -154,12 +149,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of value as array with size`() {
         val json = "[0,0,0,0]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON array size doesn't match - Expected 3, was 4") {
             expectJSON(json) {
                 valueIsArray(3)
             }
-        }.let {
-            expect("JSON array size doesn't match - Expected 3, was 4") { it.message }
         }
     }
 
@@ -174,27 +167,23 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of value as array with nested tests`() {
         val json = "{}"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
             expectJSON(json) {
                 valueIsArray {
                     item(0, 1)
                 }
             }
-        }.let {
-            expect("JSON type doesn't match - expected array, was object") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of value as array with failing nested tests`() {
         val json = "[1]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 valueIsArray {
                     item(0, 2)
                 }
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected 2, was 1") { it.message }
         }
     }
 
@@ -216,14 +205,13 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of simple property specified as separate value`() {
         val json = """{"abc":1}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 property("abc") {
                     value(2)
                 }
             }
         }
-        expect("/abc: JSON value doesn't match - expected 2, was 1") { exception.message }
     }
 
     @Test fun `should test multiple properties`() {
@@ -245,12 +233,11 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of number of properties`() {
         val json = """{"abc":1,"def":-8}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON count doesn't match - expected 3, was 2") {
             expectJSON(json) {
                 count(3)
             }
         }
-        expect("JSON count doesn't match - expected 3, was 2") { exception.message }
     }
 
     @Test fun `should test number of properties as range`() {
@@ -264,12 +251,11 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of number of properties as range`() {
         val json = """{"abc":1,"def":-8}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON count doesn't match - expected 3..5, was 2") {
             expectJSON(json) {
                 count(3..5)
             }
         }
-        expect("JSON count doesn't match - expected 3..5, was 2") { exception.message }
     }
 
     @Test fun `should test property is object`() {
@@ -281,12 +267,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of property as object`() {
         val json = """{"abc":[]}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON type doesn't match - expected object, was array") {
             expectJSON(json) {
                 propertyIsObject("abc")
             }
-        }.let {
-            expect("/abc: JSON type doesn't match - expected object, was array") { it.message }
         }
     }
 
@@ -301,27 +285,23 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of property as object with nested tests`() {
         val json = """{"abc":[]}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON type doesn't match - expected object, was array") {
             expectJSON(json) {
                 propertyIsObject("abc") {
                     property("def", 1)
                 }
             }
-        }.let {
-            expect("/abc: JSON type doesn't match - expected object, was array") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of property as object with failing nested tests`() {
         val json = """{"abc":{"def":1}}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc/def: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 propertyIsObject("abc") {
                     property("def", 2)
                 }
             }
-        }.let {
-            expect("/abc/def: JSON value doesn't match - expected 2, was 1") { it.message }
         }
     }
 
@@ -334,12 +314,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of property as array`() {
         val json = """{"abc":{}}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON type doesn't match - expected array, was object") {
             expectJSON(json) {
                 propertyIsArray("abc")
             }
-        }.let {
-            expect("/abc: JSON type doesn't match - expected array, was object") { it.message }
         }
     }
 
@@ -352,12 +330,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of property as array with size`() {
         val json = """{"abc":[0]}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON array size doesn't match - Expected 0, was 1") {
             expectJSON(json) {
                 propertyIsArray("abc", 0)
             }
-        }.let {
-            expect("/abc: JSON array size doesn't match - Expected 0, was 1") { it.message }
         }
     }
 
@@ -372,27 +348,23 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of property as array with nested tests`() {
         val json = """{"abc":{}}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON type doesn't match - expected array, was object") {
             expectJSON(json) {
                 propertyIsArray("abc") {
                     item(0, 1)
                 }
             }
-        }.let {
-            expect("/abc: JSON type doesn't match - expected array, was object") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of property as array with failing nested tests`() {
         val json = """{"abc":[1]}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc/0: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 propertyIsArray("abc") {
                     item(0, 2)
                 }
             }
-        }.let {
-            expect("/abc/0: JSON value doesn't match - expected 2, was 1") { it.message }
         }
     }
 
@@ -427,13 +399,12 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of multiple int array items`() {
         val json = "[12345,-27]"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected -28, was -27") {
             expectJSON(json) {
                 item(0, 12345)
                 item(1, -28)
             }
         }
-        expect("/1: JSON value doesn't match - expected -28, was -27") { exception.message }
     }
 
     @Test fun `should test nested int array items`() {
@@ -452,7 +423,7 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of nested int array items`() {
         val json = "[[12345,-27],[44,55]]"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/1/0: JSON value doesn't match - expected 45, was 44") {
             expectJSON(json) {
                 item(0) {
                     item(0, 12345)
@@ -464,7 +435,6 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/1/0: JSON value doesn't match - expected 45, was 44") { exception.message }
     }
 
     @Test fun `should test doubly nested int array items`() {
@@ -492,12 +462,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of array item as object`() {
         val json = "[[]]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON type doesn't match - expected object, was array") {
             expectJSON(json) {
                 itemIsObject(0)
             }
-        }.let {
-            expect("/0: JSON type doesn't match - expected object, was array") { it.message }
         }
     }
 
@@ -512,27 +480,23 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of array item as object with nested tests`() {
         val json = "[[]]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON type doesn't match - expected object, was array") {
             expectJSON(json) {
                 itemIsObject(0) {
                     property("def", 1)
                 }
             }
-        }.let {
-            expect("/0: JSON type doesn't match - expected object, was array") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of array item as object with failing nested tests`() {
         val json = """[{"def":1}]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0/def: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 itemIsObject(0) {
                     property("def", 2)
                 }
             }
-        }.let {
-            expect("/0/def: JSON value doesn't match - expected 2, was 1") { it.message }
         }
     }
 
@@ -545,12 +509,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of array item as array`() {
         val json = "[{}]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON type doesn't match - expected array, was object") {
             expectJSON(json) {
                 itemIsArray(0)
             }
-        }.let {
-            expect("/0: JSON type doesn't match - expected array, was object") { it.message }
         }
     }
 
@@ -563,12 +525,10 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of array item as array with size`() {
         val json = "[[1,2,3]]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON array size doesn't match - Expected 1, was 3") {
             expectJSON(json) {
                 itemIsArray(0, size = 1)
             }
-        }.let {
-            expect("/0: JSON array size doesn't match - Expected 1, was 3") { it.message }
         }
     }
 
@@ -583,33 +543,29 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of array item as array with nested tests`() {
         val json = "[{}]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON type doesn't match - expected array, was object") {
             expectJSON(json) {
                 itemIsArray(0) {
                     item(0, 1)
                 }
             }
-        }.let {
-            expect("/0: JSON type doesn't match - expected array, was object") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of array item as array with failing nested tests`() {
         val json = "[[1]]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0/0: JSON value doesn't match - expected 2, was 1") {
             expectJSON(json) {
                 itemIsArray(0) {
                     item(0, 2)
                 }
             }
-        }.let {
-            expect("/0/0: JSON value doesn't match - expected 2, was 1") { it.message }
         }
     }
 
     @Test fun `should fail on incorrect test of doubly nested int array items`() {
         val json = "[[[12345,-27],[44,55]]]"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0/1/0: JSON value doesn't match - expected 45, was 44") {
             expectJSON(json) {
                 item(0) {
                     item(0) {
@@ -623,7 +579,6 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/0/1/0: JSON value doesn't match - expected 45, was 44") { exception.message }
     }
 
     @Test fun `should test nested property`() {
@@ -637,14 +592,13 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of nested property`() {
         val json = """{"outer":{"field":99}}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/outer/field: JSON value doesn't match - expected 98, was 99") {
             expectJSON(json) {
                 property("outer") {
                     property("field", 98)
                 }
             }
         }
-        expect("/outer/field: JSON value doesn't match - expected 98, was 99") { exception.message }
     }
 
     @Test fun `should test doubly nested property`() {
@@ -660,7 +614,7 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of doubly nested property`() {
         val json = """{"outer":{"middle":{"field":99}}}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/outer/middle/field: JSON value doesn't match - expected 98, was 99") {
             expectJSON(json) {
                 property("outer") {
                     property("middle") {
@@ -669,7 +623,6 @@ class JSONExpectTest1 {
                 }
             }
         }
-        expect("/outer/middle/field: JSON value doesn't match - expected 98, was 99") { exception.message }
     }
 
     @Test fun `should test property nested in array`() {
@@ -683,14 +636,13 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on incorrect test of property nested in array`() {
         val json = """[{"field":99}]"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0/field: JSON value doesn't match - expected 98, was 99") {
             expectJSON(json) {
                 item(0) {
                     property("field", 98)
                 }
             }
         }
-        expect("/0/field: JSON value doesn't match - expected 98, was 99") { exception.message }
     }
 
     @Test fun `should test array item nested in property`() {
@@ -713,26 +665,24 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on test of array item nested in property`() {
         val json = """{"primes":[1,2,3,5,7,11,13,17,19,23]}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/primes/9: JSON value doesn't match - expected 27, was 23") {
             expectJSON(json) {
                 property("primes") {
                     item(9, 27)
                 }
             }
         }
-        expect("/primes/9: JSON value doesn't match - expected 27, was 23") { exception.message }
     }
 
     @Test fun `should fail on array index out of bounds`() {
         val json = """{"primes":[1,2,3,5,7,11,13,17,19,23]}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/primes: JSON array index out of bounds - 10") {
             expectJSON(json) {
                 property("primes") {
                     item(10, 27)
                 }
             }
         }
-        expect("/primes: JSON array index out of bounds - 10") { exception.message }
     }
 
     @Test fun `should test count of array items`() {
@@ -747,14 +697,13 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on test of count of array items`() {
         val json = """{"primes":[1,2,3,5,7,11,13,17,19,23]}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/primes: JSON count doesn't match - expected 9, was 10") {
             expectJSON(json) {
                 property("primes") {
                     count(9)
                 }
             }
         }
-        expect("/primes: JSON count doesn't match - expected 9, was 10") { exception.message }
     }
 
     @Test fun `should test count of array items as range`() {
@@ -769,14 +718,22 @@ class JSONExpectTest1 {
 
     @Test fun `should fail on test of count of array items as range`() {
         val json = """{"primes":[1,2,3,5,7,11,13,17,19,23]}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/primes: JSON count doesn't match - expected 2..9, was 10") {
             expectJSON(json) {
                 property("primes") {
                     count(2..9)
                 }
             }
         }
-        expect("/primes: JSON count doesn't match - expected 2..9, was 10") { exception.message }
+    }
+
+    @Test fun `should use shouldMatchJSON syntax`() {
+        val json = """{"abc":[1]}"""
+        json shouldMatchJSON {
+            propertyIsArray("abc", 1) {
+                item(0, 1)
+            }
+        }
     }
 
 }

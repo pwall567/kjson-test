@@ -2,7 +2,7 @@
  * @(#) YearMonthTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
 
 import java.time.YearMonth
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -39,19 +39,16 @@ class YearMonthTest {
     @Test fun `should read nodeAsYearMonth`() {
         val json = "\"2022-06\""
         JSONExpect.expectJSON(json) {
-            if (nodeAsYearMonth != YearMonth.of(2022, 6))
-                fail()
+            nodeAsYearMonth shouldBe YearMonth.of(2022, 6)
         }
     }
 
     @Test fun `should fail on invalid nodeAsYearMonth`() {
         val json = "\"not a YearMonth\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON string is not a YearMonth - \"not a YearMonth\"") {
             JSONExpect.expectJSON(json) {
                 nodeAsYearMonth
             }
-        }.let {
-            expect("JSON string is not a YearMonth - \"not a YearMonth\"") { it.message }
         }
     }
 
@@ -64,12 +61,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth value`() {
         val json = "\"2022-05\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected \"2022-06\", was \"2022-05\"") {
             JSONExpect.expectJSON(json) {
                 value(YearMonth.of(2022, 6))
             }
-        }.let {
-            expect("JSON value doesn't match - expected \"2022-06\", was \"2022-05\"") { it.message }
         }
     }
 
@@ -82,12 +77,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth property`() {
         val json = """{"abc":"2022-05"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected \"2022-06\", was \"2022-05\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", YearMonth.of(2022, 6))
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected \"2022-06\", was \"2022-05\"") { it.message }
         }
     }
 
@@ -100,12 +93,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth array item`() {
         val json = """["2022-05"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected \"2022-06\", was \"2022-05\"") {
             JSONExpect.expectJSON(json) {
                 item(0, YearMonth.of(2022, 6))
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected \"2022-06\", was \"2022-05\"") { it.message }
         }
     }
 
@@ -118,12 +109,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth value in range`() {
         val json = "\"2022-06\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range \"2022-07\"..\"2022-08\" - \"2022-06\"") {
             JSONExpect.expectJSON(json) {
                 value(YearMonth.of(2022, 7)..YearMonth.of(2022, 8))
             }
-        }.let {
-            expect("JSON value not in range \"2022-07\"..\"2022-08\" - \"2022-06\"") { it.message }
         }
     }
 
@@ -136,12 +125,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth property in range`() {
         val json = """{"abc":"2022-06"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range \"2022-07\"..\"2022-08\" - \"2022-06\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", YearMonth.of(2022, 7)..YearMonth.of(2022, 8))
             }
-        }.let {
-            expect("/abc: JSON value not in range \"2022-07\"..\"2022-08\" - \"2022-06\"") { it.message }
         }
     }
 
@@ -154,12 +141,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth array item in range`() {
         val json = "[\"2022-06\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range \"2022-07\"..\"2022-08\" - \"2022-06\"") {
             JSONExpect.expectJSON(json) {
                 item(0, YearMonth.of(2022, 7)..YearMonth.of(2022, 8))
             }
-        }.let {
-            expect("/0: JSON value not in range \"2022-07\"..\"2022-08\" - \"2022-06\"") { it.message }
         }
     }
 
@@ -172,12 +157,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth value in collection`() {
         val json = "\"2022-06\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - \"2022-06\"") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(YearMonth.of(2022, 7), YearMonth.of(2022, 8)))
             }
-        }.let {
-            expect("JSON value not in collection - \"2022-06\"") { it.message }
         }
     }
 
@@ -190,12 +173,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth property in collection`() {
         val json = """{"abc":"2022-06"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - \"2022-06\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(YearMonth.of(2022, 7), YearMonth.of(2022, 8)))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - \"2022-06\"") { it.message }
         }
     }
 
@@ -208,12 +189,10 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect YearMonth array item in collection`() {
         val json = "[\"2022-06\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - \"2022-06\"") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(YearMonth.of(2022, 7), YearMonth.of(2022, 8)))
             }
-        }.let {
-            expect("/0: JSON value not in collection - \"2022-06\"") { it.message }
         }
     }
 
@@ -226,11 +205,11 @@ class YearMonthTest {
 
     @Test fun `should fail on incorrect test that any item has YearMonth value`() {
         val json = """["2023-09","2023-10","2023-11"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"2023-12\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(YearMonth.of(2023, 12))
             }
-        }.let { expect("No JSON array item has value \"2023-12\"") { it.message } }
+        }
     }
 
 }

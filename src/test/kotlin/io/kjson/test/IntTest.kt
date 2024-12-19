@@ -26,9 +26,9 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -37,19 +37,16 @@ class IntTest {
     @Test fun `should read nodeAsInt`() {
         val json = "12345"
         JSONExpect.expectJSON(json) {
-            if (nodeAsInt != 12345)
-                fail()
+            nodeAsInt shouldBe 12345
         }
     }
 
     @Test fun `should fail on invalid nodeAsInt`() {
         val json = "\"not an Int\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON type doesn't match - expected integer, was string") {
             JSONExpect.expectJSON(json) {
                 nodeAsInt
             }
-        }.let {
-            expect("JSON type doesn't match - expected integer, was string") { it.message }
         }
     }
 
@@ -62,12 +59,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int value`() {
         val json = "123456"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected 654321, was 123456") {
             JSONExpect.expectJSON(json) {
                 value(654321)
             }
-        }.let {
-            expect("JSON value doesn't match - expected 654321, was 123456") { it.message }
         }
     }
 
@@ -80,12 +75,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int value in range`() {
         val json = "12355"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range 12340..12350 - 12355") {
             JSONExpect.expectJSON(json) {
                 value(12340..12350)
             }
-        }.let {
-            expect("JSON value not in range 12340..12350 - 12355") { it.message }
         }
     }
 
@@ -98,12 +91,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int value in collection`() {
         val json = "12345"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - 12345") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(12344, 12366))
             }
-        }.let {
-            expect("JSON value not in collection - 12345") { it.message }
         }
     }
 
@@ -111,22 +102,19 @@ class IntTest {
         val json = """{"abc":12345}"""
         JSONExpect.expectJSON(json) {
             property("abc") {
-                if (nodeAsInt != 12345)
-                    fail()
+                nodeAsInt shouldBe 12345
             }
         }
     }
 
     @Test fun `should fail on invalid property nodeAsInt`() {
         val json = """{"abc":"not an Int"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON type doesn't match - expected integer, was string") {
             JSONExpect.expectJSON(json) {
                 property("abc") {
                     nodeAsInt
                 }
             }
-        }.let {
-            expect("/abc: JSON type doesn't match - expected integer, was string") { it.message }
         }
     }
 
@@ -139,12 +127,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int property`() {
         val json = """{"abc":123456}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected 12345, was 123456") {
             JSONExpect.expectJSON(json) {
                 property("abc", 12345)
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected 12345, was 123456") { it.message }
         }
     }
 
@@ -157,12 +143,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int property in range`() {
         val json = """{"abc":12355}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range 12340..12350 - 12355") {
             JSONExpect.expectJSON(json) {
                 property("abc", 12340..12350)
             }
-        }.let {
-            expect("/abc: JSON value not in range 12340..12350 - 12355") { it.message }
         }
     }
 
@@ -175,12 +159,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int property in collection`() {
         val json = """{"abc":12345}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - 12345") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(12344, 12355, 12366))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - 12345") { it.message }
         }
     }
 
@@ -188,22 +170,19 @@ class IntTest {
         val json = "[12345]"
         JSONExpect.expectJSON(json) {
             item(0) {
-                if (nodeAsInt != 12345)
-                    fail()
+                nodeAsInt shouldBe 12345
             }
         }
     }
 
     @Test fun `should fail on invalid array item nodeAsInt`() {
         val json = """["not an Int"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON type doesn't match - expected integer, was string") {
             JSONExpect.expectJSON(json) {
                 item(0) {
                     nodeAsInt
                 }
             }
-        }.let {
-            expect("/0: JSON type doesn't match - expected integer, was string") { it.message }
         }
     }
 
@@ -216,12 +195,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int array item`() {
         val json = """[987654]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected 98765, was 987654") {
             JSONExpect.expectJSON(json) {
                 item(0, 98765)
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected 98765, was 987654") { it.message }
         }
     }
 
@@ -234,12 +211,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int array item in range`() {
         val json = "[12355]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range 12340..12350 - 12355") {
             JSONExpect.expectJSON(json) {
                 item(0, 12340..12350)
             }
-        }.let {
-            expect("/0: JSON value not in range 12340..12350 - 12355") { it.message }
         }
     }
 
@@ -252,12 +227,10 @@ class IntTest {
 
     @Test fun `should fail on incorrect Int array item in collection`() {
         val json = "[12344]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - 12344") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(12300, 12340, 12345, 12350))
             }
-        }.let {
-            expect("/0: JSON value not in collection - 12344") { it.message }
         }
     }
 
@@ -270,11 +243,11 @@ class IntTest {
 
     @Test fun `should fail on incorrect test that any item has Int value`() {
         val json = "[12345, 12346, 12347]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value 12350") {
             JSONExpect.expectJSON(json) {
                 anyItem(12350)
             }
-        }.let { expect("No JSON array item has value 12350") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has Int value - exhaustive`() {
@@ -290,14 +263,14 @@ class IntTest {
 
     @Test fun `should fail on incorrect test that any item has Int value - exhaustive`() {
         val json = "[12345, 12346, 12347, 12348]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON array items not tested: 0, 3") {
             JSONExpect.expectJSON(json) {
                 exhaustive {
                     anyItem(12347)
                     anyItem(12346)
                 }
             }
-        }.let { expect("JSON array items not tested: 0, 3") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has Int value in range`() {
@@ -309,11 +282,11 @@ class IntTest {
 
     @Test fun `should fail on incorrect test that any item has Int value in range`() {
         val json = """[12345, 12346, 12347]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value in given range - 12340..12344") {
             JSONExpect.expectJSON(json) {
                 anyItem(12340..12344)
             }
-        }.let { expect("No JSON array item has value in given range - 12340..12344") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has Int value in collection`() {
@@ -325,11 +298,11 @@ class IntTest {
 
     @Test fun `should fail on incorrect test that any item has Int value in collection`() {
         val json = """[12345, 12346, 12347]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value in given collection") {
             JSONExpect.expectJSON(json) {
                 anyItem(MiniSet.of(12340, 12342, 12348, 12350))
             }
-        }.let { expect("No JSON array item has value in given collection") { it.message } }
+        }
     }
 
 }

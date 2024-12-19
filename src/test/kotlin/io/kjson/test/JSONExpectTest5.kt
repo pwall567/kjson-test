@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest5.kt
  *
  * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021 Peter Wall
+ * Copyright (c) 2020, 2021, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,10 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
 
 import java.math.BigDecimal
+
+import io.kstuff.test.shouldThrow
 
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
@@ -52,12 +52,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of value as one of multiple possibilities`() {
         val json = "\"INCORRECT\""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is \"INCORRECT\"") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(42), test("NEVER"))
             }
         }
-        expect("No successful test - value is \"INCORRECT\"") { exception.message }
     }
 
     @Test fun `should test property as one of multiple possibilities`() {
@@ -83,14 +82,13 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of property as one of multiple possibilities`() {
         val json = """{"abc":"INCORRECT"}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: No successful test - value is \"INCORRECT\"") {
             expectJSON(json) {
                 property("abc") {
                     oneOf(isLocalDate, test(42), test("NEVER"))
                 }
             }
         }
-        expect("/abc: No successful test - value is \"INCORRECT\"") { exception.message }
     }
 
     @Test fun `should test array item as one of multiple possibilities`() {
@@ -116,14 +114,13 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of array item as one of multiple possibilities`() {
         val json = "[\"INCORRECT\"]"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: No successful test - value is \"INCORRECT\"") {
             expectJSON(json) {
                 item(0) {
                     oneOf(isLocalDate, test(42), test("NEVER"))
                 }
             }
         }
-        expect("/0: No successful test - value is \"INCORRECT\"") { exception.message }
     }
 
     @Test fun `should include long check as one of multiple possibilities`() {
@@ -135,12 +132,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of long check as one of multiple possibilities`() {
         val json = "0"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is 0") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(2233445566778899), test("NEVER"))
             }
         }
-        expect("No successful test - value is 0") { exception.message }
     }
 
     @Test fun `should include decimal check as one of multiple possibilities`() {
@@ -152,12 +148,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of decimal check as one of multiple possibilities`() {
         val json = "0.5"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is 0.5") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(BigDecimal("1.5")), test("NEVER"))
             }
         }
-        expect("No successful test - value is 0.5") { exception.message }
     }
 
     @Test fun `should include boolean check as one of multiple possibilities`() {
@@ -169,12 +164,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of boolean check as one of multiple possibilities`() {
         val json = "false"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is false") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(true), test("NEVER"))
             }
         }
-        expect("No successful test - value is false") { exception.message }
     }
 
     @Test fun `should include null check as one of multiple possibilities`() {
@@ -186,12 +180,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of null check as one of multiple possibilities`() {
         val json = "0"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is 0") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(null), test("NEVER"))
             }
         }
-        expect("No successful test - value is 0") { exception.message }
     }
 
     @Test fun `should include Regex check as one of multiple possibilities`() {
@@ -203,12 +196,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of Regex check as one of multiple possibilities`() {
         val json = "\"0\""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is \"0\"") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(Regex("^[a-z]+$")), test("NEVER"))
             }
         }
-        expect("No successful test - value is \"0\"") { exception.message }
     }
 
     @Test fun `should include int range check as one of multiple possibilities`() {
@@ -220,12 +212,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of int range check as one of multiple possibilities`() {
         val json = "51"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is 51") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(0..50), test("NEVER"))
             }
         }
-        expect("No successful test - value is 51") { exception.message }
     }
 
     @Test fun `should include long range check as one of multiple possibilities`() {
@@ -237,12 +228,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of long range check as one of multiple possibilities`() {
         val json = "1122334455667799"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is 1122334455667799") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(0..1122334455667788), test("NEVER"))
             }
         }
-        expect("No successful test - value is 1122334455667799") { exception.message }
     }
 
     @Test fun `should include decimal range check as one of multiple possibilities`() {
@@ -254,12 +244,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of decimal range check as one of multiple`() {
         val json = "-2.5"
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is -2.5") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(BigDecimal.ZERO..BigDecimal("10.0")), test("NEVER"))
             }
         }
-        expect("No successful test - value is -2.5") { exception.message }
     }
 
     @Test fun `should include string range check as one of multiple possibilities`() {
@@ -271,12 +260,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of string range check as one of multiple possibilities`() {
         val json = "\"AAA\""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is \"AAA\"") {
             expectJSON(json) {
                 oneOf(isLocalDate, test("aaa".."zzz"), test("NEVER"))
             }
         }
-        expect("No successful test - value is \"AAA\"") { exception.message }
     }
 
     @Test fun `should include string collection check as one of multiple possibilities`() {
@@ -288,12 +276,11 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of string collection check as one of multiple`() {
         val json = "\"delta\""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is \"delta\"") {
             expectJSON(json) {
                 oneOf(isLocalDate, test(setOf("alpha", "beta", "gamma")), test("NEVER"))
             }
         }
-        expect("No successful test - value is \"delta\"") { exception.message }
     }
 
     @Test fun `should test complex combinations of multiple possibilities`() {
@@ -317,7 +304,7 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of complex combinations of multiple possibilities`() {
         val json = """{"data":28}"""
-        val exception = assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No successful test - value is {...}") {
             expectJSON(json) {
                 oneOf({
                     property("data", 27)
@@ -326,7 +313,6 @@ class JSONExpectTest5 {
                 })
             }
         }
-        expect("No successful test - value is {...}") { exception.message }
     }
 
 }

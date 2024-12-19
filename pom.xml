@@ -5,7 +5,7 @@
 
   <groupId>io.kjson</groupId>
   <artifactId>kjson-test</artifactId>
-  <version>4.0</version>
+  <version>4.1</version>
   <name>Library for testing Kotlin JSON applications</name>
   <description>Kotlin classes for testing JSON applications.</description>
   <packaging>jar</packaging>
@@ -65,7 +65,7 @@
     <dependency>
       <groupId>net.pwall.json</groupId>
       <artifactId>json-validation</artifactId>
-      <version>2.0</version>
+      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>net.pwall.util</groupId>
@@ -88,6 +88,12 @@
       <version>${kotlin.version}</version>
     </dependency>
     <dependency>
+      <groupId>io.kstuff</groupId>
+      <artifactId>should-test</artifactId>
+      <version>4.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-test-junit</artifactId>
       <version>${kotlin.version}</version>
@@ -104,7 +110,7 @@
         <artifactId>kotlin-maven-plugin</artifactId>
         <version>${kotlin.version}</version>
         <configuration>
-          <jvmTarget>1.8</jvmTarget>
+          <jvmTarget>${java.version}</jvmTarget>
           <languageVersion>1.9</languageVersion>
           <apiVersion>1.9</apiVersion>
         </configuration>

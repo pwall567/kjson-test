@@ -2,7 +2,7 @@
  * @(#) Lambda.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022 Peter Wall
+ * Copyright (c) 2022, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -98,28 +98,43 @@ val JSONExpect.isBoolean: JSONExpect.() -> Unit
 val JSONExpect.isUUID: JSONExpect.() -> Unit
     get() = {
         if (!JSONValidation.isUUID(nodeAsString))
-            error("JSON string is not a UUID - ${showNode()}")
+            errorOnStringFormat("UUID")
     }
 
 /** Check that a string value is a valid [LocalDate]. */
 val JSONExpect.isLocalDate: JSONExpect.() -> Unit
-    get() = { nodeAsLocalDate }
+    get() = {
+        if (!JSONValidation.isDate(nodeAsString))
+            errorOnStringFormat("LocalDate")
+    }
 
 /** Check that a string value is a valid [LocalDateTime]. */
 val JSONExpect.isLocalDateTime: JSONExpect.() -> Unit
-    get() = { nodeAsLocalDateTime }
+    get() = {
+        if (!JSONValidation.isLocalDateTime(nodeAsString))
+            errorOnStringFormat("LocalDateTime")
+    }
 
 /** Check that a string value is a valid [LocalTime]. */
 val JSONExpect.isLocalTime: JSONExpect.() -> Unit
-    get() = { nodeAsLocalTime }
+    get() = {
+        if (!JSONValidation.isLocalTime(nodeAsString))
+            errorOnStringFormat("LocalTime")
+    }
 
 /** Check that a string value is a valid [OffsetDateTime]. */
 val JSONExpect.isOffsetDateTime: JSONExpect.() -> Unit
-    get() = { nodeAsOffsetDateTime }
+    get() = {
+        if (!JSONValidation.isDateTime(nodeAsString))
+            errorOnStringFormat("OffsetDateTime")
+    }
 
 /** Check that a string value is a valid [OffsetTime]. */
 val JSONExpect.isOffsetTime: JSONExpect.() -> Unit
-    get() = { nodeAsOffsetTime }
+    get() = {
+        if (!JSONValidation.isTime(nodeAsString))
+            errorOnStringFormat("OffsetTime")
+    }
 
 /** Check that a string value is a valid [ZonedDateTime]. */
 val JSONExpect.isZonedDateTime: JSONExpect.() -> Unit
@@ -166,11 +181,29 @@ val JSONExpect.isEmptyArray: JSONExpect.() -> Unit
         }
     }
 
+/** Check that a value is a non-empty array. */
+val JSONExpect.isNonEmptyArray: JSONExpect.() -> Unit
+    get() = {
+        nodeAsArray.let {
+            if (it.isEmpty())
+                error("JSON array is empty")
+        }
+    }
+
 /** Check that a value is an empty object. */
 val JSONExpect.isEmptyObject: JSONExpect.() -> Unit
     get() = {
         nodeAsObject.let {
             if (it.isNotEmpty())
                 error("JSON object is not empty - size ${it.size}")
+        }
+    }
+
+/** Check that a value is a non-empty object. */
+val JSONExpect.isNonEmptyObject: JSONExpect.() -> Unit
+    get() = {
+        nodeAsObject.let {
+            if (it.isEmpty())
+                error("JSON object is empty")
         }
     }

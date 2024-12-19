@@ -2,7 +2,7 @@
  * @(#) UUIDTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
 
 import java.util.UUID
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -39,19 +39,25 @@ class UUIDTest {
     @Test fun `should read nodeAsUUID`() {
         val json = "\"ea986c80-ed1d-11ec-a20b-a7e136265750\""
         JSONExpect.expectJSON(json) {
-            if (nodeAsUUID != uuid0)
-                fail()
+            nodeAsUUID shouldBe uuid0
         }
     }
 
     @Test fun `should fail on invalid nodeAsUUID`() {
         val json = "\"not a UUID\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON string is not a UUID - \"not a UUID\"") {
             JSONExpect.expectJSON(json) {
                 nodeAsUUID
             }
-        }.let {
-            expect("JSON string is not a UUID - \"not a UUID\"") { it.message }
+        }
+    }
+
+    @Test fun `should fail on invalid nodeAsUUID - number too short`() {
+        val json = "\"ea986c80-ed1d-11ec-a20b-a7e13626575\""
+        shouldThrow<AssertionError>("JSON string is not a UUID - \"ea986c80-ed1d-11ec-a20b-a7e13626575\"") {
+            JSONExpect.expectJSON(json) {
+                nodeAsUUID
+            }
         }
     }
 
@@ -64,13 +70,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID value`() {
         val json = "\"ea986c80-ed1d-11ec-a20b-a7e136265750\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected \"ea986c80-ed1d-11ec-a20b-a7e136265751\"," +
+                " was \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 value(uuid1)
             }
-        }.let {
-            expect("JSON value doesn't match - expected \"ea986c80-ed1d-11ec-a20b-a7e136265751\"," +
-                    " was \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -83,13 +87,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID property`() {
         val json = """{"abc":"ea986c80-ed1d-11ec-a20b-a7e136265750"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected " +
+                "\"ea986c80-ed1d-11ec-a20b-a7e136265751\", was \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", uuid1)
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected \"ea986c80-ed1d-11ec-a20b-a7e136265751\"," +
-                    " was \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -102,13 +104,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID array item`() {
         val json = """["ea986c80-ed1d-11ec-a20b-a7e136265750"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected " +
+                "\"ea986c80-ed1d-11ec-a20b-a7e136265751\", was \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 item(0, uuid1)
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected \"ea986c80-ed1d-11ec-a20b-a7e136265751\"," +
-                    " was \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -121,14 +121,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID value in range`() {
         val json = "\"ea986c80-ed1d-11ec-a20b-a7e136265750\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range \"ea986c80-ed1d-11ec-a20b-a7e136265751\".." +
+                "\"ea986c80-ed1d-11ec-a20b-a7e136265752\" - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 value(uuid1..uuid2)
             }
-        }.let {
-            expect("JSON value not in range \"ea986c80-ed1d-11ec-a20b-a7e136265751\".." +
-                    "\"ea986c80-ed1d-11ec-a20b-a7e136265752\" - " +
-                    "\"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -141,14 +138,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID property in range`() {
         val json = """{"abc":"ea986c80-ed1d-11ec-a20b-a7e136265750"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range \"ea986c80-ed1d-11ec-a20b-a7e136265751\".." +
+                "\"ea986c80-ed1d-11ec-a20b-a7e136265752\" - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", uuid1..uuid2)
             }
-        }.let {
-            expect("/abc: JSON value not in range \"ea986c80-ed1d-11ec-a20b-a7e136265751\".." +
-                    "\"ea986c80-ed1d-11ec-a20b-a7e136265752\" - " +
-                    "\"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -161,14 +155,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID array item in range`() {
         val json = "[\"ea986c80-ed1d-11ec-a20b-a7e136265750\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range \"ea986c80-ed1d-11ec-a20b-a7e136265751\".." +
+                "\"ea986c80-ed1d-11ec-a20b-a7e136265752\" - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 item(0, uuid1..uuid2)
             }
-        }.let {
-            expect("/0: JSON value not in range \"ea986c80-ed1d-11ec-a20b-a7e136265751\".." +
-                    "\"ea986c80-ed1d-11ec-a20b-a7e136265752\" - " +
-                    "\"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -181,12 +172,10 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID value in collection`() {
         val json = "\"ea986c80-ed1d-11ec-a20b-a7e136265750\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(uuid1, uuid2))
             }
-        }.let {
-            expect("JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -199,12 +188,10 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID property in collection`() {
         val json = """{"abc":"ea986c80-ed1d-11ec-a20b-a7e136265750"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(uuid1, uuid2))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -217,12 +204,10 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect UUID array item in collection`() {
         val json = "[\"ea986c80-ed1d-11ec-a20b-a7e136265750\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(uuid1, uuid2))
             }
-        }.let {
-            expect("/0: JSON value not in collection - \"ea986c80-ed1d-11ec-a20b-a7e136265750\"") { it.message }
         }
     }
 
@@ -235,11 +220,11 @@ class UUIDTest {
 
     @Test fun `should fail on incorrect test that any item has UUID value`() {
         val json = """["$uuid0","$uuid1"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"$uuid2\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(uuid2)
             }
-        }.let { expect("No JSON array item has value \"$uuid2\"") { it.message } }
+        }
     }
 
     companion object {

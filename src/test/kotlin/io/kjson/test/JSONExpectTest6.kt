@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest6.kt
  *
  * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,8 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
 
-import java.math.BigDecimal
+import io.kstuff.test.shouldThrow
 
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
@@ -55,25 +53,25 @@ class JSONExpectTest6 {
 
     @Test fun `should fail when not all object properties tested`() {
         val json = """{"abc":1,"def":2,"ghi":3}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON object property not tested: ghi") {
             expectJSON(json) {
                 exhaustive {
                     property("abc", 1)
                     property("def", 2)
                 }
             }
-        }.let { expect("JSON object property not tested: ghi") { it.message } }
+        }
     }
 
     @Test fun `should fail when multiple object properties not tested`() {
         val json = """{"abc":1,"def":2,"ghi":3}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON object properties not tested: def, ghi") {
             expectJSON(json) {
                 exhaustive {
                     property("abc", 1)
                 }
             }
-        }.let { expect("JSON object properties not tested: def, ghi") { it.message } }
+        }
     }
 
     @Test fun `should check all array items tested`() {
@@ -96,36 +94,36 @@ class JSONExpectTest6 {
 
     @Test fun `should fail when not all array items tested`() {
         val json = """[111,222,333]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON array item not tested: 2") {
             expectJSON(json) {
                 exhaustive {
                     item(0, 111)
                     item(1, 222)
                 }
             }
-        }.let { expect("JSON array item not tested: 2") { it.message } }
+        }
     }
 
     @Test fun `should fail when multiple array items not tested`() {
         val json = """[111,222,333]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON array items not tested: 1, 2") {
             expectJSON(json) {
                 exhaustive {
                     item(0, 111)
                 }
             }
-        }.let { expect("JSON array items not tested: 1, 2") { it.message } }
+        }
     }
 
     @Test fun `should fail when exhaustive check attempted on incorrect type`() {
         val json = """{"aaa":123}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/aaa: JSON type doesn't match - expected object or array, was integer") {
             expectJSON(json) {
                 property("aaa") {
                     exhaustive {}
                 }
             }
-        }.let { expect("/aaa: JSON type doesn't match - expected object or array, was integer") { it.message } }
+        }
     }
 
     @Test fun `should test that any item of nested array has integer value`() {
@@ -139,13 +137,13 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item of nested array has integer value`() {
         val json = """{"aaa":[7,8,9]}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/aaa: No JSON array item has value 6") {
             expectJSON(json) {
                 property("aaa") {
                     anyItem(6)
                 }
             }
-        }.let { expect("/aaa: No JSON array item has value 6") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has boolean value`() {
@@ -157,11 +155,11 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item has boolean value`() {
         val json = "[false,false,false]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value true") {
             expectJSON(json) {
                 anyItem(true)
             }
-        }.let { expect("No JSON array item has value true") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has string value`() {
@@ -173,11 +171,11 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item has string value`() {
         val json = """["alpha","beta","gamma"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"delta\"") {
             expectJSON(json) {
                 anyItem("delta")
             }
-        }.let { expect("No JSON array item has value \"delta\"") { it.message } }
+        }
     }
 
     @Test fun `should test that any item matches a Regex`() {
@@ -189,11 +187,11 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item matches a Regex`() {
         val json = """["alpha","beta","gamma"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value matching given Regex - ^[0-9]+\$") {
             expectJSON(json) {
                 anyItem(Regex("^[0-9]+$"))
             }
-        }.let { expect("No JSON array item has value matching given Regex - ^[0-9]+\$") { it.message } }
+        }
     }
 
     @Test fun `should test that any item is in a Collection`() {
@@ -205,11 +203,11 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item is in a Collection`() {
         val json = """["alpha","beta","gamma"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value in given collection") {
             expectJSON(json) {
                 anyItem(setOf("delta", "mu", "omega"))
             }
-        }.let { expect("No JSON array item has value in given collection") { it.message } }
+        }
     }
 
     @Test fun `should test that any item has complex value`() {
@@ -223,13 +221,13 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item has complex value`() {
         val json = """[{"a":1},{"b":2}]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value matching given tests") {
             expectJSON(json) {
                 anyItem {
                     property("a", 2)
                 }
             }
-        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+        }
     }
 
     @Test fun `should test that any item is an object with further tests`() {
@@ -243,13 +241,13 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item is an object with further tests`() {
         val json = """[{"a":1},{"b":2}]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value matching given tests") {
             expectJSON(json) {
                 anyItemIsObject {
                     property("a", 2)
                 }
             }
-        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+        }
     }
 
     @Test fun `should test that any item is an array with further tests`() {
@@ -264,13 +262,13 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item is an array with further tests`() {
         val json = "[[1,2],[3,4]]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value matching given tests") {
             expectJSON(json) {
                 anyItemIsArray {
                     item(0, 4)
                 }
             }
-        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+        }
     }
 
     @Test fun `should test that any item is an array of a given size with further tests`() {
@@ -285,11 +283,11 @@ class JSONExpectTest6 {
 
     @Test fun `should fail on incorrect test that any item is an array of a given size`() {
         val json = "[[1,2],[3,4]]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value matching given tests") {
             expectJSON(json) {
                 anyItemIsArray(3)
             }
-        }.let { expect("No JSON array item has value matching given tests") { it.message } }
+        }
     }
 
 }

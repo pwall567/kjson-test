@@ -2,7 +2,7 @@
  * @(#) LocalDateTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023 Peter Wall
+ * Copyright (c) 2022, 2023, 2024 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@
 package io.kjson.test
 
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.expect
-import kotlin.test.fail
 
 import java.time.LocalDate
+
+import io.kstuff.test.shouldBe
+import io.kstuff.test.shouldThrow
 
 import net.pwall.util.MiniSet
 
@@ -39,19 +39,16 @@ class LocalDateTest {
     @Test fun `should read nodeAsLocalDate`() {
         val json = "\"2022-06-15\""
         JSONExpect.expectJSON(json) {
-            if (nodeAsLocalDate != LocalDate.of(2022, 6, 15))
-                fail()
+            nodeAsLocalDate shouldBe LocalDate.of(2022, 6, 15)
         }
     }
 
     @Test fun `should fail on invalid nodeAsLocalDate`() {
         val json = "\"not a LocalDate\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON string is not a LocalDate - \"not a LocalDate\"") {
             JSONExpect.expectJSON(json) {
                 nodeAsLocalDate
             }
-        }.let {
-            expect("JSON string is not a LocalDate - \"not a LocalDate\"") { it.message }
         }
     }
 
@@ -64,12 +61,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate value`() {
         val json = "\"2022-06-14\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value doesn't match - expected \"2022-06-15\", was \"2022-06-14\"") {
             JSONExpect.expectJSON(json) {
                 value(LocalDate.of(2022, 6, 15))
             }
-        }.let {
-            expect("JSON value doesn't match - expected \"2022-06-15\", was \"2022-06-14\"") { it.message }
         }
     }
 
@@ -82,12 +77,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate value in range`() {
         val json = "\"2022-06-15\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in range \"2022-06-16\"..\"2022-06-18\" - \"2022-06-15\"") {
             JSONExpect.expectJSON(json) {
                 value(LocalDate.of(2022, 6, 16)..LocalDate.of(2022, 6, 18))
             }
-        }.let {
-            expect("JSON value not in range \"2022-06-16\"..\"2022-06-18\" - \"2022-06-15\"") { it.message }
         }
     }
 
@@ -100,12 +93,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate value in collection`() {
         val json = "\"2022-06-15\""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("JSON value not in collection - \"2022-06-15\"") {
             JSONExpect.expectJSON(json) {
                 value(MiniSet.of(LocalDate.of(2022, 6, 14), LocalDate.of(2022, 6, 16)))
             }
-        }.let {
-            expect("JSON value not in collection - \"2022-06-15\"") { it.message }
         }
     }
 
@@ -118,12 +109,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate property`() {
         val json = """{"abc":"2022-06-14"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value doesn't match - expected \"2022-06-15\", was \"2022-06-14\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", LocalDate.of(2022, 6, 15))
             }
-        }.let {
-            expect("/abc: JSON value doesn't match - expected \"2022-06-15\", was \"2022-06-14\"") { it.message }
         }
     }
 
@@ -136,12 +125,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate property in range`() {
         val json = """{"abc":"2022-06-15"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in range \"2022-06-16\"..\"2022-06-18\" - \"2022-06-15\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", LocalDate.of(2022, 6, 16)..LocalDate.of(2022, 6, 18))
             }
-        }.let {
-            expect("/abc: JSON value not in range \"2022-06-16\"..\"2022-06-18\" - \"2022-06-15\"") { it.message }
         }
     }
 
@@ -154,12 +141,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate property in collection`() {
         val json = """{"abc":"2022-06-15"}"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/abc: JSON value not in collection - \"2022-06-15\"") {
             JSONExpect.expectJSON(json) {
                 property("abc", MiniSet.of(LocalDate.of(2022, 6, 14), LocalDate.of(2022, 6, 16)))
             }
-        }.let {
-            expect("/abc: JSON value not in collection - \"2022-06-15\"") { it.message }
         }
     }
 
@@ -172,12 +157,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate array item`() {
         val json = """["2022-06-14"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value doesn't match - expected \"2022-06-15\", was \"2022-06-14\"") {
             JSONExpect.expectJSON(json) {
                 item(0, LocalDate.of(2022, 6, 15))
             }
-        }.let {
-            expect("/0: JSON value doesn't match - expected \"2022-06-15\", was \"2022-06-14\"") { it.message }
         }
     }
 
@@ -190,12 +173,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate array item in range`() {
         val json = "[\"2022-06-15\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in range \"2022-06-16\"..\"2022-06-18\" - \"2022-06-15\"") {
             JSONExpect.expectJSON(json) {
                 item(0, LocalDate.of(2022, 6, 16)..LocalDate.of(2022, 6, 18))
             }
-        }.let {
-            expect("/0: JSON value not in range \"2022-06-16\"..\"2022-06-18\" - \"2022-06-15\"") { it.message }
         }
     }
 
@@ -208,12 +189,10 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect LocalDate array item in collection`() {
         val json = "[\"2022-06-15\"]"
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("/0: JSON value not in collection - \"2022-06-15\"") {
             JSONExpect.expectJSON(json) {
                 item(0, MiniSet.of(LocalDate.of(2022, 6, 14), LocalDate.of(2022, 6, 16)))
             }
-        }.let {
-            expect("/0: JSON value not in collection - \"2022-06-15\"") { it.message }
         }
     }
 
@@ -226,11 +205,11 @@ class LocalDateTest {
 
     @Test fun `should fail on incorrect test that any item has LocalDate value`() {
         val json = """["2023-09-18","2023-09-19","2023-09-20"]"""
-        assertFailsWith<AssertionError> {
+        shouldThrow<AssertionError>("No JSON array item has value \"2023-09-21\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(LocalDate.of(2023, 9, 21))
             }
-        }.let { expect("No JSON array item has value \"2023-09-21\"") { it.message } }
+        }
     }
 
 }

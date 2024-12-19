@@ -43,9 +43,11 @@ import java.time.YearMonth
 import java.time.ZonedDateTime
 import java.util.BitSet
 import java.util.UUID
+import io.kjson.test.JSONExpect.Companion.expectJSON
 
 import net.pwall.json.JSONFunctions
 import net.pwall.json.JSONSimple
+import net.pwall.json.validation.JSONValidation
 import net.pwall.util.DateOutput
 
 /**
@@ -104,119 +106,83 @@ class JSONExpect private constructor(
 
     /** The context node as [LocalDate]. */
     val nodeAsLocalDate: LocalDate
-        get() = try {
+        get() = tryConvert("LocalDate") {
             LocalDate.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a LocalDate - ${showNode()}")
         }
 
     /** The context node as [LocalDateTime]. */
     val nodeAsLocalDateTime: LocalDateTime
-        get() = try {
+        get() = tryConvert("LocalDateTime") {
             LocalDateTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a LocalDateTime - ${showNode()}")
         }
 
     /** The context node as [LocalTime]. */
     val nodeAsLocalTime: LocalTime
-        get() = try {
+        get() = tryConvert("LocalTime") {
             LocalTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a LocalTime - ${showNode()}")
         }
 
     /** The context node as [OffsetDateTime]. */
     val nodeAsOffsetDateTime: OffsetDateTime
-        get() = try {
+        get() = tryConvert("OffsetDateTime") {
             OffsetDateTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not an OffsetDateTime - ${showNode()}")
         }
 
     /** The context node as [OffsetTime]. */
     val nodeAsOffsetTime: OffsetTime
-        get() = try {
+        get() = tryConvert("OffsetTime") {
             OffsetTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not an OffsetTime - ${showNode()}")
         }
 
     /** The context node as [ZonedDateTime]. */
     val nodeAsZonedDateTime: ZonedDateTime
-        get() = try {
+        get() = tryConvert("ZonedDateTime") {
             ZonedDateTime.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a ZonedDateTime - ${showNode()}")
         }
 
     /** The context node as [YearMonth]. */
     val nodeAsYearMonth: YearMonth
-        get() = try {
+        get() = tryConvert("YearMonth") {
             YearMonth.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a YearMonth - ${showNode()}")
         }
 
     /** The context node as [MonthDay]. */
     val nodeAsMonthDay: MonthDay
-        get() = try {
+        get() = tryConvert("MonthDay") {
             MonthDay.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a MonthDay - ${showNode()}")
         }
 
     /** The context node as [Year]. */
     val nodeAsYear: Year
-        get() = try {
+        get() = tryConvert("Year") {
             Year.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Year - ${showNode()}")
         }
 
     /** The context node as [JavaDuration]. */
     val nodeAsJavaDuration: JavaDuration
-        get() = try {
+        get() = tryConvert("Java Duration") {
             JavaDuration.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Java Duration - ${showNode()}")
         }
 
     /** The context node as [Period]. */
     val nodeAsPeriod: Period
-        get() = try {
+        get() = tryConvert("Period") {
             Period.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Period - ${showNode()}")
         }
 
     /** The context node as [Duration]. */
     val nodeAsDuration: Duration
-        get() = try {
+        get() = tryConvert("Duration") {
             Duration.parse(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a Duration - ${showNode()}")
         }
 
     /** The context node as [UUID]. */
     val nodeAsUUID: UUID
-        get() = try {
-            UUID.fromString(nodeAsString)
-        }
-        catch (_: Exception) {
-            error("JSON string is not a UUID - ${showNode()}")
+        get() = nodeAsString.let {
+            if (JSONValidation.isUUID(it))
+                UUID.fromString(it)
+            else
+                errorOnStringFormat("UUID")
         }
 
     /* ====================================== value tests ====================================== */
@@ -1760,6 +1726,26 @@ class JSONExpect private constructor(
         error("JSON type doesn't match - expected $expected, was $type")
     }
 
+    private fun <T : Any> tryConvert(name: String, conversion: () -> T): T = try {
+        conversion()
+    } catch (_: Exception) {
+        errorOnStringFormat(name)
+    }
+
+    internal fun errorOnStringFormat(expected: String): Nothing {
+        error(
+            buildString {
+                append("JSON string is not a")
+                if (expected[0] == 'O') // use "an" for OffsetTime and OffsetDateTime, extend this if needed
+                    append('n')
+                append(' ')
+                append(expected)
+                append(" - ")
+                append(showNode())
+            }
+        )
+    }
+
     private fun errorInCollection() {
         error("JSON value not in collection - ${showNode()}")
     }
@@ -1824,4 +1810,11 @@ class JSONExpect private constructor(
 
     }
 
+}
+
+/**
+ * Test a JSON string against a set of validations.
+ */
+infix fun String.shouldMatchJSON(tests: JSONExpect.() -> Unit) {
+    expectJSON(this, tests)
 }

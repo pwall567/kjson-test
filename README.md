@@ -152,6 +152,14 @@ This parses the JSON into an internal form and then performs the tests in the su
     }
 ```
 
+Or, from version 4.1 onwards, the following syntax does exactly the same, but fits in better with the `shouldXXXX` idiom
+of the [`should-test`](https://github.com/pwall567/should-test) library:
+```kotlin
+    stringToBeTested shouldMatchJSON {
+        // tests...
+    }
+```
+
 If any of the tests fail, an `AssertionError` will be thrown with a detailed error message, usually including expected
 and actual values.
 The message will in most cases be prefixed by the location of the node in error in
@@ -284,8 +292,8 @@ the `kjson-test` library converts all such numbers to `BigDecimal`.
 This means that tests on floating point numbers must use `BigDecimal`, or `ClosedRange<BigDecimal>`, or
 `Collection<BigDecimal>`.
 
-If a comparison using a `BigDecimal` is performed against an `Int` or a `Long`, the value will be "widened" to
-`BigDecimal` before the test is performed.
+If a comparison using a `BigDecimal` is performed against an `Int` or a `Long`, the value will be &ldquo;widened&rdquo;
+to `BigDecimal` before the test is performed.
 
 One unusual feature of the `BigDecimal` class is that the `equals` comparison requires that both the value and the scale
 of the number must be equal, but this library uses `compareTo` to compare the values regardless of scale.
@@ -488,6 +496,12 @@ import io.kjson.test.JSONExpect.Companion.expectJSON
 If the IDE is configured to include the `kjson-test` library, it will often include the `import` automatically when you
 enter the name of the test function.
 
+From version 4.1 onwards the `shouldMatchJSON` infix function offers a more attractive syntax, as well as a simpler
+import:
+```kotlin
+import io.kjson.test.shouldMatchJSON
+```
+
 ### `expectJSON`
 
 The `expectJSON` function introduces the set of tests to be performed on the JSON.
@@ -498,6 +512,21 @@ It takes two parameters:
 Example:
 ```kotlin
     expectJSON(stringOfJSON) {
+        property("data") {
+            // tests ...
+        }
+    }
+```
+
+### `shouldMatchJSON`
+
+The `shouldMatchJSON` infix function does exactly the same as `expectJSON`, but uses the more attractive `shouldXXXX`
+syntax.
+The LHS argument is the `String` containing the JSON to be examined, while the RHS is the lambda containing the tests.
+
+Example:
+```kotlin
+    stringOfJSON shouldMatchJSON {
         property("data") {
             // tests ...
         }
@@ -982,16 +1011,16 @@ Examples:
 
 In custom tests the current node can be accessed by one of the following:
 
-| `val` name      | Type         |
-|-----------------|--------------|
-| `node`          | `Any?`       |
-| `nodeAsString`  | `String`     |
-| `nodeAsInt`     | `Int`        |
-| `nodeAsLong`    | `Long`       |
-| `nodeAsDecimal` | `BigDecimal` |
-| `nodeAsBoolean` | `Boolean`    |
-| `nodeAsObject`  | `Map<*, *>`  |
-| `nodeAsArray`   | `List<*>`    |
+| `val` name      | Type         | Notes                                                                |
+|-----------------|--------------|----------------------------------------------------------------------|
+| `node`          | `Any?`       |                                                                      |
+| `nodeAsString`  | `String`     |                                                                      |
+| `nodeAsInt`     | `Int`        |                                                                      |
+| `nodeAsLong`    | `Long`       | An `Int` will be accepted and returned as a `Long`                   |
+| `nodeAsDecimal` | `BigDecimal` | An `Int` or a `Long` will be accepted and returned as a `BigDecimal` |
+| `nodeAsBoolean` | `Boolean`    |                                                                      |
+| `nodeAsObject`  | `Map<*, *>`  |                                                                      |
+| `nodeAsArray`   | `List<*>`    |                                                                      |
 
 If the node as not of the required type, an `AssertionError` will be thrown.
 
@@ -1012,39 +1041,45 @@ These are all functions with the signature `JSONExpect.() -> Unit`, and they may
 [`property`](#property), [`item`](#item) or [`value`](#value) functions that takes a lambda parameter.
 They are useful when only the general nature of the value is to be tested, and the actual value is not important.
 
-| Name               | Tests that the value is...                                     |
-|--------------------|----------------------------------------------------------------|
-| `isNull`           | ...null                                                        |
-| `isNonNull`        | ...non-null                                                    |
-| `isObject`         | ...an object                                                   |
-| `isEmptyObject`    | ...an empty object (an object with no properties)              |
-| `isArray`          | ...an array                                                    |
-| `isEmptyArray`     | ...an empty array                                              |
-| `isString`         | ...a `String`                                                  |
-| `isInteger`        | ...an `Int`                                                    |
-| `isLongInteger`    | ...a `Long`                                                    |
-| `isDecimal`        | ...a `BigDecimal` (a number with an optional decimal fraction) |
-| `isUUID`           | ...a `String` containing a valid UUID                          |
-| `isLocalDate`      | ...a `String` containing a valid `LocalDate`                   |
-| `isLocalDateTime`  | ...a `String` containing a valid `LocalDateTime`               |
-| `isLocalTime`      | ...a `String` containing a valid `LocalTime`                   |
-| `isOffsetDateTime` | ...a `String` containing a valid `OffsetDateTime`              |
-| `isOffsetTime`     | ...a `String` containing a valid `OffsetTime`                  |
-| `isZonedDateTime`  | ...a `String` containing a valid `ZonedDateTime`               |
-| `isYear`           | ...a `String` containing a valid `Year`                        |
-| `isYearMonth`      | ...a `String` containing a valid `YearMonth`                   |
-| `isMonthDay`       | ...a `String` containing a valid `MonthDay`                    |
-| `isJavaDuration`   | ...a `String` containing a valid `java.time.Duration`          |
-| `isPeriod`         | ...a `String` containing a valid `Period`                      |
-| `isDuration`       | ...a `String` containing a valid `kotlin.time.Duration`        |
+| Name               | Tests that the value is...                                                                    |
+|--------------------|-----------------------------------------------------------------------------------------------|
+| `isNull`           | ...null                                                                                       |
+| `isNonNull`        | ...non-null                                                                                   |
+| `isObject`         | ...an object                                                                                  |
+| `isEmptyObject`    | ...an empty object (an object with no properties)                                             |
+| `isNonEmptyObject` | ...a non-empty object (an object with at least one property)                                  |
+| `isArray`          | ...an array                                                                                   |
+| `isEmptyArray`     | ...an empty array                                                                             |
+| `isNonEmptyArray`  | ...a non-empty array                                                                          |
+| `isString`         | ...a `String`                                                                                 |
+| `isInteger`        | ...an `Int`                                                                                   |
+| `isLongInteger`    | ...a `Long` (see <sup>1</sup> below)                                                          |
+| `isDecimal`        | ...a `BigDecimal` (a number with an optional decimal fraction &ndash; see <sup>1</sup> below) |
+| `isUUID`           | ...a `String` containing a valid UUID (see <sup>2</sup> below)                                |
+| `isLocalDate`      | ...a `String` containing a valid `LocalDate`                                                  |
+| `isLocalDateTime`  | ...a `String` containing a valid `LocalDateTime`                                              |
+| `isLocalTime`      | ...a `String` containing a valid `LocalTime`                                                  |
+| `isOffsetDateTime` | ...a `String` containing a valid `OffsetDateTime`                                             |
+| `isOffsetTime`     | ...a `String` containing a valid `OffsetTime`                                                 |
+| `isZonedDateTime`  | ...a `String` containing a valid `ZonedDateTime`                                              |
+| `isYear`           | ...a `String` containing a valid `Year`                                                       |
+| `isYearMonth`      | ...a `String` containing a valid `YearMonth`                                                  |
+| `isMonthDay`       | ...a `String` containing a valid `MonthDay`                                                   |
+| `isJavaDuration`   | ...a `String` containing a valid `java.time.Duration`                                         |
+| `isPeriod`         | ...a `String` containing a valid `Period`                                                     |
+| `isDuration`       | ...a `String` containing a valid `kotlin.time.Duration`                                       |
 
-Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the `isLongInteger` test
-passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the value is `Int` or `Long` or `BigDecimal`.
+<sup>1</sup> Consistent with the widening of numbers in the tests against `Long` and `BigDecimal` values, the
+`isLongInteger` test passes if the value is `Int` or `Long`, and the `isDecimal` test passes if the value is `Int` or
+`Long` or `BigDecimal`.
 
+<sup>2</sup> The Java `UUID.fromString()` function does not check that a UUID is valid &ndash; it allows the five blocks
+of hexadecimal digits to be shorter or longer than their expected lengths (8-4-4-4-12).
+The `isUUID` test performs a strict check of the lengths of the five blocks, as well as the content.
 
 ## Dependency Specification
 
-The latest version of the library is 4.0, and it may be obtained from the Maven Central repository.
+The latest version of the library is 4.1, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -1053,19 +1088,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>4.0</version>
+      <version>4.1</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:4.0'
+    testImplementation 'io.kjson:kjson-test:4.1'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:4.0")
+    testImplementation("io.kjson:kjson-test:4.1")
 ```
 
 Peter Wall
 
-2024-08-01
+2024-12-19
