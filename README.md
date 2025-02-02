@@ -1079,7 +1079,7 @@ The `isUUID` test performs a strict check of the lengths of the five blocks, as 
 
 ## Dependency Specification
 
-The latest version of the library is 4.2, and it may be obtained from the Maven Central repository.
+The latest version of the library is 4.3, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -1088,19 +1088,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>4.2</version>
+      <version>4.3</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:4.2'
+    testImplementation 'io.kjson:kjson-test:4.3'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:4.2")
+    testImplementation("io.kjson:kjson-test:4.3")
 ```
 
 Peter Wall
 
-2025-02-02
+2025-02-03

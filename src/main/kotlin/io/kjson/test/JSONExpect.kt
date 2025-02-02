@@ -44,9 +44,9 @@ import java.time.ZonedDateTime
 import java.util.BitSet
 import java.util.UUID
 
-import io.jstuff.java.validation.JSONValidation
 import io.jstuff.json.JSONFunctions
 import io.jstuff.json.JSONSimple
+import io.jstuff.json.validation.JSONValidation
 import io.jstuff.util.DateOutput
 
 import io.kjson.test.JSONExpect.Companion.expectJSON
