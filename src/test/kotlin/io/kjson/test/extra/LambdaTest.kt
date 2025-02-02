@@ -26,6 +26,7 @@
 package io.kjson.test.extra
 
 import kotlin.test.Test
+
 import io.kjson.test.JSONExpect.Companion.expectJSON
 import io.kjson.test.isInteger
 import io.kjson.test.isObject

@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.2] - 2025-02-02
+### Changed
+- `pom.xml`: updated Kotlin version to 2.0.21, updated dependency versions
+
 ## [4.1] - 2024-12-19
 ### Changed
 - `JSONExpect`, `Lambda.kt`: changed to use `JSONValidation` tests where possible, improved `UUID` check and conversion

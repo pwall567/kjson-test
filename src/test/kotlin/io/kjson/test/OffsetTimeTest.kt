@@ -32,8 +32,9 @@ import java.time.OffsetTime
 import io.kstuff.test.shouldBe
 import io.kstuff.test.shouldThrow
 
+import io.jstuff.util.MiniSet
+
 import io.kjson.test.OffsetDateTimeTest.Companion.offset10
-import net.pwall.util.MiniSet
 
 class OffsetTimeTest {
 

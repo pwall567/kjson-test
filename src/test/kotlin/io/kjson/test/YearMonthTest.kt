@@ -32,7 +32,7 @@ import java.time.YearMonth
 import io.kstuff.test.shouldBe
 import io.kstuff.test.shouldThrow
 
-import net.pwall.util.MiniSet
+import io.jstuff.util.MiniSet
 
 class YearMonthTest {
 

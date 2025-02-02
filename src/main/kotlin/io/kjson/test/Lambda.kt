@@ -43,7 +43,7 @@ import java.time.YearMonth
 import java.time.ZonedDateTime
 import java.util.UUID
 
-import net.pwall.json.validation.JSONValidation
+import io.jstuff.java.validation.JSONValidation
 
 /** Check that a value is null. */
 val JSONExpect.isNull: JSONExpect.() -> Unit

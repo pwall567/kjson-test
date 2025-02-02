@@ -43,12 +43,13 @@ import java.time.YearMonth
 import java.time.ZonedDateTime
 import java.util.BitSet
 import java.util.UUID
-import io.kjson.test.JSONExpect.Companion.expectJSON
 
-import net.pwall.json.JSONFunctions
-import net.pwall.json.JSONSimple
-import net.pwall.json.validation.JSONValidation
-import net.pwall.util.DateOutput
+import io.jstuff.java.validation.JSONValidation
+import io.jstuff.json.JSONFunctions
+import io.jstuff.json.JSONSimple
+import io.jstuff.util.DateOutput
+
+import io.kjson.test.JSONExpect.Companion.expectJSON
 
 /**
  * Implementation class for `expectJSON()` function.
