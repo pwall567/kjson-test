@@ -2,7 +2,7 @@
  * @(#) JavaDurationTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -208,6 +208,40 @@ class JavaDurationTest {
         shouldThrow<AssertionError>("No JSON array item has value \"PT45S\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(Duration.ofSeconds(45))
+            }
+        }
+    }
+
+    @Test fun `should test multiple Java Duration values`() {
+        val json = """["PT30S","PT35S","PT40S"]"""
+        JSONExpect.expectJSON(json) {
+            items(Duration.ofSeconds(30), Duration.ofSeconds(35), Duration.ofSeconds(40))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple Java Duration values`() {
+        val json = """["PT30S","PT35S","PT40S"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"PT36S\", was \"PT35S\"") {
+            JSONExpect.expectJSON(json) {
+                items(Duration.ofSeconds(30), Duration.ofSeconds(36), Duration.ofSeconds(40))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple Java Duration values`() {
+        val json = """["PT30S","PT35S","PT40S"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(Duration.ofSeconds(30), Duration.ofSeconds(35))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple Java Duration values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(Duration.ofSeconds(30), Duration.ofSeconds(35), Duration.ofSeconds(40))
             }
         }
     }

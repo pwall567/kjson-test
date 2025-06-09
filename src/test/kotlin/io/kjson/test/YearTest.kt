@@ -2,7 +2,7 @@
  * @(#) YearTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -208,6 +208,40 @@ class YearTest {
         shouldThrow<AssertionError>("No JSON array item has value \"2026\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(Year.of(2026))
+            }
+        }
+    }
+
+    @Test fun `should test multiple Year values`() {
+        val json = """["2025","2026","2027"]"""
+        JSONExpect.expectJSON(json) {
+            items(Year.of(2025), Year.of(2026), Year.of(2027))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple Year values`() {
+        val json = """["2025","2026","2027"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"2027\", was \"2026\"") {
+            JSONExpect.expectJSON(json) {
+                items(Year.of(2025), Year.of(2027), Year.of(2028))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple Year values`() {
+        val json = """["2025","2026","2027"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(Year.of(2025), Year.of(2026))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple Year values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(Year.of(2025), Year.of(2026), Year.of(2027))
             }
         }
     }

@@ -2,7 +2,7 @@
  * @(#) LongTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2021, 2024 Peter Wall
+ * Copyright (c) 2021, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -343,6 +343,40 @@ class LongTest {
         shouldThrow<AssertionError>("No JSON array item has value in given collection") {
             JSONExpect.expectJSON(json) {
                 anyItem(MiniSet.of(123456789012340, 123456789012345, 123456789012350, 123456789012355))
+            }
+        }
+    }
+
+    @Test fun `should test multiple Long values`() {
+        val json = "[123456789012345, 123456789012347, 123456789012349]"
+        JSONExpect.expectJSON(json) {
+            items(123456789012345, 123456789012347, 123456789012349)
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple Long values`() {
+        val json = "[123456789012345, 123456789012347, 123456789012349]"
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected 123456789012348, was 123456789012347") {
+            JSONExpect.expectJSON(json) {
+                items(123456789012345, 123456789012348, 123456789012349)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple Long values`() {
+        val json = "[123456789012345, 123456789012347, 123456789012349]"
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(123456789012345, 123456789012347)
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple Long values applied to string`() {
+        val json = "\"abc\""
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was string") {
+            JSONExpect.expectJSON(json) {
+                items(123456789012345, 123456789012347, 123456789012349)
             }
         }
     }

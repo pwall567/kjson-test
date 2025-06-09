@@ -2,7 +2,7 @@
  * @(#) JSONExpect.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021, 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2020, 2021, 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1415,6 +1415,179 @@ class JSONExpect private constructor(
         }
     }
 
+    /* ====================================== items tests ====================================== */
+
+    /**
+     * Check that the value is an array and compare each value as an [Int].
+     */
+    fun items(vararg expected: Int) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [Long].
+     */
+    fun items(vararg expected: Long) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [BigDecimal].
+     */
+    fun items(vararg expected: BigDecimal) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [Boolean].
+     */
+    fun items(vararg expected: Boolean) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [Char].
+     */
+    fun items(vararg expected: Char) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [String].
+     */
+    fun items(vararg expected: String) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [LocalDate].
+     */
+    fun items(vararg expected: LocalDate) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [LocalDateTime].
+     */
+    fun items(vararg expected: LocalDateTime) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [LocalTime].
+     */
+    fun items(vararg expected: LocalTime) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [OffsetDateTime].
+     */
+    fun items(vararg expected: OffsetDateTime) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [OffsetTime].
+     */
+    fun items(vararg expected: OffsetTime) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [ZonedDateTime].
+     */
+    fun items(vararg expected: ZonedDateTime) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [YearMonth].
+     */
+    fun items(vararg expected: YearMonth) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [MonthDay].
+     */
+    fun items(vararg expected: MonthDay) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [Year].
+     */
+    fun items(vararg expected: Year) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [JavaDuration].
+     */
+    fun items(vararg expected: JavaDuration) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [Period].
+     */
+    fun items(vararg expected: Period) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a [UUID].
+     */
+    fun items(vararg expected: UUID) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
+    /**
+     * Check that the value is an array and compare each value as a enum type.
+     */
+    fun <E : Enum<E>> items(vararg expected: E) {
+        val array = checkArray(expected.size)
+        for (i in expected.indices)
+            JSONExpect(array[i], itemPointer(i)).value(expected[i])
+    }
+
     /* ====================================== "test" lambda functions ====================================== */
 
     /**
@@ -1781,6 +1954,11 @@ class JSONExpect private constructor(
     private fun propertiesText(count: Int) = if (count == 1) "object property" else "object properties"
 
     private fun itemsText(count: Int) = if (count == 1) "array item" else "array items"
+
+    private fun checkArray(expectedSize: Int): List<*> = nodeAsArray.also {
+        if (it.size != expectedSize)
+            error("JSON array size not the same as number of values - expected $expectedSize, was ${it.size}")
+    }
 
     companion object {
 

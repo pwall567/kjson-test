@@ -2,7 +2,7 @@
  * @(#) PeriodTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -160,6 +160,40 @@ class PeriodTest {
         shouldThrow<AssertionError>("No JSON array item has value \"P40D\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(Period.ofDays(40))
+            }
+        }
+    }
+
+    @Test fun `should test multiple Period values`() {
+        val json = """["P10D","P20D","P30D"]"""
+        JSONExpect.expectJSON(json) {
+            items(Period.ofDays(10), Period.ofDays(20), Period.ofDays(30))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple Period values`() {
+        val json = """["P10D","P20D","P30D"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"P25D\", was \"P20D\"") {
+            JSONExpect.expectJSON(json) {
+                items(Period.ofDays(10), Period.ofDays(25), Period.ofDays(30))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple Period values`() {
+        val json = """["P10D","P20D","P30D"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(Period.ofDays(10), Period.ofDays(20))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple Period values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(Period.ofDays(10), Period.ofDays(20), Period.ofDays(30))
             }
         }
     }

@@ -2,7 +2,7 @@
  * @(#) MonthDayTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -208,6 +208,40 @@ class MonthDayTest {
         shouldThrow<AssertionError>("No JSON array item has value \"--09-21\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(MonthDay.of(9, 21))
+            }
+        }
+    }
+
+    @Test fun `should test multiple MonthDay values`() {
+        val json = """["--05-10","--05-11","--05-12"]"""
+        JSONExpect.expectJSON(json) {
+            items(MonthDay.of(5, 10), MonthDay.of(5, 11), MonthDay.of(5, 12))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple MonthDay values`() {
+        val json = """["--05-10","--05-11","--05-12"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"--05-12\", was \"--05-11\"") {
+            JSONExpect.expectJSON(json) {
+                items(MonthDay.of(5, 10), MonthDay.of(5, 12), MonthDay.of(5, 13))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple MonthDay values`() {
+        val json = """["--05-10","--05-11","--05-12"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(MonthDay.of(5, 10), MonthDay.of(5, 11))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple MonthDay values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(MonthDay.of(5, 10), MonthDay.of(5, 11), MonthDay.of(5, 12))
             }
         }
     }

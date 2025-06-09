@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest1.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021, 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2020, 2021, 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,13 +53,6 @@ class JSONExpectTest1 {
         val json = "\"abc\""
         expectJSON(json) {
             value("abc")
-        }
-    }
-
-    @Test fun `should test boolean value`() {
-        val json = "true"
-        expectJSON(json) {
-            value(true)
         }
     }
 
@@ -184,13 +177,6 @@ class JSONExpectTest1 {
                     item(0, 2)
                 }
             }
-        }
-    }
-
-    @Test fun `should test simple boolean property`() {
-        val json = """{"abc":true}"""
-        expectJSON(json) {
-            property("abc", true)
         }
     }
 
@@ -365,13 +351,6 @@ class JSONExpectTest1 {
                     item(0, 2)
                 }
             }
-        }
-    }
-
-    @Test fun `should test boolean array item`() {
-        val json = "[true]"
-        expectJSON(json) {
-            item(0, true)
         }
     }
 
@@ -659,6 +638,26 @@ class JSONExpectTest1 {
                 item(7, 17)
                 item(8, 19)
                 item(9, 23)
+            }
+        }
+    }
+
+    @Test fun `should test array item nested in property using items`() {
+        val json = """{"primes":[1,2,3,5,7,11,13,17,19,23]}"""
+        expectJSON(json) {
+            property("primes") {
+                items(1, 2, 3, 5, 7, 11, 13, 17, 19, 23)
+            }
+        }
+    }
+
+    @Test fun `should fail on test of array item nested in property using items`() {
+        val json = """{"primes":[1,2,3,5,7,11,13,17,19,23]}"""
+        shouldThrow<AssertionError>("/primes/8: JSON value doesn't match - expected 23, was 19") {
+            expectJSON(json) {
+                property("primes") {
+                    items(1, 2, 3, 5, 7, 11, 13, 17, 23, 29)
+                }
             }
         }
     }

@@ -2,7 +2,7 @@
  * @(#) LocalDateTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,44 @@ class LocalDateTimeTest {
         shouldThrow<AssertionError>("No JSON array item has value \"2023-09-18T19:30:55\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(LocalDateTime.of(2023, 9, 18, 19, 30, 55))
+            }
+        }
+    }
+
+    @Test fun `should test multiple LocalDateTime values`() {
+        val json = """["2025-05-10T20:30:15","2025-05-10T20:30:30","2025-05-10T20:30:45"]"""
+        JSONExpect.expectJSON(json) {
+            items(LocalDateTime.of(2025, 5, 10, 20, 30, 15), LocalDateTime.of(2025, 5, 10, 20, 30, 30),
+                    LocalDateTime.of(2025, 5, 10, 20, 30, 45))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple LocalDateTime values`() {
+        val json = """["2025-05-10T20:30:15","2025-05-10T20:30:30","2025-05-10T20:30:45"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"2025-05-10T20:30:35\", " +
+                "was \"2025-05-10T20:30:30\"") {
+            JSONExpect.expectJSON(json) {
+                items(LocalDateTime.of(2025, 5, 10, 20, 30, 15), LocalDateTime.of(2025, 5, 10, 20, 30, 35),
+                        LocalDateTime.of(2025, 5, 10, 20, 30, 45))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple LocalDateTime values`() {
+        val json = """["2025-05-10T20:30:15","2025-05-10T20:30:30","2025-05-10T20:30:45"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(LocalDateTime.of(2025, 5, 10, 20, 30, 15), LocalDateTime.of(2025, 5, 10, 20, 30, 30))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple LocalDateTime values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(LocalDateTime.of(2025, 5, 10, 20, 30, 15), LocalDateTime.of(2025, 5, 10, 20, 30, 30),
+                        LocalDateTime.of(2025, 5, 10, 20, 30, 45))
             }
         }
     }

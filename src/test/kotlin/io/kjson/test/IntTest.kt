@@ -2,7 +2,7 @@
  * @(#) IntTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2021,  2024 Peter Wall
+ * Copyright (c) 2021,  2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -301,6 +301,40 @@ class IntTest {
         shouldThrow<AssertionError>("No JSON array item has value in given collection") {
             JSONExpect.expectJSON(json) {
                 anyItem(MiniSet.of(12340, 12342, 12348, 12350))
+            }
+        }
+    }
+
+    @Test fun `should test multiple Int values`() {
+        val json = "[12345, 12346, 12347]"
+        JSONExpect.expectJSON(json) {
+            items(12345, 12346, 12347)
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple Int values`() {
+        val json = "[12345, 12346, 12347]"
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected 12348, was 12346") {
+            JSONExpect.expectJSON(json) {
+                items(12345, 12348, 12347)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple Int values`() {
+        val json = "[12345, 12346, 12347]"
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(12345, 12346)
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple Int values applied to string`() {
+        val json = "\"abc\""
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was string") {
+            JSONExpect.expectJSON(json) {
+                items(12345, 12346, 12347)
             }
         }
     }

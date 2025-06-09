@@ -3,11 +3,11 @@
 [![Build Status](https://github.com/pwall567/kjson-test/actions/workflows/build.yml/badge.svg)](https://github.com/pwall567/kjson-test/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Kotlin](https://img.shields.io/static/v1?label=Kotlin&message=v2.0.21&color=7f52ff&logo=kotlin&logoColor=7f52ff)](https://github.com/JetBrains/kotlin/releases/tag/v2.0.21)
-[![Maven Central](https://img.shields.io/maven-central/v/io.kjson/kjson-test?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.kjson%22%20AND%20a:%22kjson-test%22)
+[![Maven Central](https://img.shields.io/maven-central/v/io.kjson/kjson-test?label=Maven%20Central)](https://central.sonatype.com/artifact/io.kjson/kjson-test)
 
 Library for testing Kotlin JSON applications
 
-This library provides a convenient way of testing applications that produce JSON results.
+This library provides a convenient means of testing applications that produce JSON results.
 It uses a Kotlin DSL to describe the expected JSON values, and produces detailed error messages in the case of failure.
 
 The library is an evolution of the [`json-kotlin-test`](https://github.com/pwall567/json-kotlin-test) project.
@@ -36,6 +36,8 @@ This is for consistency with the newly-added `isObject` and `isArray` tests.
 Also, the lambda functions have been moved to standalone functions, so they each require an `import` statement.
 
 **New in version 3.9:** the `anyItem` test allows for the checking of array items in an unordered set.
+
+**New in version 4.4:** the `items` test allows for the checking of multiple array items with a single function call.
 
 ## Contents
 
@@ -226,6 +228,18 @@ As with property tests, if the array item is expected to be an object or an arra
         itemIsArray(0, size = 2) {
             // tests on nested array
         }
+```
+
+Where the array contains only primitive values, a shorthand form is available:
+```kotlin
+        items("Tom", "Dick", "Happy")
+```
+This is equivalent to:
+```kotlin
+        count(3)
+        item(0, "Tom")
+        item(1, "Dick")
+        item(2, "Harry")
 ```
 
 In the case of a JSON array representing an unordered set, the [`anyItem`](#anyitem) function tests whether any item in
@@ -572,8 +586,8 @@ although in practice a range of `Int` or `Long` would be more likely to use `Int
 
 Only the test for `String` has a signature that allows `null` values; this is to avoid compile-time ambiguity on tests
 against `null`.
-This does not mean that only `String` properties can be tested for `null` - a `null` property in the JSON is typeless
-so a test for `null` would work, regardless of the type that the property would otherwise hold.
+This does not mean that only `String` properties can be tested for `null` &ndash; a `null` property in the JSON is
+typeless so a test for `null` would work, regardless of the type that the property would otherwise hold.
 
 One important consideration to keep in mind when using the comparisons involving standard Java classes such as `UUID`
 and `LocalDate` &ndash; some mocking libraries allow the static functions of Java classes to be mocked; for example,
@@ -640,7 +654,7 @@ Examples:
 ### `item`
 
 Tests the value of an array item.
-In all cases, the first parameter is the index of the array item (must be non-negative).
+In all cases, the first parameter is the index of the array item (zero-based, must be within array bounds).
 The second parameter varies according to the test being performed.
 
 | Signature                          | Check that the array item...                               |
@@ -684,6 +698,44 @@ Examples:
         item(0) {
             // nested tests
         }
+```
+
+
+### `items`
+
+Tests all the items in an array with a single function.
+The `items` function takes a `vararg` list of values, and the array is tested to contain exactly those values in the
+same order.
+The values must all be of the same type, and that type must be one of:
+- `Int`
+- `Lomg`
+- `BigDecimal`
+- `Boolean`
+- `Char`
+- `String`
+- `LocalDate`
+- `LocalDateTime`
+- `LocalTime`
+- `OffsetDateTime`
+- `OffsetTime`
+- `ZonedDateTime`
+- `YearMonth`
+- `MonthDay`
+- `Year`
+- `java.time.Duration`
+- `Period`
+- `UUID`
+- `Enum<*>`
+
+Note that `kotlin.time.Duration` is not on the list; it is implemented as a `value class`, and Kotlin does not
+currently (version 2.0.21) allow such classes to be used in `vararg` lists.
+
+The array is checked to be of the same size as the list of values.
+
+Examples:
+```kotlin
+        items(1, 1, 2, 3, 5, 8, 13)
+        items("alpha", "beta", "gamma")
 ```
 
 
@@ -1079,7 +1131,7 @@ The `isUUID` test performs a strict check of the lengths of the five blocks, as 
 
 ## Dependency Specification
 
-The latest version of the library is 4.3, and it may be obtained from the Maven Central repository.
+The latest version of the library is 4.4, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -1088,19 +1140,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>4.3</version>
+      <version>4.4</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:4.3'
+    testImplementation 'io.kjson:kjson-test:4.4'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:4.3")
+    testImplementation("io.kjson:kjson-test:4.4")
 ```
 
 Peter Wall
 
-2025-02-03
+2025-06-09

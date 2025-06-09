@@ -2,7 +2,7 @@
  * @(#) YearMonthTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -208,6 +208,40 @@ class YearMonthTest {
         shouldThrow<AssertionError>("No JSON array item has value \"2023-12\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(YearMonth.of(2023, 12))
+            }
+        }
+    }
+
+    @Test fun `should test multiple YearMonth values`() {
+        val json = """["2025-05","2025-06","2025-07"]"""
+        JSONExpect.expectJSON(json) {
+            items(YearMonth.of(2025, 5), YearMonth.of(2025, 6), YearMonth.of(2025, 7))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple YearMonth values`() {
+        val json = """["2025-05","2025-06","2025-07"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"2025-07\", was \"2025-06\"") {
+            JSONExpect.expectJSON(json) {
+                items(YearMonth.of(2025, 5), YearMonth.of(2025, 7), YearMonth.of(2025, 8))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple YearMonth values`() {
+        val json = """["2025-05","2025-06","2025-07"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(YearMonth.of(2025, 5), YearMonth.of(2025, 6))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple YearMonth values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(YearMonth.of(2025, 5), YearMonth.of(2025, 6), YearMonth.of(2025, 7))
             }
         }
     }

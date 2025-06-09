@@ -2,7 +2,7 @@
  * @(#) OffsetTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -219,6 +219,44 @@ class OffsetTimeTest {
         shouldThrow<AssertionError>("No JSON array item has value \"19:30:55+10:00\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(OffsetTime.of(19, 30, 55, 0, offset10))
+            }
+        }
+    }
+
+    @Test fun `should test multiple OffsetTime values`() {
+        val json = """["20:30:15+10:00","20:30:30+10:00","20:30:45+10:00"]"""
+        JSONExpect.expectJSON(json) {
+            items(OffsetTime.of(20, 30, 15, 0, offset10), OffsetTime.of(20, 30, 30, 0, offset10),
+                    OffsetTime.of(20, 30, 45, 0, offset10))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple OffsetTime values`() {
+        val json = """["20:30:15+10:00","20:30:30+10:00","20:30:45+10:00"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"20:30:35+10:00\", " +
+                "was \"20:30:30+10:00\"") {
+            JSONExpect.expectJSON(json) {
+                items(OffsetTime.of(20, 30, 15, 0, offset10), OffsetTime.of(20, 30, 35, 0, offset10),
+                        OffsetTime.of(20, 30, 45, 0, offset10))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple OffsetTime values`() {
+        val json = """["20:30:15+10:00","20:30:30+10:00","20:30:45+10:00"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(OffsetTime.of(20, 30, 15, 0, offset10), OffsetTime.of(20, 30, 30, 0, offset10))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple OffsetTime values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(OffsetTime.of(20, 30, 15, 0, offset10), OffsetTime.of(20, 30, 30, 0, offset10),
+                        OffsetTime.of(20, 30, 45, 0, offset10))
             }
         }
     }

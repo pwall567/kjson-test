@@ -2,6 +2,10 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.4] - 2025-06-09
+### Changed
+- `JSONExpect`: added `items()` functions
+
 ## [4.3] - 2025-02-03
 ### Changed
 - `pom.xml`: updated dependency version

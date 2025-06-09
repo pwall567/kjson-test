@@ -2,7 +2,7 @@
  * @(#) LocalDateTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -208,6 +208,40 @@ class LocalDateTest {
         shouldThrow<AssertionError>("No JSON array item has value \"2023-09-21\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(LocalDate.of(2023, 9, 21))
+            }
+        }
+    }
+
+    @Test fun `should test multiple LocalDate values`() {
+        val json = """["2025-05-10","2025-05-11","2025-05-12"]"""
+        JSONExpect.expectJSON(json) {
+            items(LocalDate.of(2025, 5, 10), LocalDate.of(2025, 5, 11), LocalDate.of(2025, 5, 12))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple LocalDate values`() {
+        val json = """["2025-05-10","2025-05-11","2025-05-12"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"2025-05-10\", was \"2025-05-11\"") {
+            JSONExpect.expectJSON(json) {
+                items(LocalDate.of(2025, 5, 10), LocalDate.of(2025, 5, 10), LocalDate.of(2025, 5, 11))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple LocalDate values`() {
+        val json = """["2025-05-10","2025-05-11","2025-05-12"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(LocalDate.of(2025, 5, 10), LocalDate.of(2025, 5, 11))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple LocalDate values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(LocalDate.of(2025, 5, 10), LocalDate.of(2025, 5, 11), LocalDate.of(2025, 5, 12))
             }
         }
     }

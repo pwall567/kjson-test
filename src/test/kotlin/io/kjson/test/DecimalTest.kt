@@ -2,7 +2,7 @@
  * @(#) DecimalTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2021, 2024 Peter Wall
+ * Copyright (c) 2021, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -515,6 +515,40 @@ class DecimalTest {
         shouldThrow<AssertionError>("No JSON array item has value matching given tests") {
             JSONExpect.expectJSON(json) {
                 anyItem(scale(3..4))
+            }
+        }
+    }
+
+    @Test fun `should test multiple BigDecimal values`() {
+        val json = "[12.0, 12.5, 13.0]"
+        JSONExpect.expectJSON(json) {
+            items(BigDecimal("12.0"), BigDecimal("12.5"), BigDecimal("13.0"))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple BigDecimal values`() {
+        val json = "[12.0, 12.5, 13.0]"
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected 12.6, was 12.5") {
+            JSONExpect.expectJSON(json) {
+                items(BigDecimal("12.0"), BigDecimal("12.6"), BigDecimal("13.0"))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple BigDecimal values`() {
+        val json = "[12.0, 12.5, 13.0]"
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(BigDecimal("12.0"), BigDecimal("12.5"))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple BigDecimal values applied to string`() {
+        val json = "\"abc\""
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was string") {
+            JSONExpect.expectJSON(json) {
+                items(BigDecimal("12.0"), BigDecimal("12.5"), BigDecimal("13.0"))
             }
         }
     }

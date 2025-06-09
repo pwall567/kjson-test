@@ -2,7 +2,7 @@
  * @(#) EnumTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -141,6 +141,40 @@ class EnumTest {
         shouldThrow<AssertionError>("No JSON array item has value \"INDETERMINATE\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(Status.INDETERMINATE)
+            }
+        }
+    }
+
+    @Test fun `should test multiple Enum values`() {
+        val json = """["OPEN","CLOSED"]"""
+        JSONExpect.expectJSON(json) {
+            items(Status.OPEN, Status.CLOSED)
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple Enum values`() {
+        val json = """["OPEN","CLOSED"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"INDETERMINATE\", was \"CLOSED\"") {
+            JSONExpect.expectJSON(json) {
+                items(Status.OPEN, Status.INDETERMINATE)
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple Enum values`() {
+        val json = """["OPEN","CLOSED"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 3, was 2") {
+            JSONExpect.expectJSON(json) {
+                items(Status.OPEN, Status.CLOSED, Status.CLOSED)
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple Enum values applied to string`() {
+        val json = "\"abc\""
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was string") {
+            JSONExpect.expectJSON(json) {
+                items(Status.OPEN, Status.CLOSED)
             }
         }
     }

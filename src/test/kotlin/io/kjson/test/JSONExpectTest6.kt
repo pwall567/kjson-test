@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest6.kt
  *
  * kjson-test Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -146,22 +146,6 @@ class JSONExpectTest6 {
         }
     }
 
-    @Test fun `should test that any item has boolean value`() {
-        val json = "[false,false,true]"
-        expectJSON(json) {
-            anyItem(true)
-        }
-    }
-
-    @Test fun `should fail on incorrect test that any item has boolean value`() {
-        val json = "[false,false,false]"
-        shouldThrow<AssertionError>("No JSON array item has value true") {
-            expectJSON(json) {
-                anyItem(true)
-            }
-        }
-    }
-
     @Test fun `should test that any item has string value`() {
         val json = """["alpha","beta","gamma"]"""
         expectJSON(json) {
@@ -286,6 +270,40 @@ class JSONExpectTest6 {
         shouldThrow<AssertionError>("No JSON array item has value matching given tests") {
             expectJSON(json) {
                 anyItemIsArray(3)
+            }
+        }
+    }
+
+    @Test fun `should test multiple String values`() {
+        val json = """["abc","def","ghi"]"""
+        expectJSON(json) {
+            items("abc", "def", "ghi")
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple String values`() {
+        val json = """["abc","def","ghi"]"""
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected \"xyz\", was \"def\"") {
+            expectJSON(json) {
+                items("abc", "xyz", "ghi")
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple String values`() {
+        val json = """["abc","def","ghi"]"""
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            expectJSON(json) {
+                items("abc", "def")
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple String values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            expectJSON(json) {
+                items("abc", "def", "ghi")
             }
         }
     }

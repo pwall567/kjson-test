@@ -2,7 +2,7 @@
  * @(#) ZonedDateTimeTest.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2023, 2024 Peter Wall
+ * Copyright (c) 2022, 2023, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -238,6 +238,52 @@ class ZonedDateTimeTest {
         shouldThrow<AssertionError>("No JSON array item has value \"2023-09-18T19:30:55+10:00[Australia/Sydney]\"") {
             JSONExpect.expectJSON(json) {
                 anyItem(ZonedDateTime.of(2023, 9, 18, 19, 30, 55, 0, zoneIdSydney))
+            }
+        }
+    }
+
+    @Test fun `should test multiple ZonedDateTime values`() {
+        val json = "[\"2025-05-10T20:30:15+10:00[Australia/Sydney]\",\"2025-05-10T20:30:30+10:00[Australia/Sydney]\"," +
+                "\"2025-05-10T20:30:45+10:00[Australia/Sydney]\"]"
+        JSONExpect.expectJSON(json) {
+            items(ZonedDateTime.of(2025, 5, 10, 20, 30, 15, 0, zoneIdSydney),
+                    ZonedDateTime.of(2025, 5, 10, 20, 30, 30, 0, zoneIdSydney),
+                    ZonedDateTime.of(2025, 5, 10, 20, 30, 45, 0, zoneIdSydney))
+        }
+    }
+
+    @Test fun `should fail on incorrect multiple ZonedDateTime values`() {
+        val json = "[\"2025-05-10T20:30:15+10:00[Australia/Sydney]\",\"2025-05-10T20:30:30+10:00[Australia/Sydney]\"," +
+                "\"2025-05-10T20:30:45+10:00[Australia/Sydney]\"]"
+        shouldThrow<AssertionError>("/1: JSON value doesn't match - expected " +
+                "\"2025-05-10T20:30:35+10:00[Australia/Sydney]\", " +
+                "was \"2025-05-10T20:30:30+10:00[Australia/Sydney]\"") {
+            JSONExpect.expectJSON(json) {
+                items(ZonedDateTime.of(2025, 5, 10, 20, 30, 15, 0, zoneIdSydney),
+                        ZonedDateTime.of(2025, 5, 10, 20, 30, 35, 0, zoneIdSydney),
+                        ZonedDateTime.of(2025, 5, 10, 20, 30, 45, 0, zoneIdSydney))
+            }
+        }
+    }
+
+    @Test fun `should fail on incorrect number of multiple ZonedDateTime values`() {
+        val json = "[\"2025-05-10T20:30:15+10:00[Australia/Sydney]\",\"2025-05-10T20:30:30+10:00[Australia/Sydney]\"," +
+                "\"2025-05-10T20:30:45+10:00[Australia/Sydney]\"]"
+        shouldThrow<AssertionError>("JSON array size not the same as number of values - expected 2, was 3") {
+            JSONExpect.expectJSON(json) {
+                items(ZonedDateTime.of(2025, 5, 10, 20, 30, 15, 0, zoneIdSydney),
+                        ZonedDateTime.of(2025, 5, 10, 20, 30, 30, 0, zoneIdSydney))
+            }
+        }
+    }
+
+    @Test fun `should fail on multiple ZonedDateTime values applied to an object`() {
+        val json = "{}"
+        shouldThrow<AssertionError>("JSON type doesn't match - expected array, was object") {
+            JSONExpect.expectJSON(json) {
+                items(ZonedDateTime.of(2025, 5, 10, 20, 30, 15, 0, zoneIdSydney),
+                        ZonedDateTime.of(2025, 5, 10, 20, 30, 30, 0, zoneIdSydney),
+                        ZonedDateTime.of(2025, 5, 10, 20, 30, 45, 0, zoneIdSydney))
             }
         }
     }
