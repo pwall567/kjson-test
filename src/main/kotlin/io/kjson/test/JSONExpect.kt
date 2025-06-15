@@ -49,14 +49,12 @@ import io.jstuff.json.JSONSimple
 import io.jstuff.json.validation.JSONValidation
 import io.jstuff.util.DateOutput
 
-import io.kjson.test.JSONExpect.Companion.expectJSON
-
 /**
  * Implementation class for `expectJSON()` function.
  *
  * @author  Peter Wall
  */
-class JSONExpect private constructor(
+class JSONExpect internal constructor(
     /** The context node. */
     val node: Any?,
     /** The context node pointer. */
@@ -603,7 +601,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Int) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -612,7 +610,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Long) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -621,7 +619,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: BigDecimal) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -630,7 +628,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Boolean) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -639,7 +637,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Char) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -648,7 +646,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: String?) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -657,7 +655,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: LocalDate) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -666,7 +664,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: LocalDateTime) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -675,7 +673,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: LocalTime) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -684,7 +682,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: OffsetDateTime) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -693,7 +691,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: OffsetTime) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -702,7 +700,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: ZonedDateTime) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -711,7 +709,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: YearMonth) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -720,7 +718,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: MonthDay) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -729,7 +727,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Year) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -738,7 +736,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: JavaDuration) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -747,7 +745,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Period) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -756,7 +754,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Duration) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -765,7 +763,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: UUID) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -774,7 +772,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Enum<*>) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -783,7 +781,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: Regex) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -792,7 +790,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: IntRange) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -801,7 +799,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, expected: LongRange) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -810,7 +808,7 @@ class JSONExpect private constructor(
      */
     fun <T : Comparable<T>> propertyInRange(name: String, expected: ClosedRange<T>, itemClass: KClass<*>) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).valueInRange(expected, itemClass)
+            child(it).valueInRange(expected, itemClass)
         }
     }
 
@@ -826,7 +824,7 @@ class JSONExpect private constructor(
      */
     fun <T : Any> propertyInCollection(name: String, expected: Collection<T?>, itemClass: KClass<*>) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).valueInCollection(expected, itemClass)
+            child(it).valueInCollection(expected, itemClass)
         }
     }
 
@@ -842,7 +840,7 @@ class JSONExpect private constructor(
      */
     fun property(name: String, tests: JSONExpect.() -> Unit) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).tests()
+            child(it).tests()
         }
     }
 
@@ -851,7 +849,7 @@ class JSONExpect private constructor(
      */
     fun propertyIsObject(name: String, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).valueIsObject(tests)
+            child(it).valueIsObject(tests)
         }
     }
 
@@ -860,7 +858,7 @@ class JSONExpect private constructor(
      */
     fun propertyIsArray(name: String, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).valueIsArray(tests)
+            child(it).valueIsArray(tests)
         }
     }
 
@@ -869,7 +867,7 @@ class JSONExpect private constructor(
      */
     fun propertyIsArray(name: String, size: Int, tests: JSONExpect.() -> Unit = {}) {
         checkName(name).let {
-            JSONExpect(getProperty(it), propertyPointer(it)).valueIsArray(size, tests)
+            child(it).valueIsArray(size, tests)
         }
     }
 
@@ -910,7 +908,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Int) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -919,7 +917,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Long) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -928,7 +926,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: BigDecimal) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -937,7 +935,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Boolean) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -946,7 +944,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Char) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -955,7 +953,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: String?) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -964,7 +962,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: LocalDate) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -973,7 +971,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: LocalDateTime) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -982,7 +980,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: LocalTime) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -991,7 +989,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: OffsetDateTime) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1000,7 +998,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: OffsetTime) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1009,7 +1007,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: ZonedDateTime) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1018,7 +1016,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: YearMonth) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1027,7 +1025,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: MonthDay) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1036,7 +1034,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Year) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1045,7 +1043,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: JavaDuration) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1054,7 +1052,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Period) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1063,7 +1061,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Duration) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1072,7 +1070,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: UUID) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1081,7 +1079,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Enum<*>) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1090,7 +1088,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: Regex) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1099,7 +1097,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: IntRange) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1108,7 +1106,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, expected: LongRange) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).value(expected)
+            child(it).value(expected)
         }
     }
 
@@ -1117,7 +1115,7 @@ class JSONExpect private constructor(
      */
     fun <T : Comparable<T>> itemInRange(index: Int, expected: ClosedRange<T>, itemClass: KClass<*>) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).valueInRange(expected, itemClass)
+            child(it).valueInRange(expected, itemClass)
         }
     }
 
@@ -1133,7 +1131,7 @@ class JSONExpect private constructor(
      */
     fun <T : Any> itemInCollection(index: Int, expected: Collection<T?>, itemClass: KClass<*>) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).valueInCollection(expected, itemClass)
+            child(it).valueInCollection(expected, itemClass)
         }
     }
 
@@ -1149,7 +1147,7 @@ class JSONExpect private constructor(
      */
     fun item(index: Int, tests: JSONExpect.() -> Unit) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).tests()
+            child(it).tests()
         }
     }
 
@@ -1158,7 +1156,7 @@ class JSONExpect private constructor(
      */
     fun itemIsObject(index: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).valueIsObject(tests)
+            child(it).valueIsObject(tests)
         }
     }
 
@@ -1167,7 +1165,7 @@ class JSONExpect private constructor(
      */
     fun itemIsArray(index: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).valueIsArray(tests)
+            child(it).valueIsArray(tests)
         }
     }
 
@@ -1176,7 +1174,7 @@ class JSONExpect private constructor(
      */
     fun itemIsArray(index: Int, size: Int, tests: JSONExpect.() -> Unit = {}) {
         checkIndex(index).let {
-            JSONExpect(getItem(it), itemPointer(it)).valueIsArray(size, tests)
+            child(it).valueIsArray(size, tests)
         }
     }
 
@@ -1933,6 +1931,10 @@ class JSONExpect private constructor(
     private fun checkIndex(index: Int): Int =
             if (index >= 0) index else error("JSON array index must not be negative - $index")
 
+    private fun child(name: String): JSONExpect = JSONExpect(getProperty(name), propertyPointer(name))
+
+    private fun child(index: Int): JSONExpect = JSONExpect(getItem(index), itemPointer(index))
+
     private fun getProperty(name: String): Any? = nodeAsObject.let {
         if (!it.containsKey(name))
             error("JSON property missing - $name")
@@ -1947,15 +1949,11 @@ class JSONExpect private constructor(
         it[index]
     }
 
-    private fun propertyPointer(name: String) = if (pointer != null) "$pointer/$name" else "/$name"
+    internal fun propertyPointer(name: String) = if (pointer != null) "$pointer/$name" else "/$name"
 
-    private fun itemPointer(index: Int) = if (pointer != null) "$pointer/$index" else "/$index"
+    internal fun itemPointer(index: Int) = if (pointer != null) "$pointer/$index" else "/$index"
 
-    private fun propertiesText(count: Int) = if (count == 1) "object property" else "object properties"
-
-    private fun itemsText(count: Int) = if (count == 1) "array item" else "array items"
-
-    private fun checkArray(expectedSize: Int): List<*> = nodeAsArray.also {
+    internal fun checkArray(expectedSize: Int): List<*> = nodeAsArray.also {
         if (it.size != expectedSize)
             error("JSON array size not the same as number of values - expected $expectedSize, was ${it.size}")
     }
@@ -1964,6 +1962,10 @@ class JSONExpect private constructor(
 
         @Suppress("ConstPropertyName")
         const val maxStringDisplayLength = 49
+
+        internal fun propertiesText(count: Int) = if (count == 1) "object property" else "object properties"
+
+        private fun itemsText(count: Int) = if (count == 1) "array item" else "array items"
 
         /**
          * Check that a JSON string matches the defined expectations.
@@ -1989,11 +1991,4 @@ class JSONExpect private constructor(
 
     }
 
-}
-
-/**
- * Test a JSON string against a set of validations.
- */
-infix fun String.shouldMatchJSON(tests: JSONExpect.() -> Unit) {
-    expectJSON(this, tests)
 }

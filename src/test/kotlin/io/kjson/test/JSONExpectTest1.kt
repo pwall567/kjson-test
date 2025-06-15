@@ -726,13 +726,4 @@ class JSONExpectTest1 {
         }
     }
 
-    @Test fun `should use shouldMatchJSON syntax`() {
-        val json = """{"abc":[1]}"""
-        json shouldMatchJSON {
-            propertyIsArray("abc", 1) {
-                item(0, 1)
-            }
-        }
-    }
-
 }

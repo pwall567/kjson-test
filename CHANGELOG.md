@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [4.5] - 2025-06-15
+### Added
+- `ShouldMatchJSON.kt`: `shouldMatchJSON` functions, including form that takes JSON Target string
+### Changed
+- `JSONExpect`: changed visibility of some functions, added `child()` function
+
 ## [4.4] - 2025-06-09
 ### Changed
 - `JSONExpect`: added `items()` functions
@@ -22,7 +28,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - tests: converted to `should-test`
 
 ## [4.0] - 2024-11-03
-### Changed
 ### Added
 - `build.yml`, `deploy.yml`: converted project to GitHub Actions
 ### Changed

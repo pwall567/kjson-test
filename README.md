@@ -39,6 +39,10 @@ Also, the lambda functions have been moved to standalone functions, so they each
 
 **New in version 4.4:** the `items` test allows for the checking of multiple array items with a single function call.
 
+**New in version 4.5:** the `shouldMatchJSON` infix function allows
+[comparison with a target JSON string](#simple-tests), for cases where the use of the DSL syntax might be considered
+unnecessarily complex.
+
 ## Contents
 
 - [Quick Start](#quick-start)
@@ -318,8 +322,11 @@ An `Int` or a `Long` will always be considered as having zero decimal places.
 ### Custom Deserialization
 
 This library looks only at the input JSON, and does not take into account any custom deserializations that may be
-applied to the JSON when it is used in other situations.
-Custom name annotations, and even the conversion of dates from strings to `LocalDate` (for example) are not applied.
+applied to the JSON when it is used in normal circumstances.
+
+For example, custom name annotations are sometimes used to specify the name to be used as the JSON property name if it
+differs from the internal field name; in such cases the external JSON name must be used in the tests, not the field
+name.
 
 ### Check for `null`
 
@@ -444,6 +451,25 @@ In the following case, the JSON string may be either `{"data":27}` or `{"error":
     }
 ```
 
+### Simple Tests
+
+When the set of tests to be applied to a JSON string is very simple, it may be more convenient to express them as a
+target JSON string:
+```kotlin
+    result shouldMatchJSON """{"number":27,"name":"George"}"""
+```
+This is exactly equivalent to:
+```kotlin
+    result shouldMatchJSON {
+        property("number", 27)
+        property("name", "George")
+    }
+```
+Both the string to be tested and the target string will be parsed into an internal form, so differences in whitespace or
+property order will not be significant.
+And while the DSL syntax has the advantage that errors will be reported against specific lines in the set of tests, the
+target string form will still give detailed error messages including the location in the JSON structure.
+
 ### Custom Tests
 
 In any of the tests that take a lambda parameter, the lambda is not restricted to the functions provided by the library;
@@ -546,6 +572,17 @@ Example:
         }
     }
 ```
+
+An alternate form of the `shouldMatchJSON` infix function takes as its parameter a target JSON string.
+In this case, the target string is taken as a set of exact comparison tests to be applied to the string under
+examination.
+Complex tests such as ranges or regular expression matching are not available, but for simple cases this can be a more
+convenient syntax:
+```kotlin
+    stringOfJSON shouldMatchJSON """{"data":{"name":"Fred","age":27}}"""
+```
+Because the tests are performed on a node-by-node basis, any errors will still be reported in full detail, including
+expected and actual values, and the location in JSON Pointer form.
 
 ### `property`
 
@@ -1131,7 +1168,7 @@ The `isUUID` test performs a strict check of the lengths of the five blocks, as 
 
 ## Dependency Specification
 
-The latest version of the library is 4.4, and it may be obtained from the Maven Central repository.
+The latest version of the library is 4.5, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -1140,19 +1177,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>4.4</version>
+      <version>4.5</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:4.4'
+    testImplementation 'io.kjson:kjson-test:4.5'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:4.4")
+    testImplementation("io.kjson:kjson-test:4.5")
 ```
 
 Peter Wall
 
-2025-06-09
+2025-06-15
