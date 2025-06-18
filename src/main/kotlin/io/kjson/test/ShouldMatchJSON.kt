@@ -25,9 +25,15 @@
 
 package io.kjson.test
 
-import java.math.BigDecimal
-
-import io.jstuff.json.JSONSimple
+import io.kjson.JSONArray
+import io.kjson.JSONBoolean
+import io.kjson.JSONDecimal
+import io.kjson.JSONInt
+import io.kjson.JSONLong
+import io.kjson.JSONObject
+import io.kjson.JSONString
+import io.kjson.JSONValue
+import io.kjson.test.JSONExpect.Companion.parseString
 import io.kjson.test.JSONExpect.Companion.propertiesText
 
 /**
@@ -42,18 +48,25 @@ infix fun String.shouldMatchJSON(tests: JSONExpect.() -> Unit) {
  * comparison.  Differences in whitespace or property order will be ignored.
  */
 infix fun String.shouldMatchJSON(expected: String) {
-    compareJSON(parseString(expected, "Expected string"), JSONExpect(parseString(this, "String")))
+    this shouldMatchJSON parseString(expected, "Expected string")
 }
 
-internal fun compareJSON(expected: Any?, actual: JSONExpect) {
+/**
+ * Test a JSON string against a JSON structure in the form of a [JSONValue].
+ */
+infix fun String.shouldMatchJSON(expected: JSONValue?) {
+    compareJSON(expected, JSONExpect(parseString(this, "String")))
+}
+
+internal fun compareJSON(expected: JSONValue?, actual: JSONExpect) {
     when (expected) {
         null -> actual.value(null)
-        is Map<*, *> -> {
+        is JSONObject -> {
             val map = actual.nodeAsObject
             val missing = mutableListOf<Any?>()
             for ((key, value) in expected.entries) {
                 if (map.containsKey(key))
-                    compareJSON(value, JSONExpect(map[key], actual.propertyPointer(key.toString())))
+                    compareJSON(value, JSONExpect(map[key], actual.propertyPointer(key)))
                 else
                     missing.add(key)
             }
@@ -63,22 +76,16 @@ internal fun compareJSON(expected: Any?, actual: JSONExpect) {
             if (extra.isNotEmpty())
                 actual.error("JSON ${propertiesText(extra.size)} unexpected - " + extra.joinToString())
         }
-        is List<*> -> {
+        is JSONArray -> {
             val n = expected.size
             val array = actual.checkArray(n)
             for (i in 0 until n)
                 compareJSON(expected[i], JSONExpect(array[i], actual.itemPointer(i)))
         }
-        is String -> actual.value(expected)
-        is Int -> actual.value(expected)
-        is Long -> actual.value(expected)
-        is BigDecimal -> actual.value(expected)
-        is Boolean -> actual.value(expected)
+        is JSONString -> actual.value(expected.value)
+        is JSONInt -> actual.value(expected.value)
+        is JSONLong -> actual.value(expected.value)
+        is JSONDecimal -> actual.value(expected.value)
+        is JSONBoolean -> actual.value(expected.value)
     }
-}
-
-internal fun parseString(string: String, description: String): Any? = try {
-    JSONSimple.parse(string)
-} catch (e: Exception) {
-    throw AssertionError("$description is not valid JSON: ${e.message}")
 }

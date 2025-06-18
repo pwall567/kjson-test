@@ -45,9 +45,27 @@ import java.util.BitSet
 import java.util.UUID
 
 import io.jstuff.json.JSONFunctions
-import io.jstuff.json.JSONSimple
 import io.jstuff.json.validation.JSONValidation
 import io.jstuff.util.DateOutput
+
+import io.kjson.JSON
+import io.kjson.JSON.asArrayOr
+import io.kjson.JSON.asBooleanOr
+import io.kjson.JSON.asDecimalOr
+import io.kjson.JSON.asIntOr
+import io.kjson.JSON.asLongOr
+import io.kjson.JSON.asObjectOr
+import io.kjson.JSON.asStringOr
+import io.kjson.JSON.displayValue
+import io.kjson.JSONArray
+import io.kjson.JSONBoolean
+import io.kjson.JSONDecimal
+import io.kjson.JSONInt
+import io.kjson.JSONLong
+import io.kjson.JSONObject
+import io.kjson.JSONString
+import io.kjson.JSONStructure
+import io.kjson.JSONValue
 
 /**
  * Implementation class for `expectJSON()` function.
@@ -56,7 +74,7 @@ import io.jstuff.util.DateOutput
  */
 class JSONExpect internal constructor(
     /** The context node. */
-    val node: Any?,
+    val node: JSONValue?,
     /** The context node pointer. */
     val pointer: String? = null,
 ) {
@@ -68,40 +86,31 @@ class JSONExpect internal constructor(
 
     /** The context node as [Int]. */
     val nodeAsInt: Int
-        get() = if (node is Int) node else errorOnType("integer")
+        get() = node.asIntOr { errorOnType("integer") }
 
     /** The context node as [Long]. */
     val nodeAsLong: Long
-        get() = when (node) {
-            is Long -> node
-            is Int -> node.toLong()
-            else -> errorOnType("long integer")
-        }
+        get() = node.asLongOr { errorOnType("long integer") }
 
     /** The context node as [BigDecimal]. */
     val nodeAsDecimal: BigDecimal
-        get() = when (node) {
-            is BigDecimal -> node
-            is Long -> BigDecimal(node)
-            is Int -> BigDecimal(node)
-            else -> errorOnType("decimal")
-        }
+        get() = node.asDecimalOr { errorOnType("decimal") }
 
     /** The context node as [Boolean]. */
     val nodeAsBoolean: Boolean
-        get() = if (node is Boolean) node else errorOnType("boolean")
+        get() = node.asBooleanOr { errorOnType("boolean") }
 
     /** The context node as [String]. */
     val nodeAsString: String
-        get() = if (node is String) node else errorOnType("string")
+        get() = node.asStringOr { errorOnType("string") }
 
-    /** The context node as [Map]. */
-    val nodeAsObject: Map<*, *>
-        get() = if (node is Map<*, *>) node else errorOnType("object")
+    /** The context node as [JSONObject]. */
+    val nodeAsObject: JSONObject
+        get() = node.asObjectOr { errorOnType("object") }
 
-    /** The context node as [List]. */
-    val nodeAsArray: List<*>
-        get() = if (node is List<*>) node else errorOnType("array")
+    /** The context node as [JSONArray]. */
+    val nodeAsArray: JSONArray
+        get() = node.asArrayOr { errorOnType("array") }
 
     /** The context node as [LocalDate]. */
     val nodeAsLocalDate: LocalDate
@@ -245,6 +254,13 @@ class JSONExpect internal constructor(
     }
 
     /**
+     * Check the value as a [JSONValue].
+     */
+    fun value(expected: JSONValue) {
+        compareJSON(expected, this)
+    }
+
+    /**
      * Check the value as a [LocalDate].
      */
     fun value(expected: LocalDate) {
@@ -381,10 +397,11 @@ class JSONExpect internal constructor(
     }
 
     /**
-     * Check the value as a member of a [ClosedRange].  This will normally be invoked via the inline function.
+     * Check the value as a member of a [ClosedRange].
      */
+    @PublishedApi
     @Suppress("UNCHECKED_CAST")
-    fun <T : Comparable<T>> valueInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
+    internal fun <T : Comparable<T>> valueInRange(expected: ClosedRange<T>, itemClass: KClass<*>) {
         when (itemClass) {
             Int::class -> {
                 if (nodeAsInt as T !in expected)
@@ -462,10 +479,11 @@ class JSONExpect internal constructor(
     }
 
     /**
-     * Check the value as a member of a [Collection].  This will normally be invoked via the inline function.
+     * Check the value as a member of a [Collection].
      */
+    @PublishedApi
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any> valueInCollection(expected: Collection<T?>, itemClass: KClass<*>) {
+    internal fun <T : Any> valueInCollection(expected: Collection<T?>, itemClass: KClass<*>) {
         if (node == null) {
             if (!expected.contains(null))
                 errorInCollection()
@@ -648,6 +666,13 @@ class JSONExpect internal constructor(
         checkName(name).let {
             child(it).value(expected)
         }
+    }
+
+    /**
+     * Check a property as a [JSONValue].
+     */
+    fun property(name: String, expected: JSONValue) {
+        compareJSON(expected, child(checkName(name)))
     }
 
     /**
@@ -958,6 +983,13 @@ class JSONExpect internal constructor(
     }
 
     /**
+     * Check an array item as a [JSONValue].
+     */
+    fun item(index: Int, expected: JSONValue) {
+        compareJSON(expected, child(checkIndex(index)))
+    }
+
+    /**
      * Check an array item as a [LocalDate].
      */
     fun item(index: Int, expected: LocalDate) {
@@ -1219,6 +1251,13 @@ class JSONExpect internal constructor(
      * Check that any item in array matches a [String] or `null`.
      */
     fun anyItem(expected: String?) {
+        anyItemCheck { value(expected) } || errorOnAnyItem(expected)
+    }
+
+    /**
+     * Check that any item in array matches a [JSONValue].
+     */
+    fun anyItem(expected: JSONValue) {
         anyItemCheck { value(expected) } || errorOnAnyItem(expected)
     }
 
@@ -1614,6 +1653,11 @@ class JSONExpect internal constructor(
     fun test(expected: String?): JSONExpect.() -> Unit = { value(expected) }
 
     /**
+     * Convert a [JSONValue] equality check to a lambda for use in a multiple test check.
+     */
+    fun test(expected: JSONValue): JSONExpect.() -> Unit = { value(expected) }
+
+    /**
      * Convert a [LocalDate] equality check to a lambda for use in a multiple test check.
      */
     fun test(expected: LocalDate): JSONExpect.() -> Unit = { value(expected) }
@@ -1716,7 +1760,7 @@ class JSONExpect internal constructor(
      */
     fun exhaustive(tests: JSONExpect.() -> Unit) {
         when (node) {
-            is Map<*, *> -> {
+            is JSONObject -> {
                 val accessed = mutableSetOf<String>()
                 accessedProperties = accessed
                 tests.invoke(this)
@@ -1724,7 +1768,7 @@ class JSONExpect internal constructor(
                 if (notAccessed.isNotEmpty())
                     error("JSON ${propertiesText(notAccessed.size)} not tested: ${notAccessed.joinToString(", ")}")
             }
-            is List<*> -> {
+            is JSONArray -> {
                 val accessed = BitSet()
                 accessedItems = accessed
                 tests.invoke(this)
@@ -1754,12 +1798,7 @@ class JSONExpect internal constructor(
      * Check the count of array items or object properties.
      */
     fun count(expected: Int) {
-        require(expected >= 0) { "JSON array or object count must not be negative" }
-        val length = when (node) {
-            is List<*> -> node.size
-            is Map<*, *> -> node.size
-            else -> error("JSON count check not on array or object")
-        }
+        val length = checkCount(expected)
         if (length != expected)
             error("JSON count doesn't match - expected $expected, was $length")
     }
@@ -1768,14 +1807,17 @@ class JSONExpect internal constructor(
      * Check the count of array items or object properties as a range.
      */
     fun count(expected: IntRange) {
-        require(expected.first >= 0) { "JSON array or object count must not be negative" }
-        val length = when (node) {
-            is List<*> -> node.size
-            is Map<*, *> -> node.size
-            else -> error("JSON count check not on array or object")
-        }
+        val length = checkCount(expected.first)
         if (length !in expected)
             error("JSON count doesn't match - expected $expected, was $length")
+    }
+
+    private fun checkCount(expected: Int): Int {
+        require(expected >= 0) { "JSON array or object count must not be negative" }
+        return if (node is JSONStructure<*>)
+            node.size
+        else
+            error("JSON count check not on array or object")
     }
 
     /**
@@ -1828,7 +1870,7 @@ class JSONExpect internal constructor(
     /**
      * Create a display form of the current node, for use in error messages.
      */
-    fun showNode() = showValue(node)
+    fun showNode(): String = node.displayValue(maxString = maxStringDisplayLength, maxArray = 5, maxObject = 3)
 
     /**
      * Create a display form of a value, for use in error messages.
@@ -1846,8 +1888,8 @@ class JSONExpect internal constructor(
         is YearMonth -> showFormatted(value, DateOutput::appendYearMonth)
         is MonthDay -> showFormatted(value, DateOutput::appendMonthDay)
         is Year -> showFormatted(value, DateOutput::appendYear)
-        is List<*> -> "[...]"
-        is Map<*, *> -> "{...}"
+        is List<*> -> "[ ... ]"
+        is Map<*, *> -> "{ ... }"
         else -> JSONFunctions.displayString(value.toString(), maxStringDisplayLength)
     }
 
@@ -1883,17 +1925,16 @@ class JSONExpect internal constructor(
         error("No JSON array item has value $message")
     }
 
-    internal fun errorOnType(expected: String): Nothing {
+    private fun errorOnType(expected: String): Nothing {
         val type = when (node) {
             null -> "null"
-            is Int -> "integer"
-            is Long -> "long integer"
-            is BigDecimal -> "decimal"
-            is String -> "string"
-            is Boolean -> "boolean"
-            is List<*> -> "array"
-            is Map<*, *> -> "object"
-            else -> "unknown"
+            is JSONInt -> "integer"
+            is JSONLong -> "long integer"
+            is JSONDecimal -> "decimal"
+            is JSONString -> "string"
+            is JSONBoolean -> "boolean"
+            is JSONArray -> "array"
+            is JSONObject -> "object"
         }
         error("JSON type doesn't match - expected $expected, was $type")
     }
@@ -1904,7 +1945,7 @@ class JSONExpect internal constructor(
         errorOnStringFormat(name)
     }
 
-    internal fun errorOnStringFormat(expected: String): Nothing {
+    private fun errorOnStringFormat(expected: String): Nothing {
         error(
             buildString {
                 append("JSON string is not a")
@@ -1935,14 +1976,14 @@ class JSONExpect internal constructor(
 
     private fun child(index: Int): JSONExpect = JSONExpect(getItem(index), itemPointer(index))
 
-    private fun getProperty(name: String): Any? = nodeAsObject.let {
+    private fun getProperty(name: String): JSONValue? = nodeAsObject.let {
         if (!it.containsKey(name))
             error("JSON property missing - $name")
         accessedProperties?.add(name)
         it[name]
     }
 
-    private fun getItem(index: Int): Any? = nodeAsArray.let {
+    private fun getItem(index: Int): JSONValue? = nodeAsArray.let {
         if (index !in it.indices)
             error("JSON array index out of bounds - $index")
         accessedItems?.set(index)
@@ -1953,7 +1994,7 @@ class JSONExpect internal constructor(
 
     internal fun itemPointer(index: Int) = if (pointer != null) "$pointer/$index" else "/$index"
 
-    internal fun checkArray(expectedSize: Int): List<*> = nodeAsArray.also {
+    internal fun checkArray(expectedSize: Int): JSONArray = nodeAsArray.also {
         if (it.size != expectedSize)
             error("JSON array size not the same as number of values - expected $expectedSize, was ${it.size}")
     }
@@ -1971,13 +2012,13 @@ class JSONExpect internal constructor(
          * Check that a JSON string matches the defined expectations.
          */
         fun expectJSON(json: String, tests: JSONExpect.() -> Unit) {
-            val obj = try {
-                JSONSimple.parse(json)
-            }
-            catch (e: Exception) {
-                throw AssertionError("Unable to parse JSON - ${e.message}")
-            }
-            JSONExpect(obj).tests()
+            JSONExpect(parseString(json, "String")).tests()
+        }
+
+        internal fun parseString(string: String, description: String): JSONValue? = try {
+            JSON.parse(string)
+        } catch (e: Exception) {
+            throw AssertionError("$description is not valid JSON: ${e.message}")
         }
 
         private val KClass<*>.displayName: String

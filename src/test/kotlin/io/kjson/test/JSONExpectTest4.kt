@@ -31,6 +31,7 @@ import java.math.BigDecimal
 
 import io.kstuff.test.shouldThrow
 
+import io.kjson.JSONString
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
 class JSONExpectTest4 {
@@ -193,7 +194,7 @@ class JSONExpectTest4 {
         shouldThrow<AssertionError>("/abc: Custom error message 123 /abc = 123") {
             expectJSON(json) {
                 property("abc") {
-                    if (node !is String)
+                    if (node !is JSONString)
                         error("Custom error message ${showValue(node)} $pointer = ${showNode()}")
                 }
             }

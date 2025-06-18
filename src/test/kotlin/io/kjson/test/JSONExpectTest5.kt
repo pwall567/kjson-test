@@ -304,7 +304,7 @@ class JSONExpectTest5 {
 
     @Test fun `should fail on incorrect test of complex combinations of multiple possibilities`() {
         val json = """{"data":28}"""
-        shouldThrow<AssertionError>("No successful test - value is {...}") {
+        shouldThrow<AssertionError>("No successful test - value is { \"data\": 28 }") {
             expectJSON(json) {
                 oneOf({
                     property("data", 27)

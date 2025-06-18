@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [5.0] - 2025-06-19
+### Changed
+- `JSONExpect`, `Lambda.kt`, `ShouldMatchJSON.kt`: switched to use the
+  [`kjson-core`](https://github.com/pwall567/kjson-core) library
+
 ## [4.5] - 2025-06-15
 ### Added
 - `ShouldMatchJSON.kt`: `shouldMatchJSON` functions, including form that takes JSON Target string

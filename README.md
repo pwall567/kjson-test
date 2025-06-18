@@ -43,6 +43,11 @@ Also, the lambda functions have been moved to standalone functions, so they each
 [comparison with a target JSON string](#simple-tests), for cases where the use of the DSL syntax might be considered
 unnecessarily complex.
 
+**New in version 5.0:** the JSON parser has been switched to the [`kjson-core`](https://github.com/pwall567/kjson-core)
+library.
+This change should be transparent to most users, but it gives access to a more feature-rich set of functions for
+examining the JSON structures being tested.
+
 ## Contents
 
 - [Quick Start](#quick-start)
@@ -111,8 +116,8 @@ point:
     property("id", 1234)
     property("surname", "Walker")
 ```
-This checks that the current node is an object with a property named "id" having the value 1234, and another property
-"surname" with the value "Walker".
+This checks that the current node is an object with a property named &ldquo;`id`&rdquo; having the value 1234, and
+another property &ldquo;`surname`&rdquo; with the value &ldquo;`Walker`&rdquo;.
 
 Nested objects may be checked by:
 ```kotlin
@@ -141,8 +146,8 @@ First, some terminology:
 - a JSON **array** is an ordered collection of values (possibly nested objects or arrays) enclosed in square brackets
   (` [ ] `)
 - an **array item** is a member of an array
-- a JSON **value** is any of the possible JSON data types: a string, a number, a boolean, the value "null" or a nested
-  object or array
+- a JSON **value** is any of the possible JSON data types: a string, a number, a boolean, the value &ldquo;`null`&rdquo;
+  or a nested object or array
 
 A function or service returning a JSON result will usually return an object or an array of objects, but according to the
 JSON specification the string representation of any JSON value is a valid JSON string.
@@ -236,7 +241,7 @@ As with property tests, if the array item is expected to be an object or an arra
 
 Where the array contains only primitive values, a shorthand form is available:
 ```kotlin
-        items("Tom", "Dick", "Happy")
+        items("Tom", "Dick", "Harry")
 ```
 This is equivalent to:
 ```kotlin
@@ -296,15 +301,15 @@ nested object or array, but it can also specify a named lambda, as in the follow
 ```
 
 These functions test that a property or item meets a particular requirement, without specifying the exact value.
-In the above tests, the property "account" is checked to have an integer value, item 0 of an array contains a string,
-property "id" contains a string formatted as a UUID and property "created" contains a string following the pattern of
-the `OffsetDateTime` class.
+In the above tests, the property &ldquo;`account`&rdquo; is checked to have an integer value, item 0 of an array
+contains a string, property &ldquo;`id`&rdquo; contains a string formatted as a UUID and property
+&ldquo;`created`&rdquo; contains a string following the pattern of the `OffsetDateTime` class.
 
 See the [Reference](#reference) section for a full list of these [General Test Lambdas](#general-test-lambdas).
 
 ### Floating Point
 
-Floating point numbers are those with a decimal point, or using the scientific notation (e.g. 1.5e20).
+Floating point numbers are those with a decimal point, or using the scientific notation (_e.g._ 1.5e20).
 Many decimal floating point numbers can not be represented with complete accuracy in a binary floating point system, so
 the `kjson-test` library converts all such numbers to `BigDecimal`.
 This means that tests on floating point numbers must use `BigDecimal`, or `ClosedRange<BigDecimal>`, or
@@ -330,8 +335,8 @@ name.
 
 ### Check for `null`
 
-Checking a value for `null`, e.g. `property("note", null)` will check that the named property **is present** in the JSON
-string and has the value `null`.
+Checking a value for `null`, _e.g._ `property("note", null)` will check that the named property **is present** in the
+JSON string and has the value `null`.
 Also, for convenience, a named lambda `isNull` will do the same thing.
 
 In some cases, the fact that a property is not present in the JSON may be taken as being equivalent to the property
@@ -463,6 +468,7 @@ This is exactly equivalent to:
     result shouldMatchJSON {
         property("number", 27)
         property("name", "George")
+        count(2)
     }
 ```
 Both the string to be tested and the target string will be parsed into an internal form, so differences in whitespace or
@@ -475,34 +481,36 @@ target string form will still give detailed error messages including the locatio
 In any of the tests that take a lambda parameter, the lambda is not restricted to the functions provided by the library;
 the full power of Kotlin is available to create tests of any complexity.
 
-The "receiver" for the lambda is an object describing the current node in the JSON structure, and the value is available
-as a `val` named [`node`](#node-nodeasstring-nodeasint-nodeaslong-nodeasdecimal-nodeasboolean-nodeasobject-nodeasarray).
-The type of `node` is `Any?`, but in practice it will be one of:
+The &ldquo;receiver&rdquo; for the lambda is an object describing the current node in the JSON structure, and the value
+is available as a `val` named
+[`node`](#node-nodeasstring-nodeasint-nodeaslong-nodeasdecimal-nodeasboolean-nodeasobject-nodeasarray).
+The type of `node` is `JSONValue?`; [`JSONValue`](https://github.com/pwall567/kjson-core#jsonvalue) is a sealed
+interface, and the implementing classes represent the JSON data types:
 
-- `String`
-- `Int`
-- `Long`
-- `BigDecimal`
-- `Boolean`
-- `List<Any?>`
-- `Map<String, Any?>`
-- `null`
-
-(In the case of `Map` or `List`, the type parameter `Any?` will itself be one of the above.)
+- [`JSONString`](https://github.com/pwall567/kjson-core#jsonstring) &ndash; a string value
+- [`JSONInt`](https://github.com/pwall567/kjson-core#jsonint) &ndash; a number value that fits in a 32-bit signed
+  integer
+- [`JSONLong`](https://github.com/pwall567/kjson-core#jsonlong) &ndash; a number value that fits in a 64-bit signed
+  integer
+- [`JSONDecimal`](https://github.com/pwall567/kjson-core#jsondecimal) &ndash; any number value, including non-integer
+  (uses `BigDecimal` internally)
+- [`JSONBoolean`](https://github.com/pwall567/kjson-core#jsonboolean) &ndash; a boolean value
+- [`JSONArray`](https://github.com/pwall567/kjson-core#jsonarray) &ndash; an array
+- [`JSONObject`](https://github.com/pwall567/kjson-core#jsonobject) &ndash; an object
 
 There are also conversion functions, each of which takes the form of a `val` with a custom accessor.
 These accessors either return the node in the form requested, or throw an `AssertionError` with a detailed error
 message.
 
-| Accessor        | Type         |
-|-----------------|--------------|
-| `nodeAsString`  | `String`     |
-| `nodeAsInt`     | `Int`        |
-| `nodeAsLong`    | `Long`       |
-| `nodeAsDecimal` | `BigDecimal` |
-| `nodeAsBoolean` | `Boolean`    |
-| `nodeAsArray`   | `List<*>`    |
-| `nodeAsObject`  | `Map<*, *>`  |
+| Accessor        | Type                                                |
+|-----------------|-----------------------------------------------------|
+| `nodeAsString`  | `String`                                            |
+| `nodeAsInt`     | `Int`                                               |
+| `nodeAsLong`    | `Long`                                              |
+| `nodeAsDecimal` | `BigDecimal`                                        |
+| `nodeAsBoolean` | `Boolean`                                           |
+| `nodeAsArray`   | `JSONArray` (implements `List<JSONValue?>`)         |
+| `nodeAsObject`  | `JSONObject` (implements `Map<String, JSONValue?>`) |
 
 To report errors, the [`error`](#error) function will create an `AssertionError` with the message provided, prepending
 the JSON pointer location for the current node in the JSON.
@@ -597,6 +605,7 @@ performed.
 | `property(String, Long)`                  | ...is equal to a `Long`                                    |
 | `property(String, BigDecimal)`            | ...is equal to a `BigDecimal`                              |
 | `property(String, Boolean)`               | ...is equal to a `Boolean`                                 |
+| `property(String, JSONValue)`             | ...is equal to a `JSONValue`                               |
 | `property(String, Regex)`                 | ...is a `String` matching the given `Regex`                |
 | `property(String, LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
 | `property(String, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
@@ -618,8 +627,13 @@ performed.
 | `property(String, Collection<*>)`         | ...is in a given collection                                |
 | `property(String, JSONExpect.() -> Unit)` | ...satisfies the given lambda                              |
 
-In the case of a `ClosedRange` or `Collection`, the parameter type must be `Int`, `Long`, `BigDecimal` or `String`,
-although in practice a range of `Int` or `Long` would be more likely to use `IntRange` or `LongRange` respectively.
+When the test is against a `JSONValue` (from the [`kjson-core`](https://github.com/pwall567/kjson-core) library), the
+comparison is performed on a node-by-node basis; if the `JSONValue` is a `JSONObject` or a `JSONArray`, error messages
+will include a pointer to the specific node in error.
+
+In the case of a `ClosedRange` or `Collection`, the parameter type must be `Int`, `Long`, `BigDecimal`, `String` or one
+of the time classes, although in practice a range of `Int` or `Long` would be more likely to use `IntRange` or
+`LongRange` respectively.
 
 Only the test for `String` has a signature that allows `null` values; this is to avoid compile-time ambiguity on tests
 against `null`.
@@ -701,6 +715,7 @@ The second parameter varies according to the test being performed.
 | `item(Int, Long)`                  | ...is equal to a `Long`                                    |
 | `item(Int, BigDecimal)`            | ...is equal to a `BigDecimal`                              |
 | `item(Int, Boolean)`               | ...is equal to a `Boolean`                                 |
+| `item(Int, JSONValue)`             | ...is equal to a `JSONValue`                               |
 | `item(Int, Regex)`                 | ...is a `String` matching the given `Regex`                |
 | `item(Int, LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
 | `item(Int, LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
@@ -821,6 +836,7 @@ The parameter varies according to the test being performed.
 | `anyItem(Long)`                  | ...is equal to a `Long`                                    |
 | `anyItem(BigDecimal)`            | ...is equal to a `BigDecimal`                              |
 | `anyItem(Boolean)`               | ...is equal to a `Boolean`                                 |
+| `anyItem(JSONValue)`             | ...is equal to a `JSONValue`                               |
 | `anyItem(Regex)`                 | ...is a `String` matching the given `Regex`                |
 | `anyItem(LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
 | `anyItem(LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
@@ -902,6 +918,7 @@ This function takes one parameter, which varies according to the test being perf
 | `value(Long)`                  | ...is equal to a `Long`                                    |
 | `value(BigDecimal)`            | ...is equal to a `BigDecimal`                              |
 | `value(Boolean)`               | ...is equal to a `Boolean`                                 |
+| `value(JSONValue)`             | ...is equal to a `JSONValue`                               |
 | `value(Regex)`                 | ...is a `String` matching the given `Regex`                |
 | `value(LocalDate)`             | ...is a `String` matching the given `LocalDate`            |
 | `value(LocalDateTime)`         | ...is a `String` matching the given `LocalDateTime`        |
@@ -1033,6 +1050,7 @@ It takes one parameter, which varies according to the type of test.
 | `test(Long)`                 | ...value equal to a `Long`                                    |
 | `test(BigDecimal)`           | ...value equal to a `BigDecimal`                              |
 | `test(Boolean)`              | ...value equal to a `Boolean`                                 |
+| `test(JSONValue)`            | ...value equal to a `JSONValue`                               |
 | `test(Regex)`                | ...value a `String` matching the given `Regex`                |
 | `test(LocalDate)`            | ...value a `String` matching the given `LocalDate`            |
 | `test(LocalDateTime)`        | ...value a `String` matching the given `LocalDateTime`        |
@@ -1168,7 +1186,7 @@ The `isUUID` test performs a strict check of the lengths of the five blocks, as 
 
 ## Dependency Specification
 
-The latest version of the library is 4.5, and it may be obtained from the Maven Central repository.
+The latest version of the library is 5.0, and it may be obtained from the Maven Central repository.
 (The following dependency declarations assume that the library will be included for test purposes; this is
 expected to be its principal use.)
 
@@ -1177,19 +1195,19 @@ expected to be its principal use.)
     <dependency>
       <groupId>io.kjson</groupId>
       <artifactId>kjson-test</artifactId>
-      <version>4.5</version>
+      <version>5.0</version>
       <scope>test</scope>
     </dependency>
 ```
 ### Gradle
 ```groovy
-    testImplementation 'io.kjson:kjson-test:4.5'
+    testImplementation 'io.kjson:kjson-test:5.0'
 ```
 ### Gradle (kts)
 ```kotlin
-    testImplementation("io.kjson:kjson-test:4.5")
+    testImplementation("io.kjson:kjson-test:5.0")
 ```
 
 Peter Wall
 
-2025-06-15
+2025-06-19

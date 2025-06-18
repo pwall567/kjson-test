@@ -34,6 +34,8 @@ import io.kstuff.test.shouldBeNonNull
 import io.kstuff.test.shouldStartWith
 import io.kstuff.test.shouldThrow
 
+import io.kjson.JSON
+import io.kjson.JSONInt
 import io.kjson.test.JSONExpect.Companion.expectJSON
 
 class JSONExpectTest1 {
@@ -45,7 +47,7 @@ class JSONExpectTest1 {
                 fail("Tests should not be executed")
             }
         }.let {
-            it.message.shouldBeNonNull() shouldStartWith "Unable to parse JSON - "
+            it.message.shouldBeNonNull() shouldStartWith "String is not valid JSON: "
         }
     }
 
@@ -722,6 +724,86 @@ class JSONExpectTest1 {
                 property("primes") {
                     count(2..9)
                 }
+            }
+        }
+    }
+
+    @Test fun `should test value using JSONInt`() {
+        val json = "27"
+        json shouldMatchJSON {
+            value(JSONInt(27))
+        }
+    }
+
+    @Test fun `should report error on test of value using JSONInt`() {
+        val json = "26"
+        shouldThrow<AssertionError>("JSON value doesn't match - expected 27, was 26") {
+            json shouldMatchJSON {
+                value(JSONInt(27))
+            }
+        }
+    }
+
+    @Test fun `should test property using JSONInt`() {
+        val json = """{"field1":27}"""
+        json shouldMatchJSON {
+            property("field1", JSONInt(27))
+        }
+    }
+
+    @Test fun `should report error on test of property using JSONInt`() {
+        val json = """{"field1":26}"""
+        shouldThrow<AssertionError>("/field1: JSON value doesn't match - expected 27, was 26") {
+            json shouldMatchJSON {
+                property("field1", JSONInt(27))
+            }
+        }
+    }
+
+    @Test fun `should test array item using JSONInt`() {
+        val json = "[1,2,27]"
+        json shouldMatchJSON {
+            item(2, JSONInt(27))
+        }
+    }
+
+    @Test fun `should report error on test of array item using JSONInt`() {
+        val json = "[1,2,26]"
+        shouldThrow<AssertionError>("/2: JSON value doesn't match - expected 27, was 26") {
+            json shouldMatchJSON {
+                item(2, JSONInt(27))
+            }
+        }
+    }
+
+    @Test fun `should test any array item using JSONInt`() {
+        val json = "[1,2,27,3]"
+        json shouldMatchJSON {
+            anyItem(JSONInt(27))
+        }
+    }
+
+    @Test fun `should report error on test of any array item using JSONInt`() {
+        val json = "[1,2,26]"
+        shouldThrow<AssertionError>("No JSON array item has value 27") {
+            json shouldMatchJSON {
+                anyItem(JSONInt(27))
+            }
+        }
+    }
+
+    @Test fun `should test property using complex JSON`() {
+        val json = """{"field1":{"alpha":111,"beta":222}}"""
+        json shouldMatchJSON {
+            property("field1", JSON.parseObject("""{"alpha":111,"beta":222}"""))
+        }
+    }
+
+    @Test fun `should report error on test of property using complex JSON`() {
+        val json = """{"field1":{"alpha":111,"beta":333}}"""
+        shouldThrow<AssertionError>("/field1/beta: JSON value doesn't match - expected 222, was 333") {
+            json shouldMatchJSON {
+                property("field1", JSON.parseObject("""{"alpha":111,"beta":222}"""))
             }
         }
     }

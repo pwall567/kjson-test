@@ -2,7 +2,7 @@
  * @(#) Lambda.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2022, 2024 Peter Wall
+ * Copyright (c) 2022, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ package io.kjson.test
 
 import kotlin.time.Duration
 
-import java.math.BigDecimal
 import java.time.Duration as JavaDuration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -42,8 +41,6 @@ import java.time.Year
 import java.time.YearMonth
 import java.time.ZonedDateTime
 import java.util.UUID
-
-import io.jstuff.json.validation.JSONValidation
 
 /** Check that a value is null. */
 val JSONExpect.isNull: JSONExpect.() -> Unit
@@ -61,80 +58,47 @@ val JSONExpect.isNonNull: JSONExpect.() -> Unit
 
 /** Check that a value is a string. */
 val JSONExpect.isString: JSONExpect.() -> Unit
-    get() = {
-        if (node !is String)
-            errorOnType("string")
-    }
+    get() = { nodeAsString }
 
 /** Check that a value is an integer. */
 val JSONExpect.isInteger: JSONExpect.() -> Unit
-    get() = {
-        if (node !is Int)
-            errorOnType("integer")
-    }
+    get() = { nodeAsInt }
 
 /** Check that a value is a long integer. */
 val JSONExpect.isLongInteger: JSONExpect.() -> Unit
-    get() = {
-        if (!(node is Long || node is Int))
-            errorOnType("long integer")
-    }
+    get() = { nodeAsLong }
 
 /** Check that a value is a decimal. */
 val JSONExpect.isDecimal: JSONExpect.() -> Unit
-    get() = {
-        if (!(node is BigDecimal || node is Long || node is Int))
-            errorOnType("decimal")
-    }
+    get() = {nodeAsDecimal }
 
 /** Check that a value is a boolean. */
 val JSONExpect.isBoolean: JSONExpect.() -> Unit
-    get() = {
-        if (node !is Boolean)
-            errorOnType("boolean")
-    }
+    get() = { nodeAsBoolean }
 
 /** Check that a string value is a valid [UUID]. */
 val JSONExpect.isUUID: JSONExpect.() -> Unit
-    get() = {
-        if (!JSONValidation.isUUID(nodeAsString))
-            errorOnStringFormat("UUID")
-    }
+    get() = { nodeAsUUID }
 
 /** Check that a string value is a valid [LocalDate]. */
 val JSONExpect.isLocalDate: JSONExpect.() -> Unit
-    get() = {
-        if (!JSONValidation.isDate(nodeAsString))
-            errorOnStringFormat("LocalDate")
-    }
+    get() = { nodeAsLocalDate }
 
 /** Check that a string value is a valid [LocalDateTime]. */
 val JSONExpect.isLocalDateTime: JSONExpect.() -> Unit
-    get() = {
-        if (!JSONValidation.isLocalDateTime(nodeAsString))
-            errorOnStringFormat("LocalDateTime")
-    }
+    get() = { nodeAsLocalDateTime }
 
 /** Check that a string value is a valid [LocalTime]. */
 val JSONExpect.isLocalTime: JSONExpect.() -> Unit
-    get() = {
-        if (!JSONValidation.isLocalTime(nodeAsString))
-            errorOnStringFormat("LocalTime")
-    }
+    get() = { nodeAsLocalTime }
 
 /** Check that a string value is a valid [OffsetDateTime]. */
 val JSONExpect.isOffsetDateTime: JSONExpect.() -> Unit
-    get() = {
-        if (!JSONValidation.isDateTime(nodeAsString))
-            errorOnStringFormat("OffsetDateTime")
-    }
+    get() = { nodeAsOffsetDateTime }
 
 /** Check that a string value is a valid [OffsetTime]. */
 val JSONExpect.isOffsetTime: JSONExpect.() -> Unit
-    get() = {
-        if (!JSONValidation.isTime(nodeAsString))
-            errorOnStringFormat("OffsetTime")
-    }
+    get() = { nodeAsOffsetTime }
 
 /** Check that a string value is a valid [ZonedDateTime]. */
 val JSONExpect.isZonedDateTime: JSONExpect.() -> Unit
