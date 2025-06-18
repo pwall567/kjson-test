@@ -2,7 +2,7 @@
  * @(#) JSONExpectTest3.kt
  *
  * kjson-test  Library for testing Kotlin JSON applications
- * Copyright (c) 2020, 2021, 2022, 2024 Peter Wall
+ * Copyright (c) 2020, 2021, 2022, 2024, 2025 Peter Wall
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,6 +77,102 @@ class JSONExpectTest3 {
         shouldThrow<AssertionError>("/0: JSON type doesn't match - expected string, was integer") {
             expectJSON(json) {
                 item(0, isString)
+            }
+        }
+    }
+
+    @Test fun `should test that value is a non-empty string`() {
+        val json = "\"I am a string\""
+        expectJSON(json) {
+            value(isNonEmptyString)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that value is a non-empty string`() {
+        val json = "\"\""
+        shouldThrow<AssertionError>("JSON string is empty") {
+            expectJSON(json) {
+                value(isNonEmptyString)
+            }
+        }
+    }
+
+    @Test fun `should test that property is a non-empty string`() {
+        val json = """{"abc":"I am a string"}"""
+        expectJSON(json) {
+            property("abc", isNonEmptyString)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that property is a non-empty string`() {
+        val json = """{"abc":""}"""
+        shouldThrow<AssertionError>("/abc: JSON string is empty") {
+            expectJSON(json) {
+                property("abc", isNonEmptyString)
+            }
+        }
+    }
+
+    @Test fun `should test that array item is a non-empty string`() {
+        val json = """["I am a string"]"""
+        expectJSON(json) {
+            item(0, isNonEmptyString)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that array item is a non-empty string`() {
+        val json = """[""]"""
+        shouldThrow<AssertionError>("/0: JSON string is empty") {
+            expectJSON(json) {
+                item(0, isNonEmptyString)
+            }
+        }
+    }
+
+    @Test fun `should test that value is a non-blank string`() {
+        val json = "\"I am a string\""
+        expectJSON(json) {
+            value(isNonBlankString)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that value is a non-blank string`() {
+        val json = "\"   \""
+        shouldThrow<AssertionError>("JSON string is blank") {
+            expectJSON(json) {
+                value(isNonBlankString)
+            }
+        }
+    }
+
+    @Test fun `should test that property is a non-blank string`() {
+        val json = """{"abc":"I am a string"}"""
+        expectJSON(json) {
+            property("abc", isNonBlankString)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that property is a non-blank string`() {
+        val json = """{"abc":"   "}"""
+        shouldThrow<AssertionError>("/abc: JSON string is blank") {
+            expectJSON(json) {
+                property("abc", isNonBlankString)
+            }
+        }
+    }
+
+    @Test fun `should test that array item is a non-blank string`() {
+        val json = """["I am a string"]"""
+        expectJSON(json) {
+            item(0, isNonBlankString)
+        }
+    }
+
+    @Test fun `should fail on incorrect test that array item is a non-blank string`() {
+        val json = """["   "]"""
+        shouldThrow<AssertionError>("/0: JSON string is blank") {
+            expectJSON(json) {
+                item(0, isNonBlankString)
             }
         }
     }

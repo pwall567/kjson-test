@@ -60,6 +60,20 @@ val JSONExpect.isNonNull: JSONExpect.() -> Unit
 val JSONExpect.isString: JSONExpect.() -> Unit
     get() = { nodeAsString }
 
+/** Check that a value is a non-empty string. */
+val JSONExpect.isNonEmptyString: JSONExpect.() -> Unit
+    get() = {
+        if (nodeAsString.isEmpty())
+            error("JSON string is empty")
+    }
+
+/** Check that a value is a non-blank string. */
+val JSONExpect.isNonBlankString: JSONExpect.() -> Unit
+    get() = {
+        if (nodeAsString.isBlank())
+            error("JSON string is blank")
+    }
+
 /** Check that a value is an integer. */
 val JSONExpect.isInteger: JSONExpect.() -> Unit
     get() = { nodeAsInt }
@@ -148,10 +162,8 @@ val JSONExpect.isEmptyArray: JSONExpect.() -> Unit
 /** Check that a value is a non-empty array. */
 val JSONExpect.isNonEmptyArray: JSONExpect.() -> Unit
     get() = {
-        nodeAsArray.let {
-            if (it.isEmpty())
-                error("JSON array is empty")
-        }
+        if (nodeAsArray.isEmpty())
+            error("JSON array is empty")
     }
 
 /** Check that a value is an empty object. */
@@ -166,8 +178,6 @@ val JSONExpect.isEmptyObject: JSONExpect.() -> Unit
 /** Check that a value is a non-empty object. */
 val JSONExpect.isNonEmptyObject: JSONExpect.() -> Unit
     get() = {
-        nodeAsObject.let {
-            if (it.isEmpty())
-                error("JSON object is empty")
-        }
+        if (nodeAsObject.isEmpty())
+            error("JSON object is empty")
     }

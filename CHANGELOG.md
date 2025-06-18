@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
 - `JSONExpect`, `Lambda.kt`, `ShouldMatchJSON.kt`: switched to use the
   [`kjson-core`](https://github.com/pwall567/kjson-core) library
+- `Lambda.kt`: added `isNonEmptyString` and `isNonBlankString`
 
 ## [4.5] - 2025-06-15
 ### Added

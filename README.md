@@ -1159,6 +1159,8 @@ They are useful when only the general nature of the value is to be tested, and t
 | `isEmptyArray`     | ...an empty array                                                                             |
 | `isNonEmptyArray`  | ...a non-empty array                                                                          |
 | `isString`         | ...a `String`                                                                                 |
+| `isNonEmptyString` | ...a non-empty `String`                                                                       |
+| `isNonBlankString` | ...a non-blank `String`                                                                       |
 | `isInteger`        | ...an `Int`                                                                                   |
 | `isLongInteger`    | ...a `Long` (see <sup>1</sup> below)                                                          |
 | `isDecimal`        | ...a `BigDecimal` (a number with an optional decimal fraction &ndash; see <sup>1</sup> below) |
